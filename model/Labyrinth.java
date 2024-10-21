@@ -1,6 +1,7 @@
 package model;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class Labyrinth {
@@ -8,15 +9,19 @@ public abstract class Labyrinth {
 	protected int width;
 	protected int height;
 	protected Random rand;
+	protected List<Room> rooms;
+	protected RoomFinder roomfinder;
 
-	public Labyrinth(int w, int h) {
+	public Labyrinth(int w, int h, RoomFinder rf) {
 		width = w;
 		height = h;
 		rand = new Random();
+		roomfinder = rf;
 	}
 
 	public int getWidth(){return width;}
 	public int getHeight(){return height;}
+	public List<Room> getRooms(){return rooms;}
 
 	public abstract Vector getRandomPos();
  	public abstract Vector getDir(Vector idx);
@@ -29,6 +34,33 @@ public abstract class Labyrinth {
 	protected abstract List<Vector> getValidNeighbours(Vector idx);
 	protected abstract List<Vector> getAllNeighbours(Vector idx);
 	protected abstract List<Vector> getChildren(Vector idx);
+
+	public Room inWhichRoom(Vector idx) {
+		for (Room r : rooms) {
+			if (r.idxInRoom(idx)) {
+				return r;
+			}
+		}
+		return null;
+	}
+
+	public boolean inAnyRoom(Vector idx) {
+		return inWhichRoom(idx) != null;
+	}
+
+	public void coverWithRooms() {
+		rooms = new ArrayList<Room>();
+		for (int x = 0; x < width; x++){
+			for (int y = 0; y < width; y++){
+				Vector idx = new Vector(x, y);
+				if (inAnyRoom(idx) || ! inBound(idx)) {continue;}
+				Room nroom = roomfinder.findRoomAt(idx, this);
+				if (nroom.size() >= 2) {
+					rooms.add(nroom);
+				}
+			}
+		}
+	}
 
 	public Vector getDir(int x, int y){
 		return getDir(new Vector(x, y));

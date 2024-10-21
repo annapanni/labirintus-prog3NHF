@@ -9,8 +9,8 @@ public class HexaLab extends Labyrinth {
 	private int labWidth;
 	private List<List<Vector>> directions;
 
-	public HexaLab(int w, int h) {
-		super(w, h);
+	public HexaLab(int w, int h, RoomFinder rf) {
+		super(w, h, rf);
 		root = new Vector(w - 1, 0);
 		labHeight2 = (h - 1) / 2;
 		labWidth = w - labHeight2;
