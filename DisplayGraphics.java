@@ -32,6 +32,7 @@ public class DisplayGraphics extends Canvas{
 			int[] ypos = border.stream().mapToInt(v -> labPosToPx(lab.yPosition(v))).toArray();
 			g.fillPolygon(xpos, ypos, xpos.length);
 		}
+
 		for (int y=0; y < lab.getHeight(); y++){
 			for (int x=0; x < lab.getWidth(); x++){
 				Vector idx = new Vector(x, y);
@@ -49,7 +50,7 @@ public class DisplayGraphics extends Canvas{
   }
 
   public static void main(String[] args) {
-		Labyrinth lab = new HexaLab(20, 20, new RectRoomFinder(5));
+		Labyrinth lab = new HexaLab(20, 20, new ConvexRoomFinder(3));
 		lab.changeNTimes(500);
 		lab.coverWithRooms();
     DisplayGraphics m = new DisplayGraphics(lab, 10, 15, 20, Color.WHITE);

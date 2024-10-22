@@ -29,6 +29,7 @@ public abstract class Labyrinth {
 	public abstract double xPosition(Vector idx);
 	public abstract double yPosition(Vector idx);
 	public abstract boolean inBound(Vector idx);
+	public abstract boolean onBound(Vector idx);
 
 	protected abstract double getDist2Between(Vector idx1, Vector idx2);
 	protected abstract List<Vector> getValidNeighbours(Vector idx);

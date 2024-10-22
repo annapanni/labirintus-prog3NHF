@@ -3,7 +3,7 @@ package model;
 import java.util.List;
 
 public abstract class Room {
-	private Labyrinth lab;
+	protected Labyrinth lab;
 
 	public Room(Labyrinth l) {lab = l;}
 	public Labyrinth getLab() {return lab;}

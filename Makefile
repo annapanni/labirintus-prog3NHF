@@ -1,4 +1,4 @@
-model = Labyrinth HexaLab Vector Room RectRoom GraphUtils RoomFinder RectRoomFinder
+model = Labyrinth HexaLab Vector Room RectRoom GraphUtils RoomFinder RectRoomFinder ConvexRoomFinder ConvexRoom
 
 srcs = DisplayGraphics.java $(model:%=model/%.java)
 

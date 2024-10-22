@@ -51,6 +51,11 @@ public class HexaLab extends Labyrinth {
 		 	&& idx.x + idx.y >= labHeight2 && idx.x + idx.y <= labHeight2*2 + labWidth - 1;
 	}
 
+	public boolean onBound(Vector idx){
+		return inBound(idx) && (0 == idx.x || idx.x == width - 1 || 0 == idx.y || idx.y == labHeight2*2
+		 	|| idx.x + idx.y == labHeight2 || idx.x + idx.y == labHeight2*2 + labWidth - 1);
+	}
+
 	protected double getDist2Between(Vector idx1, Vector idx2) {
 		double dx = Math.abs(idx1.x - idx2.x);
 		double dy = Math.abs(idx1.y -idx2.y);
