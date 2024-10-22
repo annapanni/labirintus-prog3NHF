@@ -22,6 +22,10 @@ public class Vector {
 		 return idx.x == x && idx.y == y;
 	 }
 
+	 public int hashCode() {
+		 return (x + ", " + y).hashCode();
+	 }
+
 	 public Vector clone(){
 		 return new Vector(x, y);
 	 }

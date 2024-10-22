@@ -38,11 +38,12 @@ public class ConvexRoomFinder implements RoomFinder {
 
 		List<Vector> gates = reachable.stream().filter(n -> {
 			List<Vector> notRoomNeighbours = lab.getAllNeighbours(n).stream().filter(x -> ! reachable.contains(x)).toList();
-			return GraphUtils.depthFirstSearch(notRoomNeighbours, lab::getAllNeighbours, null, 0).size() != notRoomNeighbours.size();
+			return GraphUtils.connectedTo(notRoomNeighbours, lab::getAllNeighbours, null, 0).size() != notRoomNeighbours.size();
 		}).toList();
+		
 		Optional<Vector> firstNotGate = reachable.stream().filter(Predicate.not(gates::contains)).findFirst();
 		int notGateIdx = firstNotGate.isPresent() ? reachable.lastIndexOf(firstNotGate.get())	: 0;
-		List<Vector> newReach = GraphUtils.depthFirstSearch(reachable, lab::getValidNeighbours, gates, notGateIdx);
+		List<Vector> newReach = new LinkedList<>(GraphUtils.connectedTo(reachable, lab::getValidNeighbours, gates, notGateIdx));
 		reachable.clear();
 		reachable.addAll(newReach);
 

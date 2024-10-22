@@ -18,6 +18,7 @@ public abstract class Labyrinth {
 		height = h;
 		rand = new Random();
 		roomfinder = rf;
+		rooms = new ArrayList<>();
 	}
 
 	public int getWidth(){return width;}

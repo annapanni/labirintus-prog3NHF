@@ -2,6 +2,9 @@ package model;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Set;
 import java.util.function.Function;
 
 
@@ -18,36 +21,52 @@ public class GraphUtils {
 		return strees;
 	}
 
-	public static <T> List<T> depthFirstSearch(List<T> nodes, Function<T, List<T>> children,
+	public static <T> Map<T,T> breadthFirstSearch(List<T> nodes, Function<T, List<T>> children,
 			List<T> stopAt, int startIdx) {
 		if (nodes.isEmpty()) {
-			return new ArrayList<>();
+			return new HashMap<>();
 		}
 		if (stopAt == null) {
 			stopAt = new ArrayList<>();
 		}
+		Map<T,T> been = new HashMap<>();
+		been.put(nodes.get(startIdx), null);
 		if (stopAt.contains(nodes.get(startIdx))){
-			List<T> been = new ArrayList<>();
-			been.add(nodes.get(startIdx));
 			return been;
 		}
-		List<T> been = new ArrayList<>();
 		List<T> toCheck = new ArrayList<>();
 		toCheck.add(nodes.get(startIdx));
 
 		while (! toCheck.isEmpty()) {
-			for (T nxt : children.apply(toCheck.get(0))){
-				if (! been.contains(nxt) && ! toCheck.contains(nxt) && nodes.contains(nxt)){
-					if (stopAt.contains(nxt)){
-						been.add(nxt);
-					} else {
+			T checking = toCheck.get(0);
+			for (T nxt : children.apply(checking)){
+				if (! been.containsKey(nxt) && nodes.contains(nxt)){
+					been.put(nxt, checking);
+					if (! stopAt.contains(nxt)){
 						toCheck.add(nxt);
 					}
 				}
 			}
-			been.add(toCheck.remove(0));
+			toCheck.remove(checking);
 		}
 		return been;
+	}
+
+	public static <T> Set<T> connectedTo(List<T> nodes, Function<T, List<T>> children,
+			List<T> stopAt, int startIdx) {
+		return breadthFirstSearch(nodes, children, stopAt, startIdx).keySet();
+	}
+
+	public <T> List<T> pathTo(List<T> nodes, Function<T, List<T>> children, T from, T to) {
+		int startIdx = nodes.lastIndexOf(to);
+		Map<T, T> tree = breadthFirstSearch(nodes, children, null, startIdx);
+		List<T> path = new ArrayList<>();
+		T checking = from;
+		while (checking != null) {
+			path.add(checking);
+			checking = tree.get(checking);
+		}
+		return path;
 	}
 
 }
