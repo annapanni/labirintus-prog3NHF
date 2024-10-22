@@ -119,20 +119,21 @@ public abstract class Labyrinth {
 			route.add(from);
 		}
 		List<Room> inRoom = route.stream().map(this::inWhichRoom).toList();
-		List<Vector> toRM = new ArrayList<>();
 		for (int i = 0; i < route.size();i++) { //i gets modified elsewhere too!
 			if (inRoom.get(i) == null) {
 				continue;
 			}
 			int lastIdx = inRoom.lastIndexOf(inRoom.get(i));
 			if (i != lastIdx) {
+				Vector lastCell = route.get(lastIdx);
 				for (int j = i+1; j < lastIdx; j++){
-					toRM.add(route.get(j));
+					route.remove(i+1);
 				}
-				i = lastIdx;
+				route.addAll(i+1, GraphUtils.pathTo(inRoom.get(i)::idxInRoom, this::getValidNeighbours, route.get(i), lastCell));
+				inRoom = route.stream().map(this::inWhichRoom).toList();
+				i = inRoom.lastIndexOf(inWhichRoom(lastCell));//lastIdx may have changed
 			}
 		}
-		route.removeAll(toRM);
 		return route;
 	}
 

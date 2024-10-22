@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.function.Function;
 
 
@@ -21,26 +22,23 @@ public class GraphUtils {
 		return strees;
 	}
 
-	public static <T> Map<T,T> breadthFirstSearch(List<T> nodes, Function<T, List<T>> children,
-			List<T> stopAt, int startIdx) {
-		if (nodes.isEmpty()) {
-			return new HashMap<>();
-		}
+	public static <T> Map<T,T> breadthFirstSearch(Function<T, Boolean> inGraph, Function<T, List<T>> children,
+			List<T> stopAt, T start) {
 		if (stopAt == null) {
 			stopAt = new ArrayList<>();
 		}
 		Map<T,T> been = new HashMap<>();
-		been.put(nodes.get(startIdx), null);
-		if (stopAt.contains(nodes.get(startIdx))){
+		been.put(start, null);
+		if (stopAt.contains(start)){
 			return been;
 		}
 		List<T> toCheck = new ArrayList<>();
-		toCheck.add(nodes.get(startIdx));
+		toCheck.add(start);
 
 		while (! toCheck.isEmpty()) {
 			T checking = toCheck.get(0);
 			for (T nxt : children.apply(checking)){
-				if (! been.containsKey(nxt) && nodes.contains(nxt)){
+				if (! been.containsKey(nxt) && inGraph.apply(nxt)){
 					been.put(nxt, checking);
 					if (! stopAt.contains(nxt)){
 						toCheck.add(nxt);
@@ -54,12 +52,12 @@ public class GraphUtils {
 
 	public static <T> Set<T> connectedTo(List<T> nodes, Function<T, List<T>> children,
 			List<T> stopAt, int startIdx) {
-		return breadthFirstSearch(nodes, children, stopAt, startIdx).keySet();
+		if (nodes.isEmpty()) {return new HashSet<>();}
+		return breadthFirstSearch(nodes::contains, children, stopAt, nodes.get(startIdx)).keySet();
 	}
 
-	public <T> List<T> pathTo(List<T> nodes, Function<T, List<T>> children, T from, T to) {
-		int startIdx = nodes.lastIndexOf(to);
-		Map<T, T> tree = breadthFirstSearch(nodes, children, null, startIdx);
+	public static <T> List<T> pathTo(Function<T, Boolean> inGraph, Function<T, List<T>> children, T from, T to) {
+		Map<T, T> tree = breadthFirstSearch(inGraph, children, null, to);
 		List<T> path = new ArrayList<>();
 		T checking = from;
 		while (checking != null) {
