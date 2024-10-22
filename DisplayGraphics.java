@@ -23,14 +23,18 @@ public class DisplayGraphics extends Canvas{
 		return offset + (int)(p*scale);
 	}
 
+	private void drawRoom(Graphics g, Room r){
+		List<Vector> border = r.getBorderPoly();
+		int[] xpos = border.stream().mapToInt(v -> labPosToPx(lab.xPosition(v))).toArray();
+		int[] ypos = border.stream().mapToInt(v -> labPosToPx(lab.yPosition(v))).toArray();
+		g.fillPolygon(xpos, ypos, xpos.length);
+	}
+
   public void paint(Graphics g) {
 		setBackground(Color.BLACK);
 		setForeground(color);
 		for (Room r : lab.getRooms()) {
-			List<Vector> border = r.getBorderPoly();
-			int[] xpos = border.stream().mapToInt(v -> labPosToPx(lab.xPosition(v))).toArray();
-			int[] ypos = border.stream().mapToInt(v -> labPosToPx(lab.yPosition(v))).toArray();
-			g.fillPolygon(xpos, ypos, xpos.length);
+			drawRoom(g, r);
 		}
 
 		for (int y=0; y < lab.getHeight(); y++){
@@ -47,6 +51,13 @@ public class DisplayGraphics extends Canvas{
         g.drawLine(centerX, centerY, endX, endY);
 			}
 		}
+
+		g.setColor(Color.RED);
+		List<Vector> route = lab.findRoute(new Vector(5, 5), new Vector(10, 15));
+		int[] xpos = route.stream().mapToInt(v -> labPosToPx(lab.xPosition(v))).toArray();
+		int[] ypos = route.stream().mapToInt(v -> labPosToPx(lab.yPosition(v))).toArray();
+		g.drawPolyline(xpos, ypos, route.size());
+
   }
 
   public static void main(String[] args) {

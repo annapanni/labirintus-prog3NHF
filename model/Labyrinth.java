@@ -2,6 +2,7 @@ package model;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 
 public abstract class Labyrinth {
@@ -105,6 +106,33 @@ public abstract class Labyrinth {
 		for (int i=0; i<n; i++){
 			changeNTimesFrom(1, getRandomPos(), false);
 		}
+	}
+
+	public List<Vector> findRoute(Vector from, Vector to){
+		rerootTo(to);
+		List<Vector> route = new LinkedList<>();
+		route.add(from);
+		while (! from.equals(to)){
+			Vector dir = getDir(from);
+			from = from.plus(dir);
+			route.add(from);
+		}
+		List<Room> inRoom = route.stream().map(this::inWhichRoom).toList();
+		List<Vector> toRM = new ArrayList<>();
+		for (int i = 0; i < route.size();i++) { //i gets modified elsewhere too!
+			if (inRoom.get(i) == null) {
+				continue;
+			}
+			int lastIdx = inRoom.lastIndexOf(inRoom.get(i));
+			if (i != lastIdx) {
+				for (int j = i+1; j < lastIdx; j++){
+					toRM.add(route.get(j));
+				}
+				i = lastIdx;
+			}
+		}
+		route.removeAll(toRM);
+		return route;
 	}
 
 }
