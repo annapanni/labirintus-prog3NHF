@@ -50,7 +50,7 @@ public class DisplayGraphics extends Canvas{
   }
 
   public static void main(String[] args) {
-		Labyrinth lab = new RectLab(20, 20, new RectRoomFinder(3));
+		Labyrinth lab = new RectLab(20, 20, new ConvexRoomFinder(3));
 		lab.changeNTimes(500);
 		lab.coverWithRooms();
     DisplayGraphics m = new DisplayGraphics(lab, 10, 15, 20, Color.WHITE);

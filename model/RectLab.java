@@ -68,7 +68,7 @@ public class RectLab extends Labyrinth {
 	}
 
 	protected List<Vector> getAllNeighbours(Vector idx){
-		return getDiagonalDirs().stream().map(idx::plus).filter(this::inBound).toList();
+		return getDiagonalDirs().stream().map(idx::plus).toList();
 	}
 
 	public Vector getRandomPos() {

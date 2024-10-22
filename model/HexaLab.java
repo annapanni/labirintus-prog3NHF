@@ -72,9 +72,7 @@ public class HexaLab extends Labyrinth {
 	}
 
 	protected List<Vector> getAllNeighbours(Vector idx){
-		List<Vector> dirs = new ArrayList<>(List.of(new Vector(-1, 0), new Vector(0, -1),
-			new Vector(1, -1), new Vector(1, 0), new Vector(0, 1), new Vector(-1, 1)));
-		return dirs.stream().map(idx::plus).toList();
+		return getAllDirs().stream().map(idx::plus).toList();
 	}
 
 	public Vector getRandomPos() {
