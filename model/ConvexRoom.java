@@ -18,18 +18,19 @@ public class ConvexRoom extends Room {
 
 	public List<Vector> getBorderPoly() {
 		List<Vector> border = nodes.stream().filter(n -> lab.onBound(n) ||
-			lab.getValidNeighbours(n).stream().map(nodes::contains).toList().contains(false)
+			lab.getAllNeighbours(n).stream().map(nodes::contains).toList().contains(false)
 		).collect(Collectors.toCollection(LinkedList::new));
 
 		List<Vector> orderedBorder = new LinkedList<>();
 		orderedBorder.add(border.remove(0));
 		while (! border.isEmpty()){
 			List<Vector> neighbours = lab.getAllNeighbours(orderedBorder.getLast());
+			List<Vector> validNeighbours = lab.getValidNeighbours(orderedBorder.getLast());
 			int nnum = neighbours.size();
 			boolean nextIsOk = false;
 			for (int i=0; i<=nnum; i++) {
 				Vector neighbour = neighbours.get(i % nnum);
-				if (nextIsOk && border.contains(neighbour)){
+				if (nextIsOk && border.contains(neighbour) && validNeighbours.contains(neighbour)){
 					orderedBorder.add(neighbour);
 					border.remove(neighbour);
 					break;
