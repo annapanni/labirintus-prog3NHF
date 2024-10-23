@@ -42,12 +42,20 @@ public class HexaLab extends Labyrinth {
 	}
 
 	public double yPosition(Vector idx) {
-		return idx.y * 0.8660254;
+		return idx.y * 0.86602540378;
 	}
 
 	public Vector posToVec(double x, double y){
-		double vy = y / 0.8660254;
-		return new Vector((int)(x - vy / 2), (int)vy);
+		int vy = (int) (y / 0.86602540378) ;
+		return new Vector((int)(x - vy / 2.0), (int)vy);
+	}
+
+	public List<double[]> getNodePoly(Vector idx) {
+		//rotate the directions to get the nodes of the polygon, and scale it down
+		return getAllDirs().stream().map(v -> new double[]{
+			0.5 / 0.86602540378 * (xPosition(v) * 0.86602540378 - yPosition(v) * 0.5) + xPosition(idx),
+			0.5 / 0.86602540378 * (xPosition(v) * 0.5 + yPosition(v) * 0.86602540378) + yPosition(idx)
+		}).toList();
 	}
 
 	public boolean inBound(Vector idx){

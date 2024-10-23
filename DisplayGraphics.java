@@ -15,6 +15,7 @@ public class DisplayGraphics extends JPanel{
 
 	private Vector routeFrom;
 	private Vector routeTo;
+	private Vector selected;
 
 	public DisplayGraphics(Labyrinth laby, int offs, int cw, int sc, Color col) {
 		lab = laby;
@@ -25,6 +26,7 @@ public class DisplayGraphics extends JPanel{
 
 		routeFrom = null;
 		routeTo = null;
+		selected = null;
 	}
 
 	private int labPosToPx(double p){
@@ -32,7 +34,7 @@ public class DisplayGraphics extends JPanel{
 	}
 
 	private double pxToLabPos(int px){
-		return (double)(px - offset) / scale;
+		return (double)(px - offset + (double)scale/2) / scale;
 	}
 
 	private void drawRoom(Graphics g, Room r){
@@ -49,12 +51,15 @@ public class DisplayGraphics extends JPanel{
 				if (! lab.inBound(idx)) {
 					continue;
 				}
+				List<double[]> xyLabPos = lab.getNodePoly(idx);
+				int[] xpos = xyLabPos.stream().mapToInt(p -> labPosToPx(p[0])).toArray();
+				int[] ypos = xyLabPos.stream().mapToInt(p -> labPosToPx(p[1])).toArray();
+        g.fillPolygon(xpos, ypos, xpos.length);
 				int centerX = labPosToPx(lab.xPosition(idx));
 				int centerY = labPosToPx(lab.yPosition(idx));
-        		g.fillOval(centerX - corridorWidth/4, centerY - corridorWidth/4, corridorWidth/2, corridorWidth/2);
 				int endX = labPosToPx(lab.xPosition(idx.plus(lab.getDir(idx))));
 				int endY = labPosToPx(lab.yPosition(idx.plus(lab.getDir(idx))));
-        		g.drawLine(centerX, centerY, endX, endY);
+        g.drawLine(centerX, centerY, endX, endY);
 			}
 		}
 	}
@@ -71,6 +76,13 @@ public class DisplayGraphics extends JPanel{
 		repaint();
 	}
 
+	private void handleMouseMove(int x, int y) {
+		Vector vm = lab.posToVec(pxToLabPos(x), pxToLabPos(y));
+		if (lab.inBound(vm) && selected != vm){
+			selected = vm;
+			repaint();
+		}
+	}
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -90,13 +102,20 @@ public class DisplayGraphics extends JPanel{
 			int[] ypos = route.stream().mapToInt(v -> labPosToPx(lab.yPosition(v))).toArray();
 			g.drawPolyline(xpos, ypos, route.size());
 		}
+		if(selected != null) {
+			g.setColor(Color.BLUE);
+			List<double[]> xyLabPos = lab.getNodePoly(selected);
+			int[] xpos = xyLabPos.stream().mapToInt(p -> labPosToPx(p[0])).toArray();
+			int[] ypos = xyLabPos.stream().mapToInt(p -> labPosToPx(p[1])).toArray();
+			g.fillPolygon(xpos, ypos, xpos.length);
+		}
 	}
 
 	public static void main(String[] args) {
-		Labyrinth lab = new RectLab(20, 20, new ConvexRoomFinder(3));
+		Labyrinth lab = new HexaLab(20, 20, new ConvexRoomFinder(3));
 		lab.changeNTimes(500);
 		lab.coverWithRooms();
-		DisplayGraphics m = new DisplayGraphics(lab, 10, 15, 20, Color.WHITE);
+		DisplayGraphics m = new DisplayGraphics(lab, 10, 15, 30, Color.WHITE);
 		JFrame frame = new JFrame();
 		frame.add(m);
 		frame.setSize(600,600);
@@ -120,5 +139,14 @@ public class DisplayGraphics extends JPanel{
 				m.handleClick(e.getX(), e.getY());
 			}
 		});
+
+		m.addMouseMotionListener(new MouseMotionListener(){
+			@Override
+			public void mouseDragged(MouseEvent e) {}
+      public void mouseMoved(MouseEvent e) {
+				m.handleMouseMove(e.getX(), e.getY());
+			}
+		});
+
 	}
 }

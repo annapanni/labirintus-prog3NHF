@@ -41,6 +41,14 @@ public class RectLab extends Labyrinth {
 		return new Vector((int)x, (int)y);
 	}
 
+	public List<double[]> getNodePoly(Vector idx) {
+		//rotate the directions to get the nodes of the polygon, and scale it down
+		return getAllDirs().stream().map(v -> new double[]{
+			0.707106781 * (v.x * 0.707106781 - v.y * 0.707106781) + xPosition(idx),
+			0.707106781 * (v.x * 0.707106781 + v.y * 0.707106781) + yPosition(idx)
+		}).toList();
+	}
+
 	public boolean inBound(Vector idx){
 		return 0 <= idx.x && idx.x < width && 0 <= idx.y && idx.y < height;
 	}
