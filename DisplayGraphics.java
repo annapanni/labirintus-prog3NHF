@@ -4,37 +4,45 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import java.util.List;
+import java.util.LinkedList;
 import model.*;
 
 public class DisplayGraphics extends JPanel{
 	private Labyrinth lab;
 	private int offset;
-	private int corridorWidth;
-	private int scale;
+	private double scale;
 	private Color color;
 
 	private Vector routeFrom;
 	private Vector routeTo;
 	private Vector selected;
+	private List<Vector> selectedReach;
 
-	public DisplayGraphics(Labyrinth laby, int offs, int cw, int sc, Color col) {
+	public DisplayGraphics(Labyrinth laby, int offs, int sc, Color col) {
 		lab = laby;
 		offset = offs;
-		corridorWidth = cw;
 		scale = sc;
 		color = col;
 
 		routeFrom = null;
 		routeTo = null;
 		selected = null;
+		selectedReach = new LinkedList<>();
 	}
 
 	private int labPosToPx(double p){
-		return offset + (int)(p*scale);
+		return offset + (int)((p + 2/scale) * scale);
 	}
 
 	private double pxToLabPos(int px){
-		return (double)(px - offset + (double)scale/2) / scale;
+		return ((int)(px - offset)) / scale;
+	}
+
+	private void drawCell(Graphics g, Vector idx) {
+		List<double[]> xyLabPos = lab.getNodePoly(idx);
+		int[] xpos = xyLabPos.stream().mapToInt(p -> labPosToPx(p[0])).toArray();
+		int[] ypos = xyLabPos.stream().mapToInt(p -> labPosToPx(p[1])).toArray();
+		g.fillPolygon(xpos, ypos, xpos.length);
 	}
 
 	private void drawRoom(Graphics g, Room r){
@@ -51,16 +59,44 @@ public class DisplayGraphics extends JPanel{
 				if (! lab.inBound(idx)) {
 					continue;
 				}
-				List<double[]> xyLabPos = lab.getNodePoly(idx);
-				int[] xpos = xyLabPos.stream().mapToInt(p -> labPosToPx(p[0])).toArray();
-				int[] ypos = xyLabPos.stream().mapToInt(p -> labPosToPx(p[1])).toArray();
-        g.fillPolygon(xpos, ypos, xpos.length);
+				drawCell(g, idx);
 				int centerX = labPosToPx(lab.xPosition(idx));
 				int centerY = labPosToPx(lab.yPosition(idx));
+
+				g.setColor(Color.BLACK);
+				g.drawOval(centerX-1, centerY-1, 2, 2);
+				g.setColor(color);
+
 				int endX = labPosToPx(lab.xPosition(idx.plus(lab.getDir(idx))));
 				int endY = labPosToPx(lab.yPosition(idx.plus(lab.getDir(idx))));
         g.drawLine(centerX, centerY, endX, endY);
 			}
+		}
+	}
+
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+
+		setBackground(Color.BLACK);
+		g.setColor(color);
+		for (Room r : lab.getRooms()) {
+			drawRoom(g, r);
+		}
+		drawLab(g);
+
+		if (routeTo != null && routeFrom != null) {
+			g.setColor(Color.RED);
+			List<Vector> route = lab.findRoute(routeFrom, routeTo);
+			int[] xpos = route.stream().mapToInt(v -> labPosToPx(lab.xPosition(v))).toArray();
+			int[] ypos = route.stream().mapToInt(v -> labPosToPx(lab.yPosition(v))).toArray();
+			g.drawPolyline(xpos, ypos, route.size());
+		}
+		if(selected != null) {
+			g.setColor(Color.BLUE);
+			drawCell(g, selected);
+			g.setColor(Color.GRAY);
+			selectedReach.stream().forEach(c -> drawCell(g, c));
 		}
 	}
 
@@ -80,47 +116,20 @@ public class DisplayGraphics extends JPanel{
 		Vector vm = lab.posToVec(pxToLabPos(x), pxToLabPos(y));
 		if (lab.inBound(vm) && selected != vm){
 			selected = vm;
+			selectedReach = lab.inReachOf(pxToLabPos(x), pxToLabPos(y));
 			repaint();
 		}
 	}
 
-	@Override
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-
-		setBackground(Color.BLACK);
-		setForeground(color);
-		for (Room r : lab.getRooms()) {
-			drawRoom(g, r);
-		}
-		drawLab(g);
-
-		if (routeTo != null && routeFrom != null) {
-			g.setColor(Color.RED);
-			List<Vector> route = lab.findRoute(routeFrom, routeTo);
-			int[] xpos = route.stream().mapToInt(v -> labPosToPx(lab.xPosition(v))).toArray();
-			int[] ypos = route.stream().mapToInt(v -> labPosToPx(lab.yPosition(v))).toArray();
-			g.drawPolyline(xpos, ypos, route.size());
-		}
-		if(selected != null) {
-			g.setColor(Color.BLUE);
-			List<double[]> xyLabPos = lab.getNodePoly(selected);
-			int[] xpos = xyLabPos.stream().mapToInt(p -> labPosToPx(p[0])).toArray();
-			int[] ypos = xyLabPos.stream().mapToInt(p -> labPosToPx(p[1])).toArray();
-			g.fillPolygon(xpos, ypos, xpos.length);
-		}
-	}
-
 	public static void main(String[] args) {
-		Labyrinth lab = new HexaLab(20, 20, new ConvexRoomFinder(3));
+		Labyrinth lab = new HexaLab(20, 20, 0.2, new ConvexRoomFinder(3));
 		lab.changeNTimes(500);
 		lab.coverWithRooms();
-		DisplayGraphics m = new DisplayGraphics(lab, 10, 15, 30, Color.WHITE);
+		DisplayGraphics m = new DisplayGraphics(lab, 60, 30, Color.WHITE);
 		JFrame frame = new JFrame();
 		frame.add(m);
-		frame.setSize(600,600);
+		frame.setSize(800,600);
 		frame.setVisible(true);
-
 
 		frame.addWindowListener(new WindowAdapter() {
     	public void windowClosing(WindowEvent windowEvent){
@@ -147,6 +156,10 @@ public class DisplayGraphics extends JPanel{
 				m.handleMouseMove(e.getX(), e.getY());
 			}
 		});
+
+		for (int i = 0; i < 100; i+=5){
+			System.out.println(i + " " + m.pxToLabPos(i) + " " + m.labPosToPx(m.pxToLabPos(i)));
+		}
 
 	}
 }

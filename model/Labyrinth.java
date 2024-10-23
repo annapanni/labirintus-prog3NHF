@@ -9,13 +9,15 @@ public abstract class Labyrinth {
 	protected Vector root;
 	protected int width;
 	protected int height;
+	protected double padding;
 	protected Random rand;
 	protected List<Room> rooms;
 	protected RoomFinder roomfinder;
 
-	protected Labyrinth(int w, int h, RoomFinder rf) {
+	protected Labyrinth(int w, int h, double p, RoomFinder rf) {
 		width = w;
 		height = h;
+		padding = p;
 		rand = new Random();
 		roomfinder = rf;
 		rooms = new ArrayList<>();
@@ -140,6 +142,19 @@ public abstract class Labyrinth {
 			i++;
 		}
 		return route;
+	}
+
+	public List<Vector> inReachOf(double x, double y){
+		Vector inside = posToVec(x, y);
+		List<Vector> reach = new LinkedList<>();
+		for (Vector n : getValidNeighbours(inside)) {
+			double tx = (x - (double)xPosition(n)) / (1.0 + padding) + (double)xPosition(n);
+			double ty = (y - (double)yPosition(n)) / (1.0 + padding) + (double)yPosition(n);
+			if (posToVec(tx, ty).equals(n)){
+				reach.add(n);
+			}
+		}
+		return reach;
 	}
 
 }

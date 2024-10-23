@@ -8,8 +8,8 @@ public class HexaLab extends Labyrinth {
 	private int labWidth;
 	private List<List<Vector>> directions;
 
-	public HexaLab(int w, int h, RoomFinder rf) {
-		super(w, h, rf);
+	public HexaLab(int w, int h, double p, RoomFinder rf) {
+		super(w, h, p, rf);
 		root = new Vector(w - 1, 0);
 		labHeight2 = (h - 1) / 2;
 		labWidth = w - labHeight2;
@@ -45,16 +45,27 @@ public class HexaLab extends Labyrinth {
 		return idx.y * 0.86602540378;
 	}
 
+	private Vector axialRounded(double x, double y){
+		long q = Math.round(x);
+		long r = Math.round(y);
+		long s = Math.round(-x-y);
+		if (Math.abs(q - x) > Math.abs(r - y) && Math.abs(q - x) > Math.abs(s + x + y)){
+			q = -r -s;
+		} else if (Math.abs(r - y) > Math.abs(s + x + y)) {
+			r = -q-s;
+		}
+		return new Vector((int)q, (int)r);
+	}
+
 	public Vector posToVec(double x, double y){
-		int vy = (int) (y / 0.86602540378) ;
-		return new Vector((int)(x - vy / 2.0), (int)vy);
+		return axialRounded(x - y / 0.86602540378 / 2.0, y / 0.86602540378);
 	}
 
 	public List<double[]> getNodePoly(Vector idx) {
 		//rotate the directions to get the nodes of the polygon, and scale it down
 		return getAllDirs().stream().map(v -> new double[]{
-			0.5 / 0.86602540378 * (xPosition(v) * 0.86602540378 - yPosition(v) * 0.5) + xPosition(idx),
-			0.5 / 0.86602540378 * (xPosition(v) * 0.5 + yPosition(v) * 0.86602540378) + yPosition(idx)
+			(1 - padding) * 0.5 / 0.86602540378 * (xPosition(v) * 0.86602540378 - yPosition(v) * 0.5) + xPosition(idx),
+			(1 - padding) * 0.5 / 0.86602540378 * (xPosition(v) * 0.5 + yPosition(v) * 0.86602540378) + yPosition(idx)
 		}).toList();
 	}
 

@@ -7,8 +7,8 @@ import java.util.List;
 public class RectLab extends Labyrinth {
 	private List<List<Vector>> directions;
 
-	public RectLab(int w, int h, RoomFinder rf) {
-		super(w, h, rf);
+	public RectLab(int w, int h, double p, RoomFinder rf) {
+		super(w, h, p, rf);
 		root = new Vector(0, 0);
 		//initialize directions
 		directions = new ArrayList<>();
@@ -38,14 +38,14 @@ public class RectLab extends Labyrinth {
 	}
 
 	public Vector posToVec(double x, double y){
-		return new Vector((int)x, (int)y);
+		return new Vector((int)(x + 0.5), (int)(y + 0.5));
 	}
 
 	public List<double[]> getNodePoly(Vector idx) {
 		//rotate the directions to get the nodes of the polygon, and scale it down
 		return getAllDirs().stream().map(v -> new double[]{
-			0.707106781 * (v.x * 0.707106781 - v.y * 0.707106781) + xPosition(idx),
-			0.707106781 * (v.x * 0.707106781 + v.y * 0.707106781) + yPosition(idx)
+			(1 - padding) * 0.707106781 * (v.x * 0.707106781 - v.y * 0.707106781) + xPosition(idx),
+			(1 - padding) * 0.707106781 * (v.x * 0.707106781 + v.y * 0.707106781) + yPosition(idx)
 		}).toList();
 	}
 
