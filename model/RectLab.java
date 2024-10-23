@@ -5,8 +5,6 @@ import java.util.List;
 
 
 public class RectLab extends Labyrinth {
-	private int labHeight2;
-	private int labWidth;
 	private List<List<Vector>> directions;
 
 	public RectLab(int w, int h, RoomFinder rf) {

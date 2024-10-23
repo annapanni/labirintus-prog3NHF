@@ -5,7 +5,7 @@ import java.util.List;
 public abstract class Room {
 	protected Labyrinth lab;
 
-	public Room(Labyrinth l) {lab = l;}
+	protected Room(Labyrinth l) {lab = l;}
 	public Labyrinth getLab() {return lab;}
 
 	public abstract boolean idxInRoom(Vector idx);

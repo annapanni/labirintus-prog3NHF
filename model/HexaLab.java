@@ -3,7 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class HexaLab extends Labyrinth {
 	private int labHeight2;
 	private int labWidth;
@@ -43,7 +42,7 @@ public class HexaLab extends Labyrinth {
 	}
 
 	public double yPosition(Vector idx) {
-		return (double)idx.y * 0.8660254;
+		return idx.y * 0.8660254;
 	}
 
 	public boolean inBound(Vector idx){

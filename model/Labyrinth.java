@@ -13,7 +13,7 @@ public abstract class Labyrinth {
 	protected List<Room> rooms;
 	protected RoomFinder roomfinder;
 
-	public Labyrinth(int w, int h, RoomFinder rf) {
+	protected Labyrinth(int w, int h, RoomFinder rf) {
 		width = w;
 		height = h;
 		rand = new Random();
@@ -52,7 +52,7 @@ public abstract class Labyrinth {
 	}
 
 	public void coverWithRooms() {
-		rooms = new ArrayList<Room>();
+		rooms = new ArrayList<>();
 		for (int x = 0; x < width; x++){
 			for (int y = 0; y < width; y++){
 				Vector idx = new Vector(x, y);
@@ -119,8 +119,10 @@ public abstract class Labyrinth {
 			route.add(from);
 		}
 		List<Room> inRoom = route.stream().map(this::inWhichRoom).toList();
-		for (int i = 0; i < route.size();i++) { //i gets modified elsewhere too!
+		int i = 0;
+		while (i < route.size()) { //i gets modified elsewhere too!
 			if (inRoom.get(i) == null) {
+				i++;
 				continue;
 			}
 			int lastIdx = inRoom.lastIndexOf(inRoom.get(i));
@@ -133,6 +135,7 @@ public abstract class Labyrinth {
 				inRoom = route.stream().map(this::inWhichRoom).toList();
 				i = inRoom.lastIndexOf(inWhichRoom(lastCell));//lastIdx may have changed
 			}
+			i++;
 		}
 		return route;
 	}

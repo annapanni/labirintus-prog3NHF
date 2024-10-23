@@ -5,11 +5,11 @@ import java.util.List;
 import model.*;
 
 public class DisplayGraphics extends Canvas{
-	public Labyrinth lab;
-	public int offset;
-	public int corridorWidth;
-	public int scale;
-	public Color color;
+	private Labyrinth lab;
+	private int offset;
+	private int corridorWidth;
+	private int scale;
+	private Color color;
 
 	public DisplayGraphics(Labyrinth laby, int offs, int cw, int sc, Color col) {
 		lab = laby;
@@ -30,7 +30,7 @@ public class DisplayGraphics extends Canvas{
 		g.fillPolygon(xpos, ypos, xpos.length);
 	}
 
-  public void paint(Graphics g) {
+	public void paint(Graphics g) {
 		setBackground(Color.BLACK);
 		setForeground(color);
 		for (Room r : lab.getRooms()) {
@@ -45,10 +45,10 @@ public class DisplayGraphics extends Canvas{
 				}
 				int centerX = labPosToPx(lab.xPosition(idx));
 				int centerY = labPosToPx(lab.yPosition(idx));
-        g.fillOval(centerX - corridorWidth/4, centerY - corridorWidth/4, corridorWidth/2, corridorWidth/2);
+        		g.fillOval(centerX - corridorWidth/4, centerY - corridorWidth/4, corridorWidth/2, corridorWidth/2);
 				int endX = labPosToPx(lab.xPosition(idx.plus(lab.getDir(idx))));
 				int endY = labPosToPx(lab.yPosition(idx.plus(lab.getDir(idx))));
-        g.drawLine(centerX, centerY, endX, endY);
+        		g.drawLine(centerX, centerY, endX, endY);
 			}
 		}
 
@@ -57,17 +57,16 @@ public class DisplayGraphics extends Canvas{
 		int[] xpos = route.stream().mapToInt(v -> labPosToPx(lab.xPosition(v))).toArray();
 		int[] ypos = route.stream().mapToInt(v -> labPosToPx(lab.yPosition(v))).toArray();
 		g.drawPolyline(xpos, ypos, route.size());
+	}
 
-  }
-
-  public static void main(String[] args) {
+	public static void main(String[] args) {
 		Labyrinth lab = new RectLab(20, 20, new ConvexRoomFinder(3));
 		lab.changeNTimes(500);
 		lab.coverWithRooms();
-    DisplayGraphics m = new DisplayGraphics(lab, 10, 15, 20, Color.WHITE);
-    JFrame frame = new JFrame();
-    frame.add(m);
-    frame.setSize(600,600);
-    frame.setVisible(true);
-  }
+		DisplayGraphics m = new DisplayGraphics(lab, 10, 15, 20, Color.WHITE);
+		JFrame frame = new JFrame();
+		frame.add(m);
+		frame.setSize(600,600);
+		frame.setVisible(true);
+	}
 }

@@ -2,9 +2,6 @@ package model;
 
 import java.util.List;
 import java.util.LinkedList;
-import java.util.ArrayList;
-import java.util.stream.IntStream;
-
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -37,10 +34,10 @@ public class ConvexRoomFinder implements RoomFinder {
 		}
 
 		List<Vector> gates = reachable.stream().filter(n -> {
-			List<Vector> notRoomNeighbours = lab.getAllNeighbours(n).stream().filter(x -> ! reachable.contains(x)).toList();
+			List<Vector> notRoomNeighbours = lab.getAllNeighbours(n).stream().filter(Predicate.not(reachable::contains)).toList();
 			return GraphUtils.connectedTo(notRoomNeighbours, lab::getAllNeighbours, null, 0).size() != notRoomNeighbours.size();
 		}).toList();
-		
+
 		Optional<Vector> firstNotGate = reachable.stream().filter(Predicate.not(gates::contains)).findFirst();
 		int notGateIdx = firstNotGate.isPresent() ? reachable.lastIndexOf(firstNotGate.get())	: 0;
 		List<Vector> newReach = new LinkedList<>(GraphUtils.connectedTo(reachable, lab::getValidNeighbours, gates, notGateIdx));

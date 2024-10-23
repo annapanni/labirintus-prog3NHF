@@ -2,10 +2,9 @@ package model;
 
 import java.util.stream.Collectors;
 import java.util.List;
-import java.util.LinkedList;;
+import java.util.LinkedList;
 
 public class ConvexRoom extends Room {
-	private Vector sidx;
 	private List<Vector> nodes;
 
 	public ConvexRoom(Labyrinth l, List<Vector> ns) {

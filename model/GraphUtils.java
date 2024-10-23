@@ -7,12 +7,13 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 
 public class GraphUtils {
 	public static <T> List<T> subtree(T start, Function<T, List<T>> children,
-			Function<T, Boolean> stopAt) {
-		if (stopAt.apply(start)) {
+		Predicate<T> stopAt) {
+		if (stopAt.test(start)) {
 			return new ArrayList<>();
 		}
 		List<T> strees = new ArrayList<>(List.of(start));
@@ -22,7 +23,7 @@ public class GraphUtils {
 		return strees;
 	}
 
-	public static <T> Map<T,T> breadthFirstSearch(Function<T, Boolean> inGraph, Function<T, List<T>> children,
+	public static <T> Map<T,T> breadthFirstSearch(Predicate<T> inGraph, Function<T, List<T>> children,
 			List<T> stopAt, T start) {
 		if (stopAt == null) {
 			stopAt = new ArrayList<>();
@@ -38,7 +39,7 @@ public class GraphUtils {
 		while (! toCheck.isEmpty()) {
 			T checking = toCheck.get(0);
 			for (T nxt : children.apply(checking)){
-				if (! been.containsKey(nxt) && inGraph.apply(nxt)){
+				if (! been.containsKey(nxt) && inGraph.test(nxt)){
 					been.put(nxt, checking);
 					if (! stopAt.contains(nxt)){
 						toCheck.add(nxt);
@@ -56,7 +57,7 @@ public class GraphUtils {
 		return breadthFirstSearch(nodes::contains, children, stopAt, nodes.get(startIdx)).keySet();
 	}
 
-	public static <T> List<T> pathTo(Function<T, Boolean> inGraph, Function<T, List<T>> children, T from, T to) {
+	public static <T> List<T> pathTo(Predicate<T> inGraph, Function<T, List<T>> children, T from, T to) {
 		Map<T, T> tree = breadthFirstSearch(inGraph, children, null, to);
 		List<T> path = new ArrayList<>();
 		T checking = from;
