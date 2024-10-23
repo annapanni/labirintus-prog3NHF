@@ -11,18 +11,16 @@ public class DisplayGraphics extends JPanel{
 	private Labyrinth lab;
 	private int offset;
 	private double scale;
-	private Color color;
 
 	private Vector routeFrom;
 	private Vector routeTo;
 	private Vector selected;
 	private List<Vector> selectedReach;
 
-	public DisplayGraphics(Labyrinth laby, int offs, int sc, Color col) {
+	public DisplayGraphics(Labyrinth laby, int offs, int sc) {
 		lab = laby;
 		offset = offs;
 		scale = sc;
-		color = col;
 
 		routeFrom = null;
 		routeTo = null;
@@ -38,21 +36,22 @@ public class DisplayGraphics extends JPanel{
 		return ((int)(px - offset)) / scale;
 	}
 
-	private void drawCell(Graphics g, Vector idx) {
+	private void drawCell(Graphics2D g, Vector idx) {
 		List<double[]> xyLabPos = lab.getNodePoly(idx);
 		int[] xpos = xyLabPos.stream().mapToInt(p -> labPosToPx(p[0])).toArray();
 		int[] ypos = xyLabPos.stream().mapToInt(p -> labPosToPx(p[1])).toArray();
 		g.fillPolygon(xpos, ypos, xpos.length);
 	}
 
-	private void drawRoom(Graphics g, Room r){
+	private void drawRoom(Graphics2D g, Room r){
 		List<Vector> border = r.getBorderPoly();
 		int[] xpos = border.stream().mapToInt(v -> labPosToPx(lab.xPosition(v))).toArray();
 		int[] ypos = border.stream().mapToInt(v -> labPosToPx(lab.yPosition(v))).toArray();
 		g.fillPolygon(xpos, ypos, xpos.length);
+		g.drawPolygon(xpos, ypos, xpos.length);
 	}
 
-	private void drawLab(Graphics g){
+	private void drawLab(Graphics2D g){
 		for (int y=0; y < lab.getHeight(); y++){
 			for (int x=0; x < lab.getWidth(); x++){
 				Vector idx = new Vector(x, y);
@@ -62,11 +61,6 @@ public class DisplayGraphics extends JPanel{
 				drawCell(g, idx);
 				int centerX = labPosToPx(lab.xPosition(idx));
 				int centerY = labPosToPx(lab.yPosition(idx));
-
-				g.setColor(Color.BLACK);
-				g.drawOval(centerX-1, centerY-1, 2, 2);
-				g.setColor(color);
-
 				int endX = labPosToPx(lab.xPosition(idx.plus(lab.getDir(idx))));
 				int endY = labPosToPx(lab.yPosition(idx.plus(lab.getDir(idx))));
         g.drawLine(centerX, centerY, endX, endY);
@@ -74,29 +68,38 @@ public class DisplayGraphics extends JPanel{
 		}
 	}
 
+	private double calculateCorridorWidth(){
+		List<double[]> nodePoly = lab.getNodePoly(new Vector(0,0));
+		double dx = nodePoly.get(0)[0] - nodePoly.get(1)[0];
+		double dy = nodePoly.get(0)[1] - nodePoly.get(1)[1];
+		return Math.sqrt(dx*dx + dy*dy);
+	}
+
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-
+		Graphics2D g2 = (Graphics2D)g;
 		setBackground(Color.BLACK);
-		g.setColor(color);
+		g2.setStroke(new BasicStroke((float)(scale * calculateCorridorWidth()+ 1)));
+		g2.setColor(Color.WHITE);
 		for (Room r : lab.getRooms()) {
-			drawRoom(g, r);
+			drawRoom(g2, r);
 		}
-		drawLab(g);
+		drawLab(g2);
 
+		g2.setStroke(new BasicStroke((float)(scale/20)));
 		if (routeTo != null && routeFrom != null) {
-			g.setColor(Color.RED);
+			g2.setColor(Color.RED);
 			List<Vector> route = lab.findRoute(routeFrom, routeTo);
 			int[] xpos = route.stream().mapToInt(v -> labPosToPx(lab.xPosition(v))).toArray();
 			int[] ypos = route.stream().mapToInt(v -> labPosToPx(lab.yPosition(v))).toArray();
-			g.drawPolyline(xpos, ypos, route.size());
+			g2.drawPolyline(xpos, ypos, route.size());
 		}
 		if(selected != null) {
-			g.setColor(Color.BLUE);
-			drawCell(g, selected);
-			g.setColor(Color.GRAY);
-			selectedReach.stream().forEach(c -> drawCell(g, c));
+			g2.setColor(Color.BLUE);
+			drawCell(g2, selected);
+			g2.setColor(Color.GRAY);
+			selectedReach.stream().forEach(c -> drawCell(g2, c));
 		}
 	}
 
@@ -122,13 +125,13 @@ public class DisplayGraphics extends JPanel{
 	}
 
 	public static void main(String[] args) {
-		Labyrinth lab = new HexaLab(20, 20, 0.2, new ConvexRoomFinder(3));
-		lab.changeNTimes(500);
+		Labyrinth lab = new RectLab(20, 20, 0.3, new ConvexRoomFinder(3));
+		lab.changeNTimes(1000);
 		lab.coverWithRooms();
-		DisplayGraphics m = new DisplayGraphics(lab, 60, 30, Color.WHITE);
+		DisplayGraphics m = new DisplayGraphics(lab, 60, 30);
 		JFrame frame = new JFrame();
 		frame.add(m);
-		frame.setSize(800,600);
+		frame.setSize(900,800);
 		frame.setVisible(true);
 
 		frame.addWindowListener(new WindowAdapter() {
@@ -156,10 +159,5 @@ public class DisplayGraphics extends JPanel{
 				m.handleMouseMove(e.getX(), e.getY());
 			}
 		});
-
-		for (int i = 0; i < 100; i+=5){
-			System.out.println(i + " " + m.pxToLabPos(i) + " " + m.labPosToPx(m.pxToLabPos(i)));
-		}
-
 	}
 }

@@ -25,6 +25,7 @@ public abstract class Labyrinth {
 
 	public int getWidth(){return width;}
 	public int getHeight(){return height;}
+	public double getPadding(){return padding;}
 	public List<Room> getRooms(){return rooms;}
 
 	public abstract Vector getRandomPos();
