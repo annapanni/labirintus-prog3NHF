@@ -38,7 +38,7 @@ public class RectLab extends Labyrinth {
 	}
 
 	public Vector posToVec(double x, double y){
-		return new Vector((int)(x + 0.5), (int)(y + 0.5));
+		return new Vector((int)Math.round(x), (int)Math.round(y));
 	}
 
 	public List<double[]> getNodePoly(Vector idx) {

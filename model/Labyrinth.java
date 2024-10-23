@@ -148,7 +148,7 @@ public abstract class Labyrinth {
 	public List<Vector> inReachOf(double x, double y){
 		Vector inside = posToVec(x, y);
 		List<Vector> reach = new LinkedList<>();
-		for (Vector n : getValidNeighbours(inside)) {
+		for (Vector n : getAllNeighbours(inside)) {
 			double tx = (x - (double)xPosition(n)) / (1.0 + padding) + (double)xPosition(n);
 			double ty = (y - (double)yPosition(n)) / (1.0 + padding) + (double)yPosition(n);
 			if (posToVec(tx, ty).equals(n)){

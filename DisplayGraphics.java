@@ -17,6 +17,8 @@ public class DisplayGraphics extends JPanel{
 	private Vector selected;
 	private List<Vector> selectedReach;
 
+	private Storable stuff;
+
 	public DisplayGraphics(Labyrinth laby, int offs, int sc) {
 		lab = laby;
 		offset = offs;
@@ -26,6 +28,8 @@ public class DisplayGraphics extends JPanel{
 		routeTo = null;
 		selected = null;
 		selectedReach = new LinkedList<>();
+
+		stuff = new Storable(lab, new Vector(12, 12));
 	}
 
 	private int labPosToPx(double p){
@@ -89,18 +93,22 @@ public class DisplayGraphics extends JPanel{
 
 		g2.setStroke(new BasicStroke((float)(scale/20)));
 		if (routeTo != null && routeFrom != null) {
-			g2.setColor(Color.RED);
+			g2.setColor(Color.GREEN);
 			List<Vector> route = lab.findRoute(routeFrom, routeTo);
 			int[] xpos = route.stream().mapToInt(v -> labPosToPx(lab.xPosition(v))).toArray();
 			int[] ypos = route.stream().mapToInt(v -> labPosToPx(lab.yPosition(v))).toArray();
 			g2.drawPolyline(xpos, ypos, route.size());
 		}
 		if(selected != null) {
-			g2.setColor(Color.BLUE);
+			g2.setColor(Color.DARK_GRAY);
 			drawCell(g2, selected);
 			g2.setColor(Color.GRAY);
 			selectedReach.stream().forEach(c -> drawCell(g2, c));
 		}
+		g2.setColor(Color.RED);
+		int x = labPosToPx(stuff.getXPos());
+		int y = labPosToPx(stuff.getYPos());
+		g2.fillOval(x-3, y-3, 6, 6);
 	}
 
 	private void handleClick(int x, int y){
@@ -122,10 +130,13 @@ public class DisplayGraphics extends JPanel{
 			selectedReach = lab.inReachOf(pxToLabPos(x), pxToLabPos(y));
 			repaint();
 		}
+		double dx = pxToLabPos(x) - stuff.getXPos();
+		double dy = pxToLabPos(y) - stuff.getYPos();
+		stuff.setPosition(stuff.getXPos() + dx/10, stuff.getYPos() + dy/10);
 	}
 
 	public static void main(String[] args) {
-		Labyrinth lab = new RectLab(20, 20, 0.3, new ConvexRoomFinder(3));
+		Labyrinth lab = new HexaLab(20, 20, 0.3, new ConvexRoomFinder(3));
 		lab.changeNTimes(1000);
 		lab.coverWithRooms();
 		DisplayGraphics m = new DisplayGraphics(lab, 60, 30);
