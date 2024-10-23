@@ -37,6 +37,10 @@ public class RectLab extends Labyrinth {
 		return idx.y;
 	}
 
+	public Vector posToVec(double x, double y){
+		return new Vector((int)x, (int)y);
+	}
+
 	public boolean inBound(Vector idx){
 		return 0 <= idx.x && idx.x < width && 0 <= idx.y && idx.y < height;
 	}

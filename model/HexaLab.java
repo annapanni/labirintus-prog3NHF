@@ -45,6 +45,11 @@ public class HexaLab extends Labyrinth {
 		return idx.y * 0.8660254;
 	}
 
+	public Vector posToVec(double x, double y){
+		double vy = y / 0.8660254;
+		return new Vector((int)(x - vy / 2), (int)vy);
+	}
+
 	public boolean inBound(Vector idx){
 		return 0 <= idx.x && idx.x < width && 0 <= idx.y && idx.y < labHeight2*2 + 1
 		 	&& idx.x + idx.y >= labHeight2 && idx.x + idx.y <= labHeight2*2 + labWidth - 1;

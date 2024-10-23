@@ -1,15 +1,20 @@
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import java.util.List;
 import model.*;
 
-public class DisplayGraphics extends Canvas{
+public class DisplayGraphics extends JPanel{
 	private Labyrinth lab;
 	private int offset;
 	private int corridorWidth;
 	private int scale;
 	private Color color;
+
+	private Vector routeFrom;
+	private Vector routeTo;
 
 	public DisplayGraphics(Labyrinth laby, int offs, int cw, int sc, Color col) {
 		lab = laby;
@@ -17,10 +22,17 @@ public class DisplayGraphics extends Canvas{
 		corridorWidth = cw;
 		scale = sc;
 		color = col;
+
+		routeFrom = null;
+		routeTo = null;
 	}
 
 	private int labPosToPx(double p){
 		return offset + (int)(p*scale);
+	}
+
+	private double pxToLabPos(int px){
+		return (double)(px - offset) / scale;
 	}
 
 	private void drawRoom(Graphics g, Room r){
@@ -30,13 +42,7 @@ public class DisplayGraphics extends Canvas{
 		g.fillPolygon(xpos, ypos, xpos.length);
 	}
 
-	public void paint(Graphics g) {
-		setBackground(Color.BLACK);
-		setForeground(color);
-		for (Room r : lab.getRooms()) {
-			drawRoom(g, r);
-		}
-
+	private void drawLab(Graphics g){
 		for (int y=0; y < lab.getHeight(); y++){
 			for (int x=0; x < lab.getWidth(); x++){
 				Vector idx = new Vector(x, y);
@@ -51,12 +57,39 @@ public class DisplayGraphics extends Canvas{
         		g.drawLine(centerX, centerY, endX, endY);
 			}
 		}
+	}
 
-		g.setColor(Color.RED);
-		List<Vector> route = lab.findRoute(new Vector(5, 5), new Vector(10, 15));
-		int[] xpos = route.stream().mapToInt(v -> labPosToPx(lab.xPosition(v))).toArray();
-		int[] ypos = route.stream().mapToInt(v -> labPosToPx(lab.yPosition(v))).toArray();
-		g.drawPolyline(xpos, ypos, route.size());
+	private void handleClick(int x, int y){
+		Vector vclick = lab.posToVec(pxToLabPos(x), pxToLabPos(y));
+		if (! lab.inBound(vclick)) {return;}
+		if (routeTo != null || routeFrom == null) {
+			routeFrom = vclick;
+			routeTo = null;
+		} else {
+			routeTo = vclick;
+		}
+		repaint();
+	}
+
+
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+
+		setBackground(Color.BLACK);
+		setForeground(color);
+		for (Room r : lab.getRooms()) {
+			drawRoom(g, r);
+		}
+		drawLab(g);
+
+		if (routeTo != null && routeFrom != null) {
+			g.setColor(Color.RED);
+			List<Vector> route = lab.findRoute(routeFrom, routeTo);
+			int[] xpos = route.stream().mapToInt(v -> labPosToPx(lab.xPosition(v))).toArray();
+			int[] ypos = route.stream().mapToInt(v -> labPosToPx(lab.yPosition(v))).toArray();
+			g.drawPolyline(xpos, ypos, route.size());
+		}
 	}
 
 	public static void main(String[] args) {
@@ -68,5 +101,24 @@ public class DisplayGraphics extends Canvas{
 		frame.add(m);
 		frame.setSize(600,600);
 		frame.setVisible(true);
+
+
+		frame.addWindowListener(new WindowAdapter() {
+    	public void windowClosing(WindowEvent windowEvent){
+          System.exit(0);
+       }
+    });
+
+		m.addMouseListener(new MouseListener(){
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {}
+      public void mouseReleased(MouseEvent e) {}
+      public void mouseEntered(MouseEvent e) {}
+
+      public void mousePressed(MouseEvent e) {
+				m.handleClick(e.getX(), e.getY());
+			}
+		});
 	}
 }

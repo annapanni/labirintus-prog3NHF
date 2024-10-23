@@ -30,6 +30,7 @@ public abstract class Labyrinth {
 	public abstract void setDir(Vector idx, Vector dir);
 	public abstract double xPosition(Vector idx);
 	public abstract double yPosition(Vector idx);
+	public abstract Vector posToVec(double x, double y);
 	public abstract boolean inBound(Vector idx);
 	public abstract boolean onBound(Vector idx);
 
