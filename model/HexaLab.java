@@ -30,19 +30,19 @@ public class HexaLab extends Labyrinth {
 	}
 
 	public Vector getDir(Vector idx) {
-		return directions.get(idx.y).get(idx.x);
+		return directions.get(idx.getY()).get(idx.getX());
 	}
 
 	public void setDir(Vector idx, Vector dir) {
-		directions.get(idx.y).set(idx.x, dir);
+		directions.get(idx.getY()).set(idx.getX(), dir);
 	}
 
 	public double xPosition(Vector idx) {
-		return idx.x + (double)idx.y/2;
+		return idx.getX()+ (double)idx.getY()/2;
 	}
 
 	public double yPosition(Vector idx) {
-		return idx.y * 0.86602540378;
+		return idx.getY() * 0.86602540378;
 	}
 
 	private Vector axialRounded(double x, double y){
@@ -70,18 +70,18 @@ public class HexaLab extends Labyrinth {
 	}
 
 	public boolean inBound(Vector idx){
-		return 0 <= idx.x && idx.x < width && 0 <= idx.y && idx.y < labHeight2*2 + 1
-		 	&& idx.x + idx.y >= labHeight2 && idx.x + idx.y <= labHeight2*2 + labWidth - 1;
+		return 0 <= idx.getX() && idx.getX() < width && 0 <= idx.getY() && idx.getY() < labHeight2*2 + 1
+		 	&& idx.getX() + idx.getY() >= labHeight2 && idx.getX() + idx.getY() <= labHeight2*2 + labWidth - 1;
 	}
 
 	public boolean onBound(Vector idx){
-		return inBound(idx) && (0 == idx.x || idx.x == width - 1 || 0 == idx.y || idx.y == labHeight2*2
-		 	|| idx.x + idx.y == labHeight2 || idx.x + idx.y == labHeight2*2 + labWidth - 1);
+		return inBound(idx) && (0 == idx.getX() || idx.getX() == width - 1 || 0 == idx.getY() || idx.getY() == labHeight2*2
+		 	|| idx.getX() + idx.getY() == labHeight2 || idx.getX() + idx.getY() == labHeight2*2 + labWidth - 1);
 	}
 
 	protected double getDist2Between(Vector idx1, Vector idx2) {
-		double dx = Math.abs(idx1.x - idx2.x);
-		double dy = Math.abs(idx1.y -idx2.y);
+		double dx = Math.abs(idx1.getX() - idx2.getX());
+		double dy = Math.abs(idx1.getY() -idx2.getY());
     return (dx + dy/2)*(dx + dy/2) + 3 * (dy/2)*(dy/2);
 	}
 

@@ -14,10 +14,10 @@ public class ConvexRoomFinder implements RoomFinder {
 		List<Vector> stree = GraphUtils.subtree(idx, lab::getChildren, lab::inAnyRoom);
 		List<Vector> reachable = new LinkedList<>();
 
-		int startx = idx.x - maxRad;
-		int endx = idx.x + maxRad + 1;
-		int starty = idx.y - maxRad;
-		int endy = idx.y + maxRad + 1;
+		int startx = idx.getX()- maxRad;
+		int endx = idx.getX()+ maxRad + 1;
+		int starty = idx.getY() - maxRad;
+		int endy = idx.getY() + maxRad + 1;
 		for (int y=starty; y < endy; y++) {
 			for (int x=startx; x < endx; x++) {
 				Vector v = new Vector(x, y);

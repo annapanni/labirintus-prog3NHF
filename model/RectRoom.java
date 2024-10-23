@@ -15,8 +15,8 @@ public class RectRoom extends Room {
 	}
 
 	public boolean idxInRoom(Vector idx) {
-		return sidx.x <= idx.x && sidx.y <= idx.y && idx.x < sidx.x + width
-			&& idx.y < sidx.y + height;
+		return sidx.getX() <= idx.getX() && sidx.getY() <= idx.getY() && idx.getX() < sidx.getX() + width
+			&& idx.getY() < sidx.getY() + height;
 	}
 
 	public List<Vector> getBorderPoly() {

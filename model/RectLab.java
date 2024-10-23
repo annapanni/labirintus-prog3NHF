@@ -22,19 +22,19 @@ public class RectLab extends Labyrinth {
 	}
 
 	public Vector getDir(Vector idx) {
-		return directions.get(idx.y).get(idx.x);
+		return directions.get(idx.getY()).get(idx.getX());
 	}
 
 	public void setDir(Vector idx, Vector dir) {
-		directions.get(idx.y).set(idx.x, dir);
+		directions.get(idx.getY()).set(idx.getX(), dir);
 	}
 
 	public double xPosition(Vector idx) {
-		return idx.x;
+		return idx.getX();
 	}
 
 	public double yPosition(Vector idx) {
-		return idx.y;
+		return idx.getY();
 	}
 
 	public Vector posToVec(double x, double y){
@@ -44,22 +44,22 @@ public class RectLab extends Labyrinth {
 	public List<double[]> getNodePoly(Vector idx) {
 		//rotate the directions to get the nodes of the polygon, and scale it down
 		return getAllDirs().stream().map(v -> new double[]{
-			(1 - padding) * 0.707106781 * (v.x * 0.707106781 - v.y * 0.707106781) + xPosition(idx),
-			(1 - padding) * 0.707106781 * (v.x * 0.707106781 + v.y * 0.707106781) + yPosition(idx)
+			(1 - padding) * 0.707106781 * (v.getX() * 0.707106781 - v.getY() * 0.707106781) + xPosition(idx),
+			(1 - padding) * 0.707106781 * (v.getX() * 0.707106781 + v.getY() * 0.707106781) + yPosition(idx)
 		}).toList();
 	}
 
 	public boolean inBound(Vector idx){
-		return 0 <= idx.x && idx.x < width && 0 <= idx.y && idx.y < height;
+		return 0 <= idx.getX() && idx.getX() < width && 0 <= idx.getY() && idx.getY() < height;
 	}
 
 	public boolean onBound(Vector idx){
-		return inBound(idx) && (0 == idx.x || idx.x == width - 1 || 0 == idx.y || idx.y == height-1);
+		return inBound(idx) && (0 == idx.getX() || idx.getX() == width - 1 || 0 == idx.getY() || idx.getY() == height-1);
 	}
 
 	protected double getDist2Between(Vector idx1, Vector idx2) {
-		double dx = Math.abs(idx1.x - idx2.x);
-		double dy = Math.abs(idx1.y -idx2.y);
+		double dx = Math.abs(idx1.getX() - idx2.getX());
+		double dy = Math.abs(idx1.getY() -idx2.getY());
     return dx*dx + dy*dy;
 	}
 
