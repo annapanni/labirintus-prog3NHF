@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Darkness {
 	static int rayNum = 100;
-	static double step = 0.1;
+	static double step = 0.05;
 	public static List<double[]> darknessFrom(Labyrinth lab, double x, double y) {
 		List<double[]> darkPoly = new ArrayList<>();
 		Storable ray = new Storable(lab, new Vector(0,0));

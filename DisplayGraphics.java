@@ -19,6 +19,7 @@ public class DisplayGraphics extends JPanel{
 	private List<Vector> selectedReach;
 
 	private Storable stuff;
+	public Firefly fly;
 
 	public DisplayGraphics(Labyrinth laby, int offs, int sc) {
 		lab = laby;
@@ -111,6 +112,13 @@ public class DisplayGraphics extends JPanel{
 		int y = labPosToPx(stuff.getYPos());
 		g2.fillOval(x-3, y-3, 6, 6);
 
+		if (fly != null) {
+			g2.setColor(Color.BLUE);
+			x = labPosToPx(fly.getXPos());
+			y = labPosToPx(fly.getYPos());
+			g2.fillOval(x-3, y-3, 6, 6);
+		}
+
 		List<double[]> darkPoly = Darkness.darknessFrom(lab, stuff.getXPos(), stuff.getYPos());
 		int[] xpos = darkPoly.stream().mapToInt(c -> labPosToPx(c[0])).toArray();
 		int[] ypos = darkPoly.stream().mapToInt(c -> labPosToPx(c[1])).toArray();
@@ -128,6 +136,7 @@ public class DisplayGraphics extends JPanel{
 			routeTo = null;
 		} else {
 			routeTo = vclick;
+			fly = new Firefly(lab, routeFrom, routeTo, 0.01);
 		}
 		repaint();
 	}
@@ -137,18 +146,23 @@ public class DisplayGraphics extends JPanel{
 		if (lab.inBound(vm) && selected != vm){
 			selected = vm;
 			selectedReach = lab.inReachOf(pxToLabPos(x), pxToLabPos(y));
-			repaint();
 		}
 		double dx = pxToLabPos(x) - stuff.getXPos();
 		double dy = pxToLabPos(y) - stuff.getYPos();
 		stuff.setPosition(stuff.getXPos() + dx/10, stuff.getYPos() + dy/10);
+
+		if (fly != null) {
+			fly.stepOne();
+		}
+
+		repaint();
 	}
 
 	public static void main(String[] args) {
-		Labyrinth lab = new RectLab(20, 20, 0.3, new ConvexRoomFinder(3));
+		Labyrinth lab = new HexaLab(20, 20, 0.3, new ConvexRoomFinder(3));
 		lab.changeNTimes(1000);
 		lab.coverWithRooms();
-		DisplayGraphics m = new DisplayGraphics(lab, 60, 30);
+		DisplayGraphics m = new DisplayGraphics(lab, 60, 50);
 		JFrame frame = new JFrame();
 		frame.add(m);
 		frame.setSize(900,800);

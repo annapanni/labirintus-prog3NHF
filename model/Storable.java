@@ -46,4 +46,5 @@ public class Storable {
 	public double getYPos(){
 		return lab.yPosition(inCell) + yOffset;
 	}
+	public Vector getCell(){return inCell;}
 }

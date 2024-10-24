@@ -136,7 +136,8 @@ public abstract class Labyrinth {
 				for (int j = i+1; j < lastIdx; j++){
 					route.remove(i+1);
 				}
-				route.addAll(i+1, GraphUtils.pathTo(inRoom.get(i)::idxInRoom, this::getValidNeighbours, route.get(i), lastCell));
+				List<Vector> roomPath = GraphUtils.pathTo(inRoom.get(i)::idxInRoom, this::getValidNeighbours, route.get(i), lastCell);
+				route.addAll(i+1, roomPath.subList(1, roomPath.size()-1));
 				inRoom = route.stream().map(this::inWhichRoom).toList();
 				i = inRoom.lastIndexOf(inWhichRoom(lastCell));//lastIdx may have changed
 			}
