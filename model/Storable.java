@@ -14,9 +14,7 @@ public class Storable {
 		inCell = idx;
 	}
 
-	public boolean isValidPosition(Vector idx, double dx, double dy){
-		double x = lab.xPosition(idx) + dx;
-		double y = lab.yPosition(idx) + dy;
+	public boolean isValidPosition(double x, double y){
 		Vector in = lab.posToVec(x, y);
 		if (! lab.inBound(in)) {return false;}
 		List<Vector> reach = lab.inReachOf(x, y);
@@ -32,10 +30,10 @@ public class Storable {
 	}
 
 	public void setPosition(double x, double y){
-		Vector in = lab.posToVec(x, y);
-		double dx = x - lab.xPosition(in);
-		double dy = y - lab.yPosition(in);
-		if (isValidPosition(in, dx, dy)) {
+		if (isValidPosition(x, y)) {
+			Vector in = lab.posToVec(x, y);
+			double dx = x - lab.xPosition(in);
+			double dy = y - lab.yPosition(in);
 			inCell = in;
 			xOffset = dx;
 			yOffset = dy;

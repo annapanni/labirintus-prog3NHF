@@ -1,6 +1,6 @@
-model = Labyrinth HexaLab Vector Room RectRoom GraphUtils RoomFinder RectRoomFinder ConvexRoomFinder ConvexRoom RectLab
+model = Labyrinth HexaLab Vector Room RectRoom GraphUtils RoomFinder RectRoomFinder ConvexRoomFinder ConvexRoom RectLab Storable
 
-srcs = DisplayGraphics.java $(model:%=model/%.java)
+srcs = DisplayGraphics.java #$(model:%=model/%.java)
 
 main = DisplayGraphics
 

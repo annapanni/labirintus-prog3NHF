@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.geom.Area;
 import java.awt.event.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -109,6 +110,14 @@ public class DisplayGraphics extends JPanel{
 		int x = labPosToPx(stuff.getXPos());
 		int y = labPosToPx(stuff.getYPos());
 		g2.fillOval(x-3, y-3, 6, 6);
+
+		List<double[]> darkPoly = Darkness.darknessFrom(lab, stuff.getXPos(), stuff.getYPos());
+		int[] xpos = darkPoly.stream().mapToInt(c -> labPosToPx(c[0])).toArray();
+		int[] ypos = darkPoly.stream().mapToInt(c -> labPosToPx(c[1])).toArray();
+		Area darkness = new Area(new Rectangle(1000, 1000));
+		darkness.subtract(new Area(new Polygon(xpos, ypos, xpos.length)));
+		g2.setColor(new Color(0, 0, 0, 150));
+		g2.fill(darkness);
 	}
 
 	private void handleClick(int x, int y){
@@ -136,7 +145,7 @@ public class DisplayGraphics extends JPanel{
 	}
 
 	public static void main(String[] args) {
-		Labyrinth lab = new HexaLab(20, 20, 0.3, new ConvexRoomFinder(3));
+		Labyrinth lab = new RectLab(20, 20, 0.3, new ConvexRoomFinder(3));
 		lab.changeNTimes(1000);
 		lab.coverWithRooms();
 		DisplayGraphics m = new DisplayGraphics(lab, 60, 30);
