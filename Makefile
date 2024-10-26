@@ -1,8 +1,10 @@
 model = Labyrinth HexaLab Vector Room RectRoom GraphUtils RoomFinder RectRoomFinder ConvexRoomFinder ConvexRoom RectLab Storable Firefly Darkness
 
-srcs = DisplayGraphics.java $(model:%=model/%.java)
+view = LabView DisplayGraphics
 
-main = DisplayGraphics
+srcs = $(view:%=view/%.java) $(model:%=model/%.java)
+
+main = view.DisplayGraphics
 
 run:
 	javac $(srcs)
