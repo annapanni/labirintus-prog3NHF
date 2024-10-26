@@ -3,7 +3,7 @@ package model;
 import java.util.List;
 import java.util.Random;
 
-public class Firefly extends Storable {
+public class Firefly extends Storable implements Moving {
 	private List<Vector> route;
 	private double step;
 	private double xAnchor;
@@ -21,9 +21,9 @@ public class Firefly extends Storable {
 		rand = new Random();
 	}
 
-	public boolean stepOne() {
+	public boolean step() {
 		if (route.isEmpty()) {
-			return false;
+			return true;
 		}
 		double dx = getLab().xPosition(route.get(0)) - xAnchor;
 		double dy = getLab().yPosition(route.get(0)) - yAnchor;
@@ -41,7 +41,7 @@ public class Firefly extends Storable {
 				route.remove(0);
 			}
 		}
-		return true;
+		return false;
 	}
 
 }

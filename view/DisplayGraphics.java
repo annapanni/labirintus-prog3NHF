@@ -25,14 +25,17 @@ public class DisplayGraphics extends JPanel{
 
 	public static void main(String[] args) {
 		Labyrinth lab = new HexaLab(20, 20, 0.3, new RectRoomFinder(5));
-		lab.changeNTimes(1000);
-		lab.coverWithRooms();
-		LabView lv = new LabView(lab, 60, 30);
+		Storable player = new Storable(lab, new Vector(12, 12));
+		LabState labState = new LabState(lab, player);
+		LabView lv = new LabView(labState, 60, 30);
 		DisplayGraphics disp = new DisplayGraphics(lv);
 		JFrame frame = new JFrame();
 		frame.add(disp);
 		frame.setSize(900,800);
 		frame.setVisible(true);
+
+		lab.changeNTimes(1000);
+		lab.coverWithRooms();
 
 		frame.addWindowListener(new WindowAdapter() {
     	public void windowClosing(WindowEvent windowEvent){

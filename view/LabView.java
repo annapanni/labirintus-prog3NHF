@@ -3,29 +3,24 @@ package view;
 import java.awt.*;
 import java.awt.geom.Area;
 import java.util.List;
+import java.util.Iterator;
 
 import model.*;
 
 public class LabView {
-	private Labyrinth lab;
+	private LabState labState;
 	private int offset;
 	private double scale;
 	private Vector routeFrom;
-	private Vector routeTo;
-	private Storable stuff;
-	public Firefly fly;
 
-	public LabView(Labyrinth laby, int offs, int sc) {
-		lab = laby;
+	public LabView(LabState laby, int offs, int sc) {
+		labState = laby;
 		offset = offs;
 		scale = sc;
-		routeFrom = null;
-		routeTo = null;
-		stuff = new Storable(lab, new Vector(12, 12));
 	}
 
 	private double calculateCorridorWidth(){
-		List<double[]> nodePoly = lab.getNodePoly(new Vector(0,0));
+		List<double[]> nodePoly = labState.getLab().getNodePoly(new Vector(0,0));
 		double dx = nodePoly.get(0)[0] - nodePoly.get(1)[0];
 		double dy = nodePoly.get(0)[1] - nodePoly.get(1)[1];
 		return Math.sqrt(dx*dx + dy*dy);
@@ -40,7 +35,7 @@ public class LabView {
 	}
 
 	private void drawCell(Graphics2D g, Vector idx) {
-		List<double[]> xyLabPos = lab.getNodePoly(idx);
+		List<double[]> xyLabPos = labState.getLab().getNodePoly(idx);
 		int[] xpos = xyLabPos.stream().mapToInt(p -> labPosToPx(p[0])).toArray();
 		int[] ypos = xyLabPos.stream().mapToInt(p -> labPosToPx(p[1])).toArray();
 		g.fillPolygon(xpos, ypos, xpos.length);
@@ -48,24 +43,24 @@ public class LabView {
 
 	private void drawRoom(Graphics2D g, Room r){
 		List<Vector> border = r.getBorderPoly();
-		int[] xpos = border.stream().mapToInt(v -> labPosToPx(lab.xPosition(v))).toArray();
-		int[] ypos = border.stream().mapToInt(v -> labPosToPx(lab.yPosition(v))).toArray();
+		int[] xpos = border.stream().mapToInt(v -> labPosToPx(labState.getLab().xPosition(v))).toArray();
+		int[] ypos = border.stream().mapToInt(v -> labPosToPx(labState.getLab().yPosition(v))).toArray();
 		g.fillPolygon(xpos, ypos, xpos.length);
 		g.drawPolygon(xpos, ypos, xpos.length);
 	}
 
 	private void drawCorridors(Graphics2D g){
-		for (int y=0; y < lab.getHeight(); y++){
-			for (int x=0; x < lab.getWidth(); x++){
+		for (int y=0; y < labState.getLab().getHeight(); y++){
+			for (int x=0; x < labState.getLab().getWidth(); x++){
 				Vector idx = new Vector(x, y);
-				if (! lab.inBound(idx)) {
+				if (! labState.getLab().inBound(idx)) {
 					continue;
 				}
 				drawCell(g, idx);
-				int centerX = labPosToPx(lab.xPosition(idx));
-				int centerY = labPosToPx(lab.yPosition(idx));
-				int endX = labPosToPx(lab.xPosition(idx.plus(lab.getDir(idx))));
-				int endY = labPosToPx(lab.yPosition(idx.plus(lab.getDir(idx))));
+				int centerX = labPosToPx(labState.getLab().xPosition(idx));
+				int centerY = labPosToPx(labState.getLab().yPosition(idx));
+				int endX = labPosToPx(labState.getLab().xPosition(idx.plus(labState.getLab().getDir(idx))));
+				int endY = labPosToPx(labState.getLab().yPosition(idx.plus(labState.getLab().getDir(idx))));
 				g.drawLine(centerX, centerY, endX, endY);
 			}
 		}
@@ -81,26 +76,17 @@ public class LabView {
 	public void drawAll(Graphics2D g) {
 		g.setStroke(new BasicStroke((float)(scale * calculateCorridorWidth()+ 1)));
 		g.setColor(Color.WHITE);
-		for (Room r : lab.getRooms()) {
+		for (Room r : labState.getLab().getRooms()) {
 			drawRoom(g, r);
 		}
 		drawCorridors(g);
 
-		g.setStroke(new BasicStroke((float)(scale/20)));
-		if (routeTo != null && routeFrom != null) {
-			g.setColor(Color.GREEN);
-			List<Vector> route = lab.findRoute(routeFrom, routeTo);
-			int[] xpos = route.stream().mapToInt(v -> labPosToPx(lab.xPosition(v))).toArray();
-			int[] ypos = route.stream().mapToInt(v -> labPosToPx(lab.yPosition(v))).toArray();
-			//g2.drawPolyline(xpos, ypos, route.size());
+		for (Storable obj : labState.getObjects()){
+			Color col = obj.equals(labState.getPlayer()) ? Color.RED : Color.BLUE;
+			drawObject(g, obj,col);
 		}
 
-		drawObject(g, stuff, Color.RED);
-		if (fly != null) {
-			drawObject(g, fly, Color.BLUE);
-		}
-
-		List<double[]> darkPoly = Darkness.darknessFrom(lab, stuff.getXPos(), stuff.getYPos());
+		List<double[]> darkPoly = Darkness.darknessFrom(labState.getLab(), labState.getPlayer().getXPos(), labState.getPlayer().getYPos());
 		int[] xpos = darkPoly.stream().mapToInt(c -> labPosToPx(c[0])).toArray();
 		int[] ypos = darkPoly.stream().mapToInt(c -> labPosToPx(c[1])).toArray();
 		Area darkness = new Area(new Rectangle(1000, 1000));
@@ -114,25 +100,29 @@ public class LabView {
 
 
 	public void handleClick(int x, int y){
-		Vector vclick = lab.posToVec(pxToLabPos(x), pxToLabPos(y));
-		if (! lab.inBound(vclick)) {return;}
-		if (routeTo != null || routeFrom == null) {
+		Vector vclick = labState.getLab().posToVec(pxToLabPos(x), pxToLabPos(y));
+		if (! labState.getLab().inBound(vclick)) {return;}
+		if (routeFrom == null) {
 			routeFrom = vclick;
-			routeTo = null;
 		} else {
-			routeTo = vclick;
-			fly = new Firefly(lab, routeFrom, routeTo, 0.01);
+			labState.getObjects().add(new Firefly(labState.getLab(), routeFrom, vclick, 0.01));
+			routeFrom = null;
 		}
 	}
 
  	public void handleMouseMove(int x, int y) {
-		Vector vm = lab.posToVec(pxToLabPos(x), pxToLabPos(y));
-		double dx = pxToLabPos(x) - stuff.getXPos();
-		double dy = pxToLabPos(y) - stuff.getYPos();
-		stuff.setPosition(stuff.getXPos() + dx/10, stuff.getYPos() + dy/10);
-		if (fly != null) {
-			boolean ended = ! fly.stepOne();
-			if (ended) fly = null;
+		Vector vm = labState.getLab().posToVec(pxToLabPos(x), pxToLabPos(y));
+		double dx = pxToLabPos(x) - labState.getPlayer().getXPos();
+		double dy = pxToLabPos(y) - labState.getPlayer().getYPos();
+		labState.getPlayer().setPosition(labState.getPlayer().getXPos() + dx/10, labState.getPlayer().getYPos() + dy/10);
+		Iterator<Storable> it = labState.getObjects().iterator();
+		while (it.hasNext()) {
+			Storable obj = it.next();
+			if (obj instanceof Moving) {
+				Moving mov = (Moving)obj;
+				boolean done = mov.step();
+				if (done) {it.remove();}
+			}
 		}
 	}
 
