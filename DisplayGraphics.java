@@ -39,7 +39,7 @@ public class DisplayGraphics extends JPanel{
 	}
 
 	private double pxToLabPos(int px){
-		return ((int)(px - offset)) / scale;
+		return (px - offset) / scale;
 	}
 
 	private void drawCell(Graphics2D g, Vector idx) {
@@ -99,7 +99,7 @@ public class DisplayGraphics extends JPanel{
 			List<Vector> route = lab.findRoute(routeFrom, routeTo);
 			int[] xpos = route.stream().mapToInt(v -> labPosToPx(lab.xPosition(v))).toArray();
 			int[] ypos = route.stream().mapToInt(v -> labPosToPx(lab.yPosition(v))).toArray();
-			g2.drawPolyline(xpos, ypos, route.size());
+			//g2.drawPolyline(xpos, ypos, route.size());
 		}
 		if(selected != null) {
 			g2.setColor(Color.DARK_GRAY);
@@ -152,17 +152,18 @@ public class DisplayGraphics extends JPanel{
 		stuff.setPosition(stuff.getXPos() + dx/10, stuff.getYPos() + dy/10);
 
 		if (fly != null) {
-			fly.stepOne();
+			boolean ended = ! fly.stepOne();
+			if (ended) fly = null;
 		}
 
 		repaint();
 	}
 
 	public static void main(String[] args) {
-		Labyrinth lab = new HexaLab(20, 20, 0.3, new ConvexRoomFinder(3));
+		Labyrinth lab = new HexaLab(20, 20, 0.3, new RectRoomFinder(5));
 		lab.changeNTimes(1000);
 		lab.coverWithRooms();
-		DisplayGraphics m = new DisplayGraphics(lab, 60, 50);
+		DisplayGraphics m = new DisplayGraphics(lab, 60, 30);
 		JFrame frame = new JFrame();
 		frame.add(m);
 		frame.setSize(900,800);

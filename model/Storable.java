@@ -4,14 +4,25 @@ import java.util.List;
 
 
 public class Storable {
-	Labyrinth lab;
-	Vector inCell;
-	double xOffset;
-	double yOffset;
+	private Labyrinth lab;
+	private Vector inCell;
+	private double xOffset;
+	private double yOffset;
+
+	public Labyrinth getLab(){return lab;}
+	public Vector getInCell(){return inCell;}
 
 	public Storable(Labyrinth l, Vector idx){
 		lab = l;
 		inCell = idx;
+	}
+
+	public double getXPos(){
+		return lab.xPosition(inCell) + xOffset;
+	}
+
+	public double getYPos(){
+		return lab.yPosition(inCell) + yOffset;
 	}
 
 	public boolean isValidPosition(double x, double y){
@@ -40,11 +51,4 @@ public class Storable {
 		}
 	}
 
-	public double getXPos(){
-		return lab.xPosition(inCell) + xOffset;
-	}
-	public double getYPos(){
-		return lab.yPosition(inCell) + yOffset;
-	}
-	public Vector getCell(){return inCell;}
 }

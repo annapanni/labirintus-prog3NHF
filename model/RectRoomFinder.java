@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class RectRoomFinder implements RoomFinder {
-	int maxsize;
+	private int maxsize;
 
 	public RectRoomFinder(int ms) {maxsize = ms;}
 

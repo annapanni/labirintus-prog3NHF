@@ -4,13 +4,13 @@ public class Vector {
 	private int x;
 	private int y;
 
+	public int getX() {return x;}
+	public int getY() {return y;}
+
 	public Vector(int x, int y){
 		this.x = x;
 		this.y = y;
 	}
-
-	public int getX() {return x;}
-	public int getY() {return y;}
 
 	public Vector neg(){
 		return new Vector(-x, -y);
@@ -30,9 +30,5 @@ public class Vector {
 
 	public int hashCode() {
 		return (x + ", " + y).hashCode();
-	}
-
-	public Vector clone(){
-		return new Vector(x, y);
 	}
 }

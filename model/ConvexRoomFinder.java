@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public class ConvexRoomFinder implements RoomFinder {
-	int maxRad;
+	private int maxRad;
 
 	public ConvexRoomFinder(int mr) {maxRad = mr;}
 

@@ -6,13 +6,23 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public abstract class Labyrinth {
-	protected Vector root;
-	protected int width;
-	protected int height;
-	protected double padding;
-	protected Random rand;
-	protected List<Room> rooms;
-	protected RoomFinder roomfinder;
+	private Vector root;
+	private int width;
+	private int height;
+	private double padding;
+	private Random rand;
+	private List<Room> rooms;
+	private RoomFinder roomfinder;
+
+	protected Vector getRoot(){return root;}
+	protected void setRoot(Vector nr){root = nr;}
+	protected Random getRand() {return rand;}
+	protected RoomFinder getRoomfinder() {return roomfinder;}
+
+	public List<Room> getRooms() {return rooms;}
+	public int getWidth(){return width;}
+	public int getHeight(){return height;}
+	public double getPadding() {return padding;}
 
 	protected Labyrinth(int w, int h, double p, RoomFinder rf) {
 		width = w;
@@ -23,25 +33,20 @@ public abstract class Labyrinth {
 		rooms = new ArrayList<>();
 	}
 
-	public int getWidth(){return width;}
-	public int getHeight(){return height;}
-	public double getPadding(){return padding;}
-	public List<Room> getRooms(){return rooms;}
-
-	public abstract Vector getRandomPos();
- 	public abstract Vector getDir(Vector idx);
-	public abstract void setDir(Vector idx, Vector dir);
-	public abstract double xPosition(Vector idx);
-	public abstract double yPosition(Vector idx);
-	public abstract Vector posToVec(double x, double y);
-	public abstract List<double[]> getNodePoly(Vector idx);
-	public abstract boolean inBound(Vector idx);
-	public abstract boolean onBound(Vector idx);
-
 	protected abstract double getDist2Between(Vector idx1, Vector idx2);
 	protected abstract List<Vector> getValidNeighbours(Vector idx);
 	protected abstract List<Vector> getAllNeighbours(Vector idx);
 	protected abstract List<Vector> getChildren(Vector idx);
+
+ 	public abstract Vector getDir(Vector idx);
+	public abstract void setDir(Vector idx, Vector dir);
+	public abstract boolean inBound(Vector idx);
+	public abstract boolean onBound(Vector idx);
+	public abstract Vector getRandomPos();
+	public abstract double xPosition(Vector idx);
+	public abstract double yPosition(Vector idx);
+	public abstract Vector posToVec(double x, double y);
+	public abstract List<double[]> getNodePoly(Vector idx);
 
 	public Room inWhichRoom(Vector idx) {
 		for (Room r : rooms) {
@@ -70,15 +75,8 @@ public abstract class Labyrinth {
 		}
 	}
 
-	public Vector getDir(int x, int y){
-		return getDir(new Vector(x, y));
-	}
-	public void setDir(int x, int y, Vector dir){
-		setDir(new Vector(x, y), dir);
-	}
-
 	protected void rerootTo(Vector idx){
-		Vector currentIdx = idx.clone();
+		Vector currentIdx = idx;
 		Vector prevDir = new Vector(0, 0);
 		while (! currentIdx.equals(root)) {
 			Vector currentDir = getDir(currentIdx);
@@ -150,8 +148,8 @@ public abstract class Labyrinth {
 		Vector inside = posToVec(x, y);
 		List<Vector> reach = new LinkedList<>();
 		for (Vector n : getAllNeighbours(inside)) {
-			double tx = (x - (double)xPosition(n)) / (1.0 + padding) + (double)xPosition(n);
-			double ty = (y - (double)yPosition(n)) / (1.0 + padding) + (double)yPosition(n);
+			double tx = (x - xPosition(n)) / (1.0 + padding) + xPosition(n);
+			double ty = (y - yPosition(n)) / (1.0 + padding) + yPosition(n);
 			if (posToVec(tx, ty).equals(n)){
 				reach.add(n);
 			}
