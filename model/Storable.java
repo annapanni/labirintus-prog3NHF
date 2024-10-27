@@ -8,9 +8,12 @@ public class Storable {
 	private Vector inCell;
 	private double xOffset;
 	private double yOffset;
+	private Light light;
 
 	public Labyrinth getLab(){return lab;}
 	public Vector getInCell(){return inCell;}
+	public Light getLight(){return light;}
+	public void setLight(Light li){light = li;}
 
 	public Storable(Labyrinth l, Vector idx){
 		lab = l;

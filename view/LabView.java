@@ -2,6 +2,9 @@ package view;
 
 import java.awt.*;
 import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
+import java.awt.RadialGradientPaint;
+import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Iterator;
 
@@ -66,11 +69,65 @@ public class LabView {
 		}
 	}
 
-	private void drawObject(Graphics g, Storable obj, Color col){
+	private void drawObject(Graphics2D g, Storable obj, Color col){
 		g.setColor(col);
 		int x = labPosToPx(obj.getXPos());
 		int y = labPosToPx(obj.getYPos());
 		g.fillOval(x-3, y-3, 6, 6);
+	}
+
+	private Area getLightArea(Light l, double rad) {
+		List<double[]> lightPoly = l.getLightPoly();
+		int[] xpos = lightPoly.stream().mapToInt(c -> labPosToPx(c[0])).toArray();
+		int[] ypos = lightPoly.stream().mapToInt(c -> labPosToPx(c[1])).toArray();
+		Area light = new Area(new Polygon(xpos, ypos, xpos.length));
+		if (rad != Double.POSITIVE_INFINITY) {
+			Storable og = l.getOrigin();
+			Area range = new Area(new Ellipse2D.Double(labPosToPx(og.getXPos()) - rad, labPosToPx(og.getYPos()) - rad, rad*2, rad*2));
+			light.intersect(range);
+		}
+		return light;
+	}
+
+	private void drawLightColors(Graphics2D g, List<Light> lights) {
+		for (Light light : lights){
+			if (light.getColor() != null && light.getColor().equals("yellow")){ //TODO decode color
+				Area lArea = getLightArea(light, light.getRadius()*scale);
+				int cx = labPosToPx(light.getOrigin().getXPos());
+				int cy = labPosToPx(light.getOrigin().getYPos());
+				double r = light.getRadius() * scale;
+				Paint p = new RadialGradientPaint((float)cx, (float)cy, (float)r, new float[]{(float)light.getDimFrom(), 1f},
+					new Color[]{new Color(250, 240, 130, 150), new Color(250, 240, 130, 0)});
+				g.setPaint(p);
+				g.fill(lArea);
+			}
+		}
+	}
+
+	private BufferedImage darknessImage(List<Light> lights) {
+		BufferedImage image = new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_ARGB); //TODO fixed size
+		Graphics2D g = image.createGraphics();
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, image.getWidth(), image.getHeight());
+		for (Light light : lights) {
+			Area lArea = getLightArea(light, light.getRadius()*scale);
+			int cx = labPosToPx(light.getOrigin().getXPos());
+			int cy = labPosToPx(light.getOrigin().getYPos());
+			double r = light.getRadius() * scale;
+			Paint p = new RadialGradientPaint((float)cx, (float)cy, (float)r, new float[]{(float)light.getDimFrom(), 1f},
+				new Color[]{new Color(255, 255, 255, 255), new Color(255, 255, 255, 0)});
+			g.setPaint(p);
+			g.fill(lArea);
+		}
+		for (int x=0; x < image.getWidth(); x++){
+			for (int y=0; y < image.getHeight(); y++){
+				int col = image.getRGB(x, y);
+				int newAlpha = (256 - col & 0xff) << 24;
+				int newCol = (col & 0xff000000) + newAlpha;
+				image.setRGB(x, y, newCol);
+			}
+		}
+		return image;
 	}
 
 	public void drawAll(Graphics2D g) {
@@ -85,14 +142,20 @@ public class LabView {
 			Color col = obj.equals(labState.getPlayer()) ? Color.RED : Color.BLUE;
 			drawObject(g, obj,col);
 		}
-
-		List<double[]> darkPoly = Darkness.darknessFrom(labState.getLab(), labState.getPlayer().getXPos(), labState.getPlayer().getYPos());
-		int[] xpos = darkPoly.stream().mapToInt(c -> labPosToPx(c[0])).toArray();
-		int[] ypos = darkPoly.stream().mapToInt(c -> labPosToPx(c[1])).toArray();
-		Area darkness = new Area(new Rectangle(1000, 1000));
-		darkness.subtract(new Area(new Polygon(xpos, ypos, xpos.length)));
-		g.setColor(new Color(0, 0, 0, 150));
-		g.fill(darkness);
+		List<Light> lights = labState.getObjects().stream().map(Storable::getLight).filter(l->l!=null).toList();
+		drawLightColors(g, lights);
+		BufferedImage darkness = darknessImage(lights);
+		g.setColor(new Color(0, 0, 0, 255));
+		Light sRange =  labState.getSightRange();
+		if (sRange != null) {
+			g.drawImage(darkness, 0, 0, null);
+			Area sightDarkness = new Area(new Rectangle(1000, 1000)); //fixed size bad bad TODO
+			sightDarkness.subtract(getLightArea(sRange, Double.POSITIVE_INFINITY));
+			g.fill(sightDarkness);
+		} else {
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+			g.drawImage(darkness, 0, 0, null);
+		}
 	}
 
 
@@ -105,7 +168,10 @@ public class LabView {
 		if (routeFrom == null) {
 			routeFrom = vclick;
 		} else {
-			labState.getObjects().add(new Firefly(labState.getLab(), routeFrom, vclick, 0.01));
+			Storable fly = new Firefly(labState.getLab(), routeFrom, vclick, 0.01);
+			Light li = new Light(fly, 0.8, 0.3, "yellow");
+			fly.setLight(li);
+			labState.getObjects().add(fly);
 			routeFrom = null;
 		}
 	}
@@ -121,7 +187,10 @@ public class LabView {
 			if (obj instanceof Moving) {
 				Moving mov = (Moving)obj;
 				boolean done = mov.step();
-				if (done) {it.remove();}
+				if (done) {
+
+					it.remove();
+				}
 			}
 		}
 	}
