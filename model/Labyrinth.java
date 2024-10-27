@@ -61,7 +61,7 @@ public abstract class Labyrinth {
 		return inWhichRoom(idx) != null;
 	}
 
-	public void coverWithRooms() {
+	public void coverWithRooms() { //TODO reroot to bottom right
 		rooms = new ArrayList<>();
 		for (int x = 0; x < width; x++){
 			for (int y = 0; y < width; y++){

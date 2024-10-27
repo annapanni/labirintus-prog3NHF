@@ -5,10 +5,10 @@ import java.util.LinkedList;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class ConvexRoomFinder implements RoomFinder {
+public class ConcaveRoomFinder implements RoomFinder {
 	private int maxRad;
 
-	public ConvexRoomFinder(int mr) {maxRad = mr;}
+	public ConcaveRoomFinder(int mr) {maxRad = mr;}
 
 	public Room findRoomAt(Vector idx, Labyrinth lab) {
 		List<Vector> stree = GraphUtils.subtree(idx, lab::getChildren, lab::inAnyRoom);
@@ -44,6 +44,6 @@ public class ConvexRoomFinder implements RoomFinder {
 		reachable.clear();
 		reachable.addAll(newReach);
 
-		return new ConvexRoom(lab, reachable);
+		return new ConcaveRoom(lab, reachable);
 	}
 }
