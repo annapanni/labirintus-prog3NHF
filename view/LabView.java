@@ -6,7 +6,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.RadialGradientPaint;
 import java.awt.image.BufferedImage;
 import java.util.List;
-import java.util.Iterator;
 
 import model.*;
 
@@ -14,7 +13,6 @@ public class LabView {
 	private LabState labState;
 	private int offset;
 	private double scale;
-	private Vector routeFrom;
 
 	public LabView(LabState laby, int offs, int sc) {
 		labState = laby;
@@ -27,14 +25,6 @@ public class LabView {
 		double dx = nodePoly.get(0)[0] - nodePoly.get(1)[0];
 		double dy = nodePoly.get(0)[1] - nodePoly.get(1)[1];
 		return Math.sqrt(dx*dx + dy*dy);
-	}
-
-	private int labPosToPx(double p){
-		return offset + (int)((p + 2/scale) * scale);
-	}
-
-	private double pxToLabPos(int px){
-		return (px - offset) / scale;
 	}
 
 	private Color decodeColor(ModelColor c) {
@@ -149,6 +139,14 @@ public class LabView {
 		return image;
 	}
 
+	public int labPosToPx(double p){
+		return offset + (int)((p + 2/scale) * scale);
+	}
+
+	public double pxToLabPos(int px){
+		return (px - offset) / scale;
+	}
+
 	public void drawAll(Graphics2D g) {
 		int screenWidth = (int)g.getDeviceConfiguration().getBounds().getWidth();
 		int screenHeight = (int)g.getDeviceConfiguration().getBounds().getHeight();
@@ -175,42 +173,6 @@ public class LabView {
 		} else {
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 			g.drawImage(darkness, 0, 0, null);
-		}
-	}
-
-
-
-
-
-	public void handleClick(int x, int y){
-		Vector vclick = labState.getLab().posToVec(pxToLabPos(x), pxToLabPos(y));
-		if (! labState.getLab().inBound(vclick)) {return;}
-		if (routeFrom == null) {
-			routeFrom = vclick;
-		} else {
-			Storable fly = new Firefly(labState.getLab(), routeFrom, vclick, 0.01);
-			Light li = new Light(fly, 0.8, 0.3, ModelColor.YELLOW);
-			fly.setLight(li);
-			labState.getObjects().add(fly);
-			routeFrom = null;
-		}
-	}
-
- 	public void handleMouseMove(int x, int y) {
-		double dx = pxToLabPos(x) - labState.getPlayer().getXPos();
-		double dy = pxToLabPos(y) - labState.getPlayer().getYPos();
-		labState.getPlayer().setPosition(labState.getPlayer().getXPos() + dx/10, labState.getPlayer().getYPos() + dy/10);
-		Iterator<Storable> it = labState.getObjects().iterator();
-		while (it.hasNext()) {
-			Storable obj = it.next();
-			if (obj instanceof Moving) {
-				Moving mov = (Moving)obj;
-				boolean done = mov.step();
-				if (done) {
-
-					it.remove();
-				}
-			}
 		}
 	}
 

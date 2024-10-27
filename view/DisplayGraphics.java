@@ -5,7 +5,11 @@ import java.awt.event.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import java.lang.Thread;
+import java.lang.InterruptedException;
+
 import model.*;
+import controller.*;
 
 public class DisplayGraphics extends JPanel{
 	public LabView lab;
@@ -21,11 +25,13 @@ public class DisplayGraphics extends JPanel{
 	}
 
 	public static void main(String[] args) {
+		int dTime = 1000 / 30;
 		Labyrinth lab = new RectLab(20, 20, 0.3, new RectRoomFinder(5));
 		Storable player = new Storable(lab, new Vector(12, 12));
 		player.setLight(new Light(player, 3, 0.8));
 		LabState labState = new LabState(lab, player);
 		LabView lv = new LabView(labState, 60, 30);
+		LabControl lctrl = new LabControl(labState, dTime);
 		DisplayGraphics disp = new DisplayGraphics(lv);
 		JFrame frame = new JFrame();
 		frame.add(disp);
@@ -49,8 +55,7 @@ public class DisplayGraphics extends JPanel{
       public void mouseEntered(MouseEvent e) {}
 
       public void mousePressed(MouseEvent e) {
-				disp.lab.handleClick(e.getX(), e.getY());
-				disp.repaint();
+				lctrl.handleClick(lv.pxToLabPos(e.getX()), lv.pxToLabPos(e.getY()));
 			}
 		});
 
@@ -58,9 +63,15 @@ public class DisplayGraphics extends JPanel{
 			@Override
 			public void mouseDragged(MouseEvent e) {}
       public void mouseMoved(MouseEvent e) {
-				disp.lab.handleMouseMove(e.getX(), e.getY());
-				disp.repaint();
+				lctrl.handleMouseMove(lv.pxToLabPos(e.getX()), lv.pxToLabPos(e.getY()));
 			}
 		});
+
+		while(true) {
+			lctrl.step();
+			disp.repaint();
+			try {Thread.sleep(dTime);}
+			catch (InterruptedException e) {}
+		}
 	}
 }
