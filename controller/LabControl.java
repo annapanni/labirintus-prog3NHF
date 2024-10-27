@@ -1,17 +1,29 @@
 package controller;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.LinkedList;
 
 import model.*;
 
 public class LabControl {
 	private LabState labState;
+	private List<Moving> toMove;
 	private Vector routeFrom;
 	private int dTime;
 
 	public LabControl(LabState laby, int dt) {
 		labState = laby;
 		dTime = dt;
+		toMove = new LinkedList<>();
+		for (Storable obj : labState.getObjects()) {
+			if (obj instanceof Moving) {
+				toMove.add((Moving)obj);
+			}
+			if (obj.getLight() != null) {
+				toMove.add((Moving)obj.getLight());
+			}
+		}
 	}
 
 	public void handleClick(double x, double y){
@@ -21,9 +33,11 @@ public class LabControl {
 			routeFrom = vclick;
 		} else {
 			Storable fly = new Firefly(labState.getLab(), routeFrom, vclick, 0.003 * dTime);
-			Light li = new Light(fly, 0.8, 0.3, ModelColor.YELLOW);
+			Light li = new Light(fly, 0.6, 0.3, 0.4, ModelColor.YELLOW);
 			fly.setLight(li);
 			labState.getObjects().add(fly);
+			toMove.add((Moving)fly);
+			toMove.add((Moving)li);
 			routeFrom = null;
 		}
 	}
@@ -41,15 +55,12 @@ public class LabControl {
 	}
 
 	public void step(){
-		Iterator<Storable> it = labState.getObjects().iterator();
+		Iterator<Moving> it = toMove.iterator();
 		while (it.hasNext()) {
-			Storable obj = it.next();
-			if (obj instanceof Moving) {
-				Moving mov = (Moving)obj;
-				boolean done = mov.step();
-				if (done) {
-					it.remove();
-				}
+			Moving m = it.next();
+			boolean done = m.step();
+			if (done) {
+				//it.remove();
 			}
 		}
 	}
