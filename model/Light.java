@@ -10,11 +10,11 @@ public class Light {
 	private double dimFrom = 0.3;
 	private int rayNum = 100;
 	private double step = 0.1;
-	private String color;
+	private ModelColor color = ModelColor.NONE;
 
 	public double getRadius(){return radius;}
 	public Storable getOrigin(){return origin;}
-	public String getColor(){return color;}
+	public ModelColor getColor(){return color;}
 	public double getDimFrom(){return dimFrom;}
 
 	public Light(Storable og){
@@ -25,7 +25,7 @@ public class Light {
 		radius = rad;
 		dimFrom = df;
 	}
-	public Light(Storable og, double rad, double df, String col){
+	public Light(Storable og, double rad, double df, ModelColor col){
 		origin = og;
 		radius = rad;
 		color = col;

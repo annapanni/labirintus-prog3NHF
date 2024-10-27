@@ -1,5 +1,5 @@
 model = Labyrinth HexaLab Vector Room RectRoom GraphUtils RoomFinder RectRoomFinder \
- ConcaveRoomFinder ConcaveRoom RectLab Storable Firefly Light LabState Moving
+ ConcaveRoomFinder ConcaveRoom RectLab Storable Firefly Light LabState Moving ModelColor
 
 view = LabView DisplayGraphics
 

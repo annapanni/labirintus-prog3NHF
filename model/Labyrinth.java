@@ -48,6 +48,12 @@ public abstract class Labyrinth {
 	public abstract Vector posToVec(double x, double y);
 	public abstract List<double[]> getNodePoly(Vector idx);
 
+	private Vector findLastValidIdx(){
+		int i = width * height - 1;
+		while (! inBound(new Vector(i / width, i % width))) {i--;}
+		return new Vector(i / width, i % width);
+	}
+
 	public Room inWhichRoom(Vector idx) {
 		for (Room r : rooms) {
 			if (r.idxInRoom(idx)) {
@@ -61,7 +67,8 @@ public abstract class Labyrinth {
 		return inWhichRoom(idx) != null;
 	}
 
-	public void coverWithRooms() { //TODO reroot to bottom right
+	public void coverWithRooms() {
+		rerootTo(findLastValidIdx());
 		rooms = new ArrayList<>();
 		for (int x = 0; x < width; x++){
 			for (int y = 0; y < width; y++){
