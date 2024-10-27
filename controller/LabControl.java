@@ -45,13 +45,8 @@ public class LabControl {
  	public void handleMouseMove(double x, double y) {
 		double dx = (x - labState.getPlayer().getXPos()) / 10;
 		double dy = (y - labState.getPlayer().getYPos()) / 10;
-		double max = 0.003 * dTime;
-		if (Math.sqrt(dx*dx + dy*dy) > max) {
-			double q = max / Math.sqrt(dx*dx + dy*dy);
-			dx = dx * q;
-			dy = dy * q;
-		}
-		labState.getPlayer().setPosition(labState.getPlayer().getXPos() + dx, labState.getPlayer().getYPos() + dy);
+		double fi = Math.atan2(dy, dx);
+		labState.getPlayer().setDir(fi);
 	}
 
 	public void step(){
