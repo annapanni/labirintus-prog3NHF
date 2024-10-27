@@ -27,12 +27,7 @@ public class Light implements Moving {
 		rand = new Random();
 	}
 	public Light(Storable og, double rad, double df, double fl){
-		origin = og;
-		radius = rad;
-		ogRadius = rad;
-		dimFrom = df;
-		flicker = fl;
-		rand = new Random();
+		this(og, rad, df, fl, ModelColor.NONE);
 	}
 	public Light(Storable og, double rad, double df, double fl, ModelColor col){
 		origin = og;

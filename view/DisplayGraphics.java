@@ -29,7 +29,7 @@ public class DisplayGraphics extends JPanel{
 		Labyrinth lab = new RectLab(20, 20, 0.3, new RectRoomFinder(5));
 		Storable player = new Storable(lab, new Vector(12, 12));
 		player.setLight(new Light(player, 3, 0.8, 0.0));
-		LabState labState = new LabState(lab, player);
+		LabState labState = new LabState(lab, player, 0.8);
 		LabView lv = new LabView(labState, 60, 30);
 		LabControl lctrl = new LabControl(labState, dTime);
 		DisplayGraphics disp = new DisplayGraphics(lv);

@@ -7,20 +7,29 @@ public class LabState {
 	private Labyrinth lab;
 	private List<Storable> objects;
 	private Storable player;
-	private Light sightRange;
+	private Light lineOfSight;
+	private double darknessOpacity;
 
 	public Labyrinth getLab(){return lab;};
 	public List<Storable> getObjects() {return objects;}
 	public Storable getPlayer() {return player;}
-	public Light getSightRange() {return sightRange;}
+	public Light getLineOfSight() {return lineOfSight;}
+	public double getdarknessOpacity() {return darknessOpacity;}
 
-	public LabState(Labyrinth l, Storable pl) {
+	public LabState(Labyrinth l, Storable pl, double dop, boolean lof) {
 		lab = l;
 		player = pl;
+		darknessOpacity = dop;
 		objects = new ArrayList<>();
 		if (player != null) {
 			objects.add(player);
-			sightRange = player.getLight();
+			if (lof) {
+				lineOfSight = new Light(player);
+			}
 		}
+	}
+
+	public LabState(Labyrinth l, Storable pl, double dop) {
+		this(l, pl, dop, true);
 	}
 }

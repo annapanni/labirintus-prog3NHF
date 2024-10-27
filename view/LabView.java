@@ -162,17 +162,15 @@ public class LabView {
 			Color col = obj.equals(labState.getPlayer()) ? Color.RED : Color.BLUE;
 			drawObject(g, obj,col);
 		}
-		BufferedImage darkness = darknessImage(lights, screenWidth, screenHeight);
 		g.setColor(new Color(0, 0, 0, 255));
-		Light sRange =  labState.getSightRange();
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)labState.getdarknessOpacity()));
+		BufferedImage darkness = darknessImage(lights, screenWidth, screenHeight);
+		g.drawImage(darkness, 0, 0, null);
+		Light sRange =  labState.getLineOfSight();
 		if (sRange != null) {
-			g.drawImage(darkness, 0, 0, null);
 			Area sightDarkness = new Area(new Rectangle(screenWidth, screenHeight));
 			sightDarkness.subtract(getLightArea(sRange, Double.POSITIVE_INFINITY));
 			g.fill(sightDarkness);
-		} else {
-			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-			g.drawImage(darkness, 0, 0, null);
 		}
 	}
 
