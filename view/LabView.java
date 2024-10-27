@@ -96,7 +96,7 @@ public class LabView {
 				int cx = labPosToPx(light.getOrigin().getXPos());
 				int cy = labPosToPx(light.getOrigin().getYPos());
 				double r = light.getRadius() * scale;
-				Paint p = new RadialGradientPaint((float)cx, (float)cy, (float)r, new float[]{(float)light.getDimFrom(), 1f},
+				Paint p = new RadialGradientPaint(cx, cy, (float)r, new float[]{(float)light.getDimFrom(), 1f},
 					new Color[]{new Color(250, 240, 130, 150), new Color(250, 240, 130, 0)});
 				g.setPaint(p);
 				g.fill(lArea);
@@ -114,7 +114,7 @@ public class LabView {
 			int cx = labPosToPx(light.getOrigin().getXPos());
 			int cy = labPosToPx(light.getOrigin().getYPos());
 			double r = light.getRadius() * scale;
-			Paint p = new RadialGradientPaint((float)cx, (float)cy, (float)r, new float[]{(float)light.getDimFrom(), 1f},
+			Paint p = new RadialGradientPaint(cx, cy, (float)r, new float[]{(float)light.getDimFrom(), 1f},
 				new Color[]{new Color(255, 255, 255, 255), new Color(255, 255, 255, 0)});
 			g.setPaint(p);
 			g.fill(lArea);
@@ -177,7 +177,6 @@ public class LabView {
 	}
 
  	public void handleMouseMove(int x, int y) {
-		Vector vm = labState.getLab().posToVec(pxToLabPos(x), pxToLabPos(y));
 		double dx = pxToLabPos(x) - labState.getPlayer().getXPos();
 		double dy = pxToLabPos(y) - labState.getPlayer().getYPos();
 		labState.getPlayer().setPosition(labState.getPlayer().getXPos() + dx/10, labState.getPlayer().getYPos() + dy/10);

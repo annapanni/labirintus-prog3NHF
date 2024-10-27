@@ -98,7 +98,7 @@ public class HexaLab extends Labyrinth {
 				i++;
 		}
 		if (i == maxIter){
-			System.out.println("Timeout, couldn't find random pos"); // -------- should throw
+			System.out.println("Timeout, couldn't find random pos"); // TODO should throw
 			return new Vector(0,0);
 		}
 		return pos;

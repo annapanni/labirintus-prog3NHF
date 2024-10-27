@@ -4,7 +4,7 @@ import java.util.stream.Collectors;
 import java.util.List;
 import java.util.LinkedList;
 
-public class ConcaveRoom extends Room { //TODO concave not convex
+public class ConcaveRoom extends Room {
 	private List<Vector> nodes;
 
 	public ConcaveRoom(Labyrinth l, List<Vector> ns) {

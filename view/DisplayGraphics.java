@@ -1,13 +1,9 @@
 package view;
 
 import java.awt.*;
-import java.awt.geom.Area;
 import java.awt.event.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 import model.*;
 
