@@ -11,27 +11,14 @@ import java.lang.InterruptedException;
 import model.*;
 import controller.*;
 
-public class DisplayGraphics extends JPanel{
-	public LabView lab;
-
-	public DisplayGraphics(LabView lv) {lab = lv;}
-
-	@Override
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D)g;
-		setBackground(Color.DARK_GRAY);
-		lab.drawAll(g2);
-	}
-
+public class DisplayGraphics{
 	public static void main(String[] args) {
 		int dTime = 1000 / 30;
 		LabState labState = LabEditControl.generateLabyrinth(new RectLab(20, 20, 0.3), new RectRoomFinder(5));
 		LabView lv = new LabView(labState, 60, 30);
 		LabGameControl lctrl = new LabGameControl(labState , dTime);
-		DisplayGraphics disp = new DisplayGraphics(lv);
 		JFrame frame = new JFrame();
-		frame.add(disp);
+		frame.add(lv);
 		frame.setSize(900,800);
 
 		frame.addWindowListener(new WindowAdapter() { // alternate solution on lecture TODO
@@ -40,7 +27,7 @@ public class DisplayGraphics extends JPanel{
        }
     });
 
-		disp.addMouseListener(new MouseListener(){
+		lv.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {}
@@ -52,7 +39,7 @@ public class DisplayGraphics extends JPanel{
 			}
 		});
 
-		disp.addMouseMotionListener(new MouseMotionListener(){
+		lv.addMouseMotionListener(new MouseMotionListener(){
 			@Override
 			public void mouseDragged(MouseEvent e) {}
       public void mouseMoved(MouseEvent e) {
@@ -64,7 +51,7 @@ public class DisplayGraphics extends JPanel{
 
 		while(true) { //something better? TODO
 			lctrl.step();
-			disp.repaint();
+			lv.repaint();
 			try {Thread.sleep(dTime);}
 			catch (InterruptedException e) {}
 		}

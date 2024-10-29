@@ -17,10 +17,10 @@ public class LabEditControl {
 
 	public static LabState generateLabyrinth(Labyrinth lab, RoomFinder roomfinder) {
 		PlayerCharacter player = new PlayerCharacter(lab, new Vector(12, 12), 0.003);
-		player.setLight(new Light(player, 3, 0.8, 0.0));
+		player.setLight(new Light(player, 3.5, 0.3, 0.0));
 		changeNTimes(lab, lab.getWidth() * lab.getHeight() * 10);
 		coverWithRooms(lab, roomfinder);
-		LabState labState = new LabState(lab, player, 0.2);
+		LabState labState = new LabState(lab, player, 1.0);
 		labState.getObjects().add(new Key(lab, new Vector(5, 5)));
 		return labState;
 	}

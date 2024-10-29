@@ -5,11 +5,12 @@ import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.RadialGradientPaint;
 import java.awt.image.BufferedImage;
+import javax.swing.JPanel;
 import java.util.List;
 
 import model.*;
 
-public class LabView {
+public class LabView extends JPanel {
 	private LabState labState;
 	private int offset;
 	private double scale;
@@ -156,9 +157,13 @@ public class LabView {
 		return (px - offset) / scale;
 	}
 
-	public void drawAll(Graphics2D g) {
+	@Override
+	public void paintComponent(Graphics g1) {
+		super.paintComponent(g1);
+		Graphics2D g = (Graphics2D)g1;
 		int screenWidth = (int)g.getDeviceConfiguration().getBounds().getWidth();
 		int screenHeight = (int)g.getDeviceConfiguration().getBounds().getHeight();
+		setBackground(Color.DARK_GRAY);
 		g.setStroke(new BasicStroke((float)(scale * calculateCorridorWidth()+ 1)));
 		g.setColor(Color.WHITE);
 		for (Room r : labState.getLab().getRooms()) {
