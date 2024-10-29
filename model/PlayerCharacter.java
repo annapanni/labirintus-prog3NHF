@@ -1,7 +1,7 @@
 package model;
 
 
-public class PlayerCharacter extends Storable implements Moving {
+public class PlayerCharacter extends Storable {
 	private double dir;
 	private double stepDist;
 
@@ -13,12 +13,6 @@ public class PlayerCharacter extends Storable implements Moving {
 
 	public double getDir() {return dir;}
 	public void setDir(double d) {dir = d;}
-
-	public boolean step(int dTime) {
-		double dx = dTime * stepDist * Math.cos(dir);
-		double dy = dTime * stepDist * Math.sin(dir);
-		setPosition(getXPos() + dx, getYPos() + dy);
-		return false;
-	}
+	public double getStepDist(){return stepDist;}
 
 }

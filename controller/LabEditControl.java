@@ -73,20 +73,10 @@ public class LabEditControl {
 	}
 
  	public void handleMouseMove(double x, double y) {
-		/*double dx = (x - labState.getPlayer().getXPos()) / 10;
-		double dy = (y - labState.getPlayer().getYPos()) / 10;
-		double fi = Math.atan2(dy, dx);
-		labState.getPlayer().setDir(fi);*/
+
 	}
 
 	public void step(){
-		/*Iterator<Moving> it = toMove.iterator();
-		while (it.hasNext()) {
-			Moving m = it.next();
-			boolean done = m.step(dTime);
-			if (done) {
-				//it.remove();
-			}
-		}*/
+
 	}
 }

@@ -1,9 +1,10 @@
 model = Labyrinth HexaLab Vector Room RectRoom GraphUtils ConcaveRoom RectLab \
-	Storable Firefly Light LabState Moving ModelColor PlayerCharacter
+	Storable Firefly Light LabState ModelColor PlayerCharacter
 
 view = LabView DisplayGraphics
 
-controller = LabGameControl LabEditControl RoomFinder RectRoomFinder ConcaveRoomFinder
+controller = LabGameControl LabEditControl RoomFinder RectRoomFinder ConcaveRoomFinder Mover \
+	CharMover LightMover FireflyMover
 
 srcs = $(view:%=view/%.java) $(model:%=model/%.java) $(controller:%=controller/%.java)
 

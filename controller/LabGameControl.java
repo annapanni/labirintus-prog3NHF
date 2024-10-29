@@ -8,7 +8,7 @@ import model.*;
 
 public class LabGameControl {
 	private LabState labState;
-	private List<Moving> toMove;
+	private List<Mover> toMove;
 	private Vector routeFrom;
 	private int dTime;
 
@@ -17,11 +17,12 @@ public class LabGameControl {
 		dTime = dt;
 		toMove = new LinkedList<>();
 		for (Storable obj : labState.getObjects()) {
-			if (obj instanceof Moving) {
-				toMove.add((Moving)obj);
+			Mover mv = Mover.create(obj);
+			if (mv != null) {
+				toMove.add(mv);
 			}
 			if (obj.getLight() != null) {
-				toMove.add((Moving)obj.getLight());
+				toMove.add(Mover.create(obj.getLight()));
 			}
 		}
 	}
@@ -32,12 +33,12 @@ public class LabGameControl {
 		if (routeFrom == null) {
 			routeFrom = vclick;
 		} else {
-			Storable fly = new Firefly(labState.getLab(), routeFrom, vclick, 0.003);
+			Firefly fly = new Firefly(labState.getLab(), routeFrom, vclick, 0.003);
 			Light li = new Light(fly, 0.6, 0.3, 0.4, ModelColor.YELLOW);
 			fly.setLight(li); //maybe somhow in firefly ctr
 			labState.getObjects().add(fly);
-			toMove.add((Moving)fly);
-			toMove.add((Moving)li);
+			toMove.add(Mover.create(fly));
+			toMove.add(Mover.create(li));
 			routeFrom = null;
 		}
 	}
@@ -50,13 +51,10 @@ public class LabGameControl {
 	}
 
 	public void step(){
-		Iterator<Moving> it = toMove.iterator();
+		Iterator<Mover> it = toMove.iterator();
 		while (it.hasNext()) {
-			Moving m = it.next();
-			boolean done = m.step(dTime);
-			if (done) {
-				//it.remove();
-			}
+			Mover m = it.next();
+			m.step(dTime);
 		}
 	}
 }

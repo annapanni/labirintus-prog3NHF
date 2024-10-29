@@ -4,10 +4,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-public class Light implements Moving {
+public class Light{
 	private Storable origin;
 	private double radius = Double.POSITIVE_INFINITY;
-	private double ogRadius = Double.POSITIVE_INFINITY;
 	private double flicker = 0.2;
 	private double dimFrom = 0.3;
 	private int rayNum = 100;
@@ -19,6 +18,7 @@ public class Light implements Moving {
 	public Storable getOrigin(){return origin;}
 	public ModelColor getColor(){return color;}
 	public double getDimFrom(){return dimFrom;}
+	public double getFlicker(){return flicker;}
 
 	public Light(Storable og){
 		origin = og;
@@ -29,20 +29,9 @@ public class Light implements Moving {
 	public Light(Storable og, double rad, double df, double fl, ModelColor col){
 		origin = og;
 		radius = rad;
-		ogRadius = rad;
 		color = col;
 		dimFrom = df;
 		flicker = fl;
-	}
-
-	public boolean step(int dTime){
-		if (Storable.rand.nextDouble(0.0, 1.0) < flicker * dTime/30.0) {
-			double newRad = radius + radius * Storable.rand.nextDouble(-flicker/4, flicker/4);
-			if (newRad < ogRadius * (1 + flicker) && ogRadius * (1 - flicker) < newRad) {
-				setRadius(newRad);
-			}
-		}
-		return false;
 	}
 
 	public List<double[]> getLightPoly() {
