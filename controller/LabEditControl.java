@@ -71,12 +71,4 @@ public class LabEditControl {
 		key.setPosition(x, y);
 		labState.getObjects().add(key);
 	}
-
- 	public void handleMouseMove(double x, double y) {
-
-	}
-
-	public void step(){
-
-	}
 }
