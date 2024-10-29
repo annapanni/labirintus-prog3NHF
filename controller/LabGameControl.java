@@ -34,11 +34,9 @@ public class LabGameControl {
 			routeFrom = vclick;
 		} else {
 			Firefly fly = new Firefly(labState.getLab(), routeFrom, vclick, 0.003);
-			Light li = new Light(fly, 0.6, 0.3, 0.4, ModelColor.YELLOW);
-			fly.setLight(li); //maybe somhow in firefly ctr
 			labState.getObjects().add(fly);
 			toMove.add(Mover.create(fly));
-			toMove.add(Mover.create(li));
+			toMove.add(Mover.create(fly.getLight()));
 			routeFrom = null;
 		}
 	}
