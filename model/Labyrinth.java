@@ -31,10 +31,9 @@ public abstract class Labyrinth {
 		rooms = new ArrayList<>();
 	}
 
-	protected abstract double getDist2Between(Vector idx1, Vector idx2);
-	protected abstract List<Vector> getAllNeighbours(Vector idx);
-	protected abstract List<Vector> getChildren(Vector idx);
-
+	public abstract double getDist2Between(Vector idx1, Vector idx2);
+	public abstract List<Vector> getAllNeighbours(Vector idx);
+	public abstract List<Vector> getChildren(Vector idx);
 	public abstract List<Vector> getValidNeighbours(Vector idx);
  	public abstract Vector getDir(Vector idx);
 	public abstract void setDir(Vector idx, Vector dir);

@@ -1,9 +1,12 @@
-package model;
+package controller;
 
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.function.Predicate;
+
+import model.*;
+
 
 public class ConcaveRoomFinder implements RoomFinder {
 	private int maxRad;

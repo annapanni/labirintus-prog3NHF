@@ -1,7 +1,10 @@
-package model;
+package controller;
 
 import java.util.List;
 import java.util.ArrayList;
+
+import model.*;
+
 
 public class RectRoomFinder implements RoomFinder {
 	private int maxsize;

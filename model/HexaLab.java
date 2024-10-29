@@ -46,17 +46,17 @@ public class HexaLab extends Labyrinth {
 			new Vector(1, -1), new Vector(1, 0),  new Vector(0, 1), new Vector(-1, 1)));
 	}
 
-	protected double getDist2Between(Vector idx1, Vector idx2) {
+	public double getDist2Between(Vector idx1, Vector idx2) {
 		double dx = Math.abs(idx1.getX() - idx2.getX());
 		double dy = Math.abs(idx1.getY() -idx2.getY());
 		return (dx + dy/2)*(dx + dy/2) + 3 * (dy/2)*(dy/2);
 	}
 
-	protected List<Vector> getAllNeighbours(Vector idx){
+	public List<Vector> getAllNeighbours(Vector idx){
 		return getAllDirs().stream().map(idx::plus).toList();
 	}
 
-	protected List<Vector> getChildren(Vector idx) {
+	public List<Vector> getChildren(Vector idx) {
 		List<Vector> ch = new ArrayList<>();
 		for (Vector dir : getAllDirs()) {
 			Vector n = idx.plus(dir);
