@@ -10,9 +10,10 @@ public abstract class Labyrinth {
 	private int width;
 	private int height;
 	private double padding;
-	private Random rand;
 	private List<Room> rooms;
 	private RoomFinder roomfinder;
+
+	protected static Random rand = new Random();
 
 	protected Vector getRoot(){return root;}
 	protected void setRoot(Vector nr){root = nr;}
@@ -28,7 +29,6 @@ public abstract class Labyrinth {
 		width = w;
 		height = h;
 		padding = p;
-		rand = new Random();
 		roomfinder = rf;
 		rooms = new ArrayList<>();
 	}

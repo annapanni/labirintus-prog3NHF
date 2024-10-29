@@ -1,6 +1,7 @@
 package model;
 
 import java.util.List;
+import java.util.Random;
 
 
 public class Storable {
@@ -10,6 +11,8 @@ public class Storable {
 	private double yOffset;
 	private Light light;
 	private ModelSprite sprite = ModelSprite.DEFAULT;
+
+	protected static Random rand = new Random();
 
 	public Labyrinth getLab(){return lab;}
 	public Vector getInCell(){return inCell;}

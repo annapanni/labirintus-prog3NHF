@@ -2,7 +2,6 @@ package model;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Random;
 
 
 public class Light implements Moving {
@@ -14,7 +13,6 @@ public class Light implements Moving {
 	private int rayNum = 100;
 	private double step = 0.1;
 	private ModelColor color = ModelColor.NONE;
-	private Random rand;
 
 	public double getRadius(){return radius;}
 	public void setRadius(double rad){radius = rad;}
@@ -24,7 +22,6 @@ public class Light implements Moving {
 
 	public Light(Storable og){
 		origin = og;
-		rand = new Random();
 	}
 	public Light(Storable og, double rad, double df, double fl){
 		this(og, rad, df, fl, ModelColor.NONE);
@@ -36,12 +33,11 @@ public class Light implements Moving {
 		color = col;
 		dimFrom = df;
 		flicker = fl;
-		rand = new Random();
 	}
 
 	public boolean step(int dTime){
-		if (rand.nextDouble(0.0, 1.0) < flicker * dTime/30.0) {
-			double newRad = radius + radius * rand.nextDouble(-flicker/4, flicker/4);
+		if (Storable.rand.nextDouble(0.0, 1.0) < flicker * dTime/30.0) {
+			double newRad = radius + radius * Storable.rand.nextDouble(-flicker/4, flicker/4);
 			if (newRad < ogRadius * (1 + flicker) && ogRadius * (1 - flicker) < newRad) {
 				setRadius(newRad);
 			}

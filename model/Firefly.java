@@ -1,7 +1,6 @@
 package model;
 
 import java.util.List;
-import java.util.Random;
 
 public class Firefly extends Storable implements Moving {
 	private List<Vector> route;
@@ -9,7 +8,6 @@ public class Firefly extends Storable implements Moving {
 	private double xAnchor;
 	private double yAnchor;
 	private double fi;
-	private Random rand;
 	private double ogLightRad;
 
 	public Firefly(Labyrinth lab, Vector from, Vector to, double s) {
@@ -19,7 +17,6 @@ public class Firefly extends Storable implements Moving {
 		stepDist = s;
 		xAnchor = getXPos();
 		yAnchor = getYPos();
-		rand = new Random();
 		setSprite(ModelSprite.FIREFLY);
 	}
 
@@ -31,8 +28,8 @@ public class Firefly extends Storable implements Moving {
 	public boolean step(int dTime) {
 		double thisStep = stepDist * dTime;
 		boolean done = false;
-		double xNoise = Math.cos(fi) * rand.nextDouble(0.05, 0.15);
-		double yNoise = Math.sin(fi) * rand.nextDouble(0.05, 0.15);
+		double xNoise = Math.cos(fi) * Storable.rand.nextDouble(0.05, 0.15);
+		double yNoise = Math.sin(fi) * Storable.rand.nextDouble(0.05, 0.15);
 		fi += 2 * Math.PI * thisStep;
 		if (route.isEmpty()) {
 			setPosition(xAnchor + xNoise, yAnchor + yNoise);
