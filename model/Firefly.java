@@ -11,8 +11,8 @@ public class Firefly extends Storable implements Moving {
 	private double ogLightRad;
 
 	public Firefly(Labyrinth lab, Vector from, Vector to, double s) {
-		super(lab, lab.findRoute(from, to).get(0));
-		route = lab.findRoute(from, to);
+		super(lab, lab.getRoute(from, to).get(0));
+		route = lab.getRoute(from, to);
 		route.remove(0);
 		stepDist = s;
 		xAnchor = getXPos();

@@ -3,7 +3,7 @@ model = Labyrinth HexaLab Vector Room RectRoom GraphUtils RoomFinder RectRoomFin
 
 view = LabView DisplayGraphics
 
-controller = LabControl
+controller = LabGameControl LabEditControl
 
 srcs = $(view:%=view/%.java) $(model:%=model/%.java) $(controller:%=controller/%.java)
 

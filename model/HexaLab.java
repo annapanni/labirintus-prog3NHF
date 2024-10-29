@@ -8,8 +8,8 @@ public class HexaLab extends Labyrinth {
 	private int labWidth;
 	private List<List<Vector>> directions;
 
-	public HexaLab(int w, int h, double p, RoomFinder rf) {
-		super(w, h, p, rf);
+	public HexaLab(int w, int h, double p) {
+		super(w, h, p);
 		setRoot(new Vector(w - 1, 0));
 		labHeight2 = (h - 1) / 2;
 		labWidth = w - labHeight2;
@@ -52,10 +52,6 @@ public class HexaLab extends Labyrinth {
 		return (dx + dy/2)*(dx + dy/2) + 3 * (dy/2)*(dy/2);
 	}
 
-	protected List<Vector> getValidNeighbours(Vector idx) {
-		return getAllDirs().stream().map(idx::plus).filter(this::inBound).toList();
-	}
-
 	protected List<Vector> getAllNeighbours(Vector idx){
 		return getAllDirs().stream().map(idx::plus).toList();
 	}
@@ -69,6 +65,10 @@ public class HexaLab extends Labyrinth {
 			}
 		}
 		return ch;
+	}
+
+	public List<Vector> getValidNeighbours(Vector idx) {
+		return getAllDirs().stream().map(idx::plus).filter(this::inBound).toList();
 	}
 
 	public Vector getDir(Vector idx) {

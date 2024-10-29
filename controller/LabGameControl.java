@@ -6,13 +6,13 @@ import java.util.LinkedList;
 
 import model.*;
 
-public class LabControl {
+public class LabGameControl {
 	private LabState labState;
 	private List<Moving> toMove;
 	private Vector routeFrom;
 	private int dTime;
 
-	public LabControl(LabState laby, int dt) {
+	public LabGameControl(LabState laby, int dt) {
 		labState = laby;
 		dTime = dt;
 		toMove = new LinkedList<>();
@@ -34,7 +34,7 @@ public class LabControl {
 		} else {
 			Storable fly = new Firefly(labState.getLab(), routeFrom, vclick, 0.003);
 			Light li = new Light(fly, 0.6, 0.3, 0.4, ModelColor.YELLOW);
-			fly.setLight(li);
+			fly.setLight(li); //maybe somhow in firefly ctr
 			labState.getObjects().add(fly);
 			toMove.add((Moving)fly);
 			toMove.add((Moving)li);

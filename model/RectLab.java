@@ -7,8 +7,8 @@ import java.util.List;
 public class RectLab extends Labyrinth {
 	private List<List<Vector>> directions;
 
-	public RectLab(int w, int h, double p, RoomFinder rf) {
-		super(w, h, p, rf);
+	public RectLab(int w, int h, double p) {
+		super(w, h, p);
 		setRoot(new Vector(0, 0));
 		//initialize directions
 		directions = new ArrayList<>();
@@ -37,10 +37,6 @@ public class RectLab extends Labyrinth {
 		return dx*dx + dy*dy;
 	}
 
-	protected List<Vector> getValidNeighbours(Vector idx) {
-		return getAllDirs().stream().map(idx::plus).filter(this::inBound).toList();
-	}
-
 	protected List<Vector> getAllNeighbours(Vector idx){
 		return getDiagonalDirs().stream().map(idx::plus).toList();
 	}
@@ -54,6 +50,10 @@ public class RectLab extends Labyrinth {
 			}
 		}
 		return ch;
+	}
+
+	public List<Vector> getValidNeighbours(Vector idx) {
+		return getAllDirs().stream().map(idx::plus).filter(this::inBound).toList();
 	}
 
 	public Vector getDir(Vector idx) {

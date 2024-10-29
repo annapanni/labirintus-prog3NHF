@@ -11,33 +11,31 @@ public abstract class Labyrinth {
 	private int height;
 	private double padding;
 	private List<Room> rooms;
-	private RoomFinder roomfinder;
 
 	protected static Random rand = new Random();
 
-	protected Vector getRoot(){return root;}
-	protected void setRoot(Vector nr){root = nr;}
+	public Vector getRoot(){return root;}
+	public void setRoot(Vector nr){root = nr;}
 	protected Random getRand() {return rand;}
-	protected RoomFinder getRoomfinder() {return roomfinder;}
 
 	public List<Room> getRooms() {return rooms;}
+	public void setRooms(List<Room> r) {rooms = r;}
 	public int getWidth(){return width;}
 	public int getHeight(){return height;}
 	public double getPadding() {return padding;}
 
-	protected Labyrinth(int w, int h, double p, RoomFinder rf) {
+	protected Labyrinth(int w, int h, double p) {
 		width = w;
 		height = h;
 		padding = p;
-		roomfinder = rf;
 		rooms = new ArrayList<>();
 	}
 
 	protected abstract double getDist2Between(Vector idx1, Vector idx2);
-	protected abstract List<Vector> getValidNeighbours(Vector idx);
 	protected abstract List<Vector> getAllNeighbours(Vector idx);
 	protected abstract List<Vector> getChildren(Vector idx);
 
+	public abstract List<Vector> getValidNeighbours(Vector idx);
  	public abstract Vector getDir(Vector idx);
 	public abstract void setDir(Vector idx, Vector dir);
 	public abstract boolean inBound(Vector idx);
@@ -48,7 +46,7 @@ public abstract class Labyrinth {
 	public abstract Vector posToVec(double x, double y);
 	public abstract List<double[]> getNodePoly(Vector idx);
 
-	private Vector findLastValidIdx(){
+	public Vector lastValidIdx(){
 		int i = width * height - 1;
 		while (! inBound(new Vector(i / width, i % width))) {i--;}
 		return new Vector(i / width, i % width);
@@ -67,22 +65,7 @@ public abstract class Labyrinth {
 		return inWhichRoom(idx) != null;
 	}
 
-	public void coverWithRooms() {
-		rerootTo(findLastValidIdx());
-		rooms = new ArrayList<>();
-		for (int x = 0; x < width; x++){
-			for (int y = 0; y < width; y++){
-				Vector idx = new Vector(x, y);
-				if (inAnyRoom(idx) || ! inBound(idx)) {continue;}
-				Room nroom = roomfinder.findRoomAt(idx, this);
-				if (nroom.size() >= 2) {
-					rooms.add(nroom);
-				}
-			}
-		}
-	}
-
-	protected void rerootTo(Vector idx){
+	public void rerootTo(Vector idx){
 		Vector currentIdx = idx;
 		Vector prevDir = new Vector(0, 0);
 		while (! currentIdx.equals(root)) {
@@ -95,31 +78,7 @@ public abstract class Labyrinth {
 		root = idx;
 	}
 
-	public void changeNTimesFrom(int n, Vector changeAt, boolean keepRoot) {
-		Vector ogRoot = null;
-		if (keepRoot) {
-			ogRoot = root;
-		}
-		rerootTo(changeAt);
-		for (int i=0; i < n; i++) {
-			List<Vector> neighbours = getValidNeighbours(root);
-      Vector nroot = neighbours.get(rand.nextInt(neighbours.size()));
-      setDir(root, nroot.plus(root.neg()));
-      setDir(nroot, new Vector(0,0));
-      root = nroot;
-		}
-		if (keepRoot) {
-			root = ogRoot;
-		}
-	}
-
-	public void changeNTimes(int n){
-		for (int i=0; i<n; i++){
-			changeNTimesFrom(1, getRandomPos(), false);
-		}
-	}
-
-	public List<Vector> findRoute(Vector from, Vector to){
+	public List<Vector> getRoute(Vector from, Vector to){
 		rerootTo(to);
 		List<Vector> route = new LinkedList<>();
 		route.add(from);
