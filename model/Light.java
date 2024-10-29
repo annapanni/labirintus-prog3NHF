@@ -39,8 +39,8 @@ public class Light implements Moving {
 		rand = new Random();
 	}
 
-	public boolean step(){
-		if (rand.nextDouble(0.0, 1.0) < flicker) {
+	public boolean step(int dTime){
+		if (rand.nextDouble(0.0, 1.0) < flicker * dTime/30.0) {
 			double newRad = radius + radius * rand.nextDouble(-flicker/4, flicker/4);
 			if (newRad < ogRadius * (1 + flicker) && ogRadius * (1 - flicker) < newRad) {
 				setRadius(newRad);

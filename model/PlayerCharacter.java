@@ -13,9 +13,9 @@ public class PlayerCharacter extends Storable implements Moving {
 	public double getDir() {return dir;}
 	public void setDir(double d) {dir = d;}
 
-	public boolean step() {
-		double dx = stepDist * Math.cos(dir);
-		double dy = stepDist * Math.sin(dir);
+	public boolean step(int dTime) {
+		double dx = dTime * stepDist * Math.cos(dir);
+		double dy = dTime * stepDist * Math.sin(dir);
 		setPosition(getXPos() + dx, getYPos() + dy);
 		return false;
 	}

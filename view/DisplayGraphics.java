@@ -27,7 +27,7 @@ public class DisplayGraphics extends JPanel{
 	public static void main(String[] args) {
 		int dTime = 1000 / 30;
 		Labyrinth lab = new RectLab(20, 20, 0.3, new RectRoomFinder(5));
-		PlayerCharacter player = new PlayerCharacter(lab, new Vector(12, 12), 0.03);
+		PlayerCharacter player = new PlayerCharacter(lab, new Vector(12, 12), 0.003);
 		player.setLight(new Light(player, 3, 0.8, 0.0));
 		LabState labState = new LabState(lab, player, 0.8);
 		LabView lv = new LabView(labState, 60, 30);
@@ -36,12 +36,11 @@ public class DisplayGraphics extends JPanel{
 		JFrame frame = new JFrame();
 		frame.add(disp);
 		frame.setSize(900,800);
-		frame.setVisible(true);
 
 		lab.changeNTimes(1000);
 		lab.coverWithRooms();
 
-		frame.addWindowListener(new WindowAdapter() {
+		frame.addWindowListener(new WindowAdapter() { // alternate solution on lecture TODO
     	public void windowClosing(WindowEvent windowEvent){
           System.exit(0);
        }
@@ -67,7 +66,9 @@ public class DisplayGraphics extends JPanel{
 			}
 		});
 
-		while(true) {
+		frame.setVisible(true);
+
+		while(true) { //something better? TODO
 			lctrl.step();
 			disp.repaint();
 			try {Thread.sleep(dTime);}

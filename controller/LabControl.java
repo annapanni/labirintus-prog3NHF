@@ -32,7 +32,7 @@ public class LabControl {
 		if (routeFrom == null) {
 			routeFrom = vclick;
 		} else {
-			Storable fly = new Firefly(labState.getLab(), routeFrom, vclick, 0.003 * dTime);
+			Storable fly = new Firefly(labState.getLab(), routeFrom, vclick, 0.003);
 			Light li = new Light(fly, 0.6, 0.3, 0.4, ModelColor.YELLOW);
 			fly.setLight(li);
 			labState.getObjects().add(fly);
@@ -53,7 +53,7 @@ public class LabControl {
 		Iterator<Moving> it = toMove.iterator();
 		while (it.hasNext()) {
 			Moving m = it.next();
-			boolean done = m.step();
+			boolean done = m.step(dTime);
 			if (done) {
 				//it.remove();
 			}
