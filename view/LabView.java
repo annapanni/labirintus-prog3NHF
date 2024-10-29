@@ -79,11 +79,20 @@ public class LabView {
 		}
 	}
 
-	private void drawObject(Graphics2D g, Storable obj, Color col){
-		g.setColor(col);
+	private void drawObject(Graphics2D g, Storable obj){
 		int x = labPosToPx(obj.getXPos());
 		int y = labPosToPx(obj.getYPos());
-		g.fillOval(x-3, y-3, 6, 6);
+		switch (obj.getSprite()) {
+			case ModelSprite.CHARACTER:
+				g.setColor(Color.RED);
+				g.fillOval(x-3, y-3, 6, 6); break;
+			case ModelSprite.KEY:
+				g.setColor(Color.YELLOW);
+				g.fillOval(x-3, y-3, 6, 6); break;
+			default:
+				g.setColor(Color.BLUE);
+				g.fillOval(x-3, y-3, 6, 6); break;
+		}
 	}
 
 	private Area getLightArea(Light l, double rad) {
@@ -159,8 +168,7 @@ public class LabView {
 		List<Light> lights = labState.getObjects().stream().map(Storable::getLight).filter(l->l!=null).toList();
 		drawLightColors(g, lights);
 		for (Storable obj : labState.getObjects()){
-			Color col = obj.equals(labState.getPlayer()) ? Color.RED : Color.BLUE;
-			drawObject(g, obj,col);
+			drawObject(g, obj);
 		}
 		g.setColor(new Color(0, 0, 0, 255));
 		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)labState.getdarknessOpacity()));

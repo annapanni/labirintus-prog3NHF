@@ -9,11 +9,14 @@ public class Storable {
 	private double xOffset;
 	private double yOffset;
 	private Light light;
+	private ModelSprite sprite = ModelSprite.DEFAULT;
 
 	public Labyrinth getLab(){return lab;}
 	public Vector getInCell(){return inCell;}
 	public Light getLight(){return light;}
 	public void setLight(Light li){light = li;}
+	public ModelSprite getSprite(){return sprite;}
+	public void setSprite(ModelSprite s){sprite = s;}
 
 	public Storable(Labyrinth l, Vector idx){
 		lab = l;

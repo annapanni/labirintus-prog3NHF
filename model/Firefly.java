@@ -20,6 +20,7 @@ public class Firefly extends Storable implements Moving {
 		xAnchor = getXPos();
 		yAnchor = getYPos();
 		rand = new Random();
+		setSprite(ModelSprite.FIREFLY);
 	}
 
 	public void setLight(Light li){

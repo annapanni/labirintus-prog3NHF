@@ -30,6 +30,7 @@ public class DisplayGraphics extends JPanel{
 		PlayerCharacter player = new PlayerCharacter(lab, new Vector(12, 12), 0.003);
 		player.setLight(new Light(player, 3, 0.8, 0.0));
 		LabState labState = new LabState(lab, player, 0.8);
+		labState.getObjects().add(new Key(lab, new Vector(5, 5)));
 		LabView lv = new LabView(labState, 60, 30);
 		LabControl lctrl = new LabControl(labState, dTime);
 		DisplayGraphics disp = new DisplayGraphics(lv);

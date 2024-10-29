@@ -8,6 +8,7 @@ public class PlayerCharacter extends Storable implements Moving {
 	public PlayerCharacter(Labyrinth l, Vector idx, double stepD){
 		super(l, idx);
 		stepDist = stepD;
+		setSprite(ModelSprite.CHARACTER);
 	}
 
 	public double getDir() {return dir;}
