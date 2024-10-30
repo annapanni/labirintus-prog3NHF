@@ -15,6 +15,8 @@ public class LabView extends JPanel {
 	private int offset;
 	private double scale;
 
+	public void setLabState(LabState ls) {labState = ls;}
+
 	public LabView(LabState laby, int offs, int sc) {
 		labState = laby;
 		offset = offs;

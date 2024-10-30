@@ -14,6 +14,8 @@ public class LabGameControl {
 	private double mouseX;
 	private double mouseY;
 
+	public void setLabState(LabState ls) {labState = ls;}
+
 	public LabGameControl(LabState laby, int dt) {
 		labState = laby;
 		dTime = dt;

@@ -9,6 +9,8 @@ import model.*;
 public class LabEditControl {
 	private LabState labState;
 
+	public void setLabState(LabState ls) {labState = ls;}
+
 	private static Random rand = new Random();
 
 	public LabEditControl(LabState laby) {

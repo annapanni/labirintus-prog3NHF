@@ -14,42 +14,52 @@ public class DisplayGraphics{
 	EditPanel editPanel;
 	GamePanel gamePanel;
 
-	private JMenuBar menuSetup(){
+	public void toEditMode() {
 		CardLayout lout = (CardLayout)mainPage.getLayout();
+		gamePanel.exitGame();
+		editPanel.startEditing();
+		lout.first(mainPage);
+	}
+
+	public void toGameMode() {
+		CardLayout lout = (CardLayout)mainPage.getLayout();
+		gamePanel.startGame();
+		editPanel.exitEdit();
+		lout.last(mainPage);
+	}
+
+	private JMenuBar menuSetup(){
 		JMenuItem edThis = new JMenuItem("Edit this map");
-		edThis.addActionListener(e -> {
-			gamePanel.exitGame();
-			editPanel.startEditing();
-			lout.first(mainPage);
-		});
+		edThis.addActionListener(e -> toEditMode());
 		JMenuItem edNew = new JMenuItem("Create new map");
 		JMenuItem edLoad = new JMenuItem("Load map");
-		JMenuItem edSave = new JMenuItem("Save");
-		JMenuItem edSaveAs = new JMenuItem("Save as");
+		edLoad.addActionListener(e -> SimplePopup.load(this, editPanel).startPopup());
 		JMenuItem pThis = new JMenuItem("Play on this map");
-		pThis.addActionListener(e -> {
-			gamePanel.startGame();
-			editPanel.exitEdit();
-			lout.last(mainPage);
-		});
+		pThis.addActionListener(e -> toGameMode());
 		JMenuItem pNew = new JMenuItem("Random new map");
 		JMenuItem pCNew = new JMenuItem("Configure random new map");
-    JMenuItem pLoad = new JMenuItem("Load map");
+		JMenuItem pLoad = new JMenuItem("Load map");
+		JMenuItem save = new JMenuItem("Save map");
+    JMenuItem saveAs = new JMenuItem("Save as...");
+		saveAs.addActionListener(e -> SimplePopup.save(editPanel.getLabState()).startPopup()); // TODO not always the active panel
+
 		JMenu eMenu = new JMenu("Edit");
-		JMenu pMenu = new JMenu("Play");
 		eMenu.add(edThis);
 		eMenu.add(edNew);
 		eMenu.add(edLoad);
-		eMenu.add(edSave);
-		eMenu.add(edSaveAs);
+		JMenu pMenu = new JMenu("Play");
 		pMenu.add(pThis);
 		pMenu.add(pNew);
 		pMenu.add(pCNew);
 		pMenu.add(pLoad);
+		JMenu sMenu = new JMenu("Save");
+		sMenu.add(save);
+		sMenu.add(saveAs);
 
 		JMenuBar mb = new JMenuBar();
 		mb.add(eMenu);
 		mb.add(pMenu);
+		mb.add(sMenu);
 
 		return mb;
 	}

@@ -3,7 +3,7 @@ package model;
 import java.util.List;
 
 
-public class Storable {
+public class Storable implements java.io.Serializable  {
 	private Labyrinth lab;
 	private Vector inCell;
 	private double xOffset;

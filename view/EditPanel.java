@@ -9,10 +9,18 @@ import controller.LabEditControl;
 import model.LabState;
 
 public class EditPanel extends JPanel {
+	LabState labState;
 	LabView labView;
 	LabEditControl labControl;
 	Timer timer = new Timer();
 	int dTime = 30;
+
+	public LabState getLabState() {return labState;}
+	public void setLabState(LabState ls){
+		labState = ls;
+		labControl.setLabState(ls);
+		labView.setLabState(ls);
+	}
 
 	private JPanel createOptionPanel() {
 		JButton keyButt = new JButton("Add/delete key");
@@ -42,7 +50,8 @@ public class EditPanel extends JPanel {
 		return pan;
 	}
 
-	public EditPanel(LabState labState) {
+	public EditPanel(LabState ls) {
+		labState = ls;
 		timer = new Timer();
 		setLayout(new BorderLayout());
 		add(createOptionPanel(), BorderLayout.WEST);

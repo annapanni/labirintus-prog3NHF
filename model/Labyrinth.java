@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
-public abstract class Labyrinth {
+public abstract class Labyrinth implements java.io.Serializable {
 	private Vector root;
 	private int width;
 	private int height;

@@ -3,18 +3,21 @@ package model;
 import java.util.List;
 import java.util.ArrayList;
 
-public class LabState {
+public class LabState implements java.io.Serializable {
 	private Labyrinth lab;
 	private List<Storable> objects;
 	private PlayerCharacter player;
 	private Light lineOfSight;
 	private double darknessOpacity;
+	private String name;
 
 	public Labyrinth getLab(){return lab;};
 	public List<Storable> getObjects() {return objects;}
 	public PlayerCharacter getPlayer() {return player;}
 	public Light getLineOfSight() {return lineOfSight;}
 	public double getdarknessOpacity() {return darknessOpacity;}
+	public String getName(){return name;}
+	public void setName(String n){name = n;}
 
 	public LabState(Labyrinth l, PlayerCharacter pl, double dop, boolean lof) {
 		lab = l;

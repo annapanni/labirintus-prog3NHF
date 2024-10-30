@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-public class Light{
+public class Light implements java.io.Serializable{
 	private Storable origin;
 	private double radius = Double.POSITIVE_INFINITY;
 	private double flicker = 0.2;

@@ -10,10 +10,13 @@ import model.LabState;
 
 
 public class GamePanel extends JPanel {
+	LabState labState;
 	LabView labView;
 	LabGameControl labControl;
 	Timer timer = new Timer();
 	int dTime = 30;
+
+	public LabState getLabState() {return labState;}
 
 	private JPanel createHelpPanel() {
 		JPanel pan = new JPanel();
@@ -26,7 +29,8 @@ public class GamePanel extends JPanel {
 		return pan;
 	}
 
-	public GamePanel(LabState labState) {
+	public GamePanel(LabState ls) {
+		labState = ls;
 		timer = new Timer();
 		setLayout(new BorderLayout());
 		add(createHelpPanel(), BorderLayout.WEST);

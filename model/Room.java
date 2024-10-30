@@ -2,7 +2,7 @@ package model;
 
 import java.util.List;
 
-public abstract class Room {
+public abstract class Room implements java.io.Serializable {
 	private Labyrinth lab;
 
 	public Labyrinth getLab() {return lab;}

@@ -4,7 +4,7 @@ model = Labyrinth HexaLab Vector Room RectRoom GraphUtils ConcaveRoom RectLab \
 view = LabView DisplayGraphics
 
 controller = LabGameControl LabEditControl RoomFinder RectRoomFinder ConcaveRoomFinder Mover \
-	CharMover LightMover FireflyMover
+	CharMover LightMover FireflyMover FileManager
 
 srcs = $(view:%=view/%.java) $(model:%=model/%.java) $(controller:%=controller/%.java)
 
