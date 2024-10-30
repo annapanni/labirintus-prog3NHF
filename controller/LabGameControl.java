@@ -11,6 +11,8 @@ public class LabGameControl {
 	private List<Mover> toMove;
 	private Vector routeFrom;
 	private int dTime;
+	private double mouseX;
+	private double mouseY;
 
 	public LabGameControl(LabState laby, int dt) {
 		labState = laby;
@@ -42,10 +44,8 @@ public class LabGameControl {
 	}
 
  	public void handleMouseMove(double x, double y) {
-		double dx = (x - labState.getPlayer().getXPos()) / 10;
-		double dy = (y - labState.getPlayer().getYPos()) / 10;
-		double fi = Math.atan2(dy, dx);
-		labState.getPlayer().setDir(fi);
+		mouseX = x;
+		mouseY = y;
 	}
 
 	public void step(){
@@ -54,5 +54,9 @@ public class LabGameControl {
 			Mover m = it.next();
 			m.step(dTime);
 		}
+		double dx = (mouseX - labState.getPlayer().getXPos()) / 10;
+		double dy = (mouseY - labState.getPlayer().getYPos()) / 10;
+		double fi = Math.atan2(dy, dx);
+		labState.getPlayer().setDir(fi);
 	}
 }

@@ -19,6 +19,7 @@ public class LabView extends JPanel {
 		labState = laby;
 		offset = offs;
 		scale = sc;
+		setPreferredSize(new Dimension(800, 600));
 	}
 
 	private double calculateCorridorWidth(){
