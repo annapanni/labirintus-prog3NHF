@@ -14,14 +14,20 @@ public class LabView extends JPanel {
 	private LabState labState;
 	private int offset;
 	private double scale;
+	private double opacityOverride;
 
 	public void setLabState(LabState ls) {labState = ls;}
 
-	public LabView(LabState laby, int offs, int sc) {
+	public LabView(LabState laby, int offs, int sc, double oo) {
 		labState = laby;
 		offset = offs;
 		scale = sc;
+		opacityOverride = oo;
 		setPreferredSize(new Dimension(800, 600));
+	}
+
+	public LabView(LabState laby, int offs, int sc) {
+		this(laby, offs, sc, -1);
 	}
 
 	private double calculateCorridorWidth(){
@@ -179,7 +185,8 @@ public class LabView extends JPanel {
 			drawObject(g, obj);
 		}
 		g.setColor(new Color(0, 0, 0, 255));
-		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)labState.getdarknessOpacity()));
+		double op = opacityOverride > 0 ? opacityOverride : labState.getdarknessOpacity();
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)op));
 		BufferedImage darkness = darknessImage(lights, screenWidth, screenHeight);
 		g.drawImage(darkness, 0, 0, null);
 		Light sRange =  labState.getLineOfSight();

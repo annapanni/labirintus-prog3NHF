@@ -56,7 +56,7 @@ public class EditPanel extends JPanel {
 		setLayout(new BorderLayout());
 		add(createOptionPanel(), BorderLayout.WEST);
 		add(createSettingsPanel(), BorderLayout.EAST);
-		labView = new LabView(labState, 50, 30);
+		labView = new LabView(labState, 50, 30, 0.2);
 		add(labView, BorderLayout.CENTER);
 		labControl = new LabEditControl(labState);
 
