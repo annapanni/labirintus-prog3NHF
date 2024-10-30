@@ -1,7 +1,7 @@
 model = Labyrinth HexaLab Vector Room RectRoom GraphUtils ConcaveRoom RectLab \
-	Storable Firefly Light LabState ModelColor PlayerCharacter
+	Storable Firefly Light LabState ModelColor PlayerCharacter ModelSprite Key
 
-view = LabView DisplayGraphics
+view = LabView DisplayGraphics CustomTimerTask EditPanel GamePanel SimplePopup
 
 controller = LabGameControl LabEditControl RoomFinder RectRoomFinder ConcaveRoomFinder Mover \
 	CharMover LightMover FireflyMover FileManager
