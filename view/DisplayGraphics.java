@@ -40,6 +40,7 @@ public class DisplayGraphics{
 			switchTo(editPanel);
 		});
 		JMenuItem edNew = new JMenuItem("Create new map");
+		edNew.addActionListener(e -> (new StructSettings(editPanel)).generateAndSet());
 		JMenuItem edLoad = new JMenuItem("Load map");
 		edLoad.addActionListener(e -> SimplePopup.load(this, editPanel).startPopup());
 		JMenuItem pCont = new JMenuItem("Continue playing");
@@ -50,6 +51,7 @@ public class DisplayGraphics{
 			switchTo(gamePanel);
 		});
 		JMenuItem pNew = new JMenuItem("Random new map");
+		pNew.addActionListener(e -> (new StructSettings(gamePanel)).generateAndSet());
 		JMenuItem pCNew = new JMenuItem("Configure random new map");
 		JMenuItem pLoad = new JMenuItem("Load map");
 		pLoad.addActionListener(e -> SimplePopup.load(this, gamePanel).startPopup());
@@ -91,7 +93,7 @@ public class DisplayGraphics{
 
 	public void createApplication() {
 		int dTime = 1000 / 30;
-		LabState labState = LabEditControl.generateLabyrinth(new RectLab(20, 20, 0.3), new RectRoomFinder(5));
+		LabState labState = (new StructSettings(null)).generate();
 
 		mainPage = new JPanel();
 		mainPage.setLayout(new CardLayout());
