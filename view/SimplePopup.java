@@ -19,7 +19,7 @@ public class SimplePopup {
 		SimplePopup s = new SimplePopup();
 		JTextField tf = new JTextField(lab.getName());
 		tf.setColumns(15);
-		JLabel label = new JLabel("New name:");
+		JLabel label = new JLabel("Save as:");
 		label.setLabelFor(tf);
 		s.input = tf;
 		s.inpLabel = label;
@@ -56,6 +56,15 @@ public class SimplePopup {
 		return s;
 	}
 
+	public static SimplePopup message(String msg) {
+		SimplePopup s = new SimplePopup();
+		JLabel label = new JLabel(msg);
+		s.inpLabel = label;
+		s.doneButton = "Ok";
+		s.action = () -> {};
+		return s;
+	}
+
 	public void startPopup() {
 		JFrame frame = new JFrame();
 		JLabel errorLabel = new JLabel("");
@@ -78,12 +87,21 @@ public class SimplePopup {
 		pan.setLayout(gridbag);
 		con.gridx = 0;
 		con.gridy = 0;
-		gridbag.setConstraints(inpLabel, con);
-		pan.add(inpLabel);
-		con.gridx = 1;
-		con.gridy = 0;
-		gridbag.setConstraints(input, con);
-		pan.add(input);
+		if (input == null) {
+			con.gridwidth = 2;
+		}
+		if (inpLabel != null) {
+			gridbag.setConstraints(inpLabel, con);
+			pan.add(inpLabel);
+			con.gridx = 1;
+			con.gridy = 0;
+		} else {
+			con.gridwidth = 2;
+		}
+		if (input != null) {
+			gridbag.setConstraints(input, con);
+			pan.add(input);
+		}
 		con.gridx = 0;
 		con.gridy = 1;
 		gridbag.setConstraints(errorLabel, con);

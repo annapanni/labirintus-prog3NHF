@@ -5,6 +5,7 @@ import javax.swing.*;
 
 import java.lang.Thread;
 import java.lang.InterruptedException;
+import java.io.IOException;
 
 import model.*;
 import controller.*;
@@ -31,26 +32,47 @@ public class DisplayGraphics{
 	}
 
 	private JMenuBar menuSetup(){
+		JMenuItem edCont = new JMenuItem("Continue edititing");
+		edCont.addActionListener(e -> switchTo(editPanel));
 		JMenuItem edThis = new JMenuItem("Edit this map");
-		edThis.addActionListener(e -> switchTo(editPanel));
+		edThis.addActionListener(e -> {
+			editPanel.setLabState(current.getLabState());
+			switchTo(editPanel);
+		});
 		JMenuItem edNew = new JMenuItem("Create new map");
 		JMenuItem edLoad = new JMenuItem("Load map");
 		edLoad.addActionListener(e -> SimplePopup.load(this, editPanel).startPopup());
+		JMenuItem pCont = new JMenuItem("Continue playing");
+		pCont.addActionListener(e -> switchTo(gamePanel));
 		JMenuItem pThis = new JMenuItem("Play on this map");
-		pThis.addActionListener(e -> switchTo(gamePanel));
+		pThis.addActionListener(e -> {
+			gamePanel.setLabState(current.getLabState());
+			switchTo(gamePanel);
+		});
 		JMenuItem pNew = new JMenuItem("Random new map");
 		JMenuItem pCNew = new JMenuItem("Configure random new map");
 		JMenuItem pLoad = new JMenuItem("Load map");
 		pLoad.addActionListener(e -> SimplePopup.load(this, gamePanel).startPopup());
 		JMenuItem save = new JMenuItem("Save map");
+		save.addActionListener(e -> {
+			if (current.getLabState().getName() == null) {
+				SimplePopup.save(current.getLabState()).startPopup();
+			} else {
+				try {FileManager.save(current.getLabState());}
+				catch (IOException ex) {SimplePopup.message("Failed to save map").startPopup();}
+			}
+		});
+
     JMenuItem saveAs = new JMenuItem("Save as...");
 		saveAs.addActionListener(e -> SimplePopup.save(current.getLabState()).startPopup());
 
 		JMenu eMenu = new JMenu("Edit");
+		eMenu.add(edCont);
 		eMenu.add(edThis);
 		eMenu.add(edNew);
 		eMenu.add(edLoad);
 		JMenu pMenu = new JMenu("Play");
+		pMenu.add(pCont);
 		pMenu.add(pThis);
 		pMenu.add(pNew);
 		pMenu.add(pCNew);
