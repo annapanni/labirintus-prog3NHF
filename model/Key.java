@@ -10,7 +10,7 @@ public class Key extends Storable {
 	public Key(Labyrinth l, Vector idx){
 		super(l, idx);
 		collected = false;
-		setLight(new Light(this, 0.2, 0.1, 0.0, ModelColor.RED));
+		setLight(new Light(this, 0.3, 0.1, 0.0, ModelColor.YELLOW));
 		setSprite(ModelSprite.KEY);
 	}
 }

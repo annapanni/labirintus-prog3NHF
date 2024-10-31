@@ -15,6 +15,6 @@ public class Firefly extends Storable {
 		route.remove(0);
 		stepDist = s;
 		setSprite(ModelSprite.FIREFLY);
-		setLight(new Light(this, 0.6, 0.3, 0.4, ModelColor.YELLOW));
+		setLight(new Light(this, 0.6, 0.3, 0.4, ModelColor.FIREFLY));
 	}
 }

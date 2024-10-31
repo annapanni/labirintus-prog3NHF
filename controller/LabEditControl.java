@@ -68,8 +68,8 @@ public class LabEditControl {
 	public void handleClick(double x, double y){
 		Vector vclick = labState.getLab().posToVec(x, y);
 		if (! labState.getLab().inBound(vclick)) {return;}
-		Storable key = new Key(labState.getLab(), vclick);
-		key.setPosition(x, y);
-		labState.getObjects().add(key);
+		Storable br = Storable.brazier(labState.getLab(), vclick);
+		br.setPosition(x, y);
+		labState.getObjects().add(br);
 	}
 }

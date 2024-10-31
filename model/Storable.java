@@ -57,4 +57,11 @@ public class Storable implements java.io.Serializable  {
 		}
 	}
 
+	public static Storable brazier(Labyrinth l, Vector idx){
+		Storable b = new Storable(l, idx);
+		b.setLight(new Light(b, 0.7, 0.2, 0.5, ModelColor.ORANGE));
+		b.setSprite(ModelSprite.BRAZIER);
+		return b;
+	}
+
 }

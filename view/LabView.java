@@ -47,6 +47,10 @@ public class LabView extends JPanel {
 				return Color.WHITE;
 			case BLACK:
 				return Color.BLACK;
+			case FIREFLY:
+				return new Color(210, 240, 30);
+			case ORANGE:
+				return new Color(255, 180, 20, 255);
 			default:
 				return new Color(0,0,0,0);
 			}
@@ -97,8 +101,11 @@ public class LabView extends JPanel {
 				g.setColor(Color.RED);
 				g.fillOval(x-3, y-3, 6, 6); break;
 			case ModelSprite.KEY:
-				g.setColor(Color.YELLOW);
+				g.setColor(Color.BLACK);
 				g.fillOval(x-3, y-3, 6, 6); break;
+			case ModelSprite.BRAZIER:
+				g.setColor(Color.RED);
+				g.fillOval(x-4, y-4, 8, 8); break;
 			default:
 				g.setColor(Color.BLUE);
 				g.fillOval(x-3, y-3, 6, 6); break;
