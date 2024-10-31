@@ -6,27 +6,16 @@ import java.util.Arrays;
 import model.LabState;
 
 public class FileManager {
-	public static void save(LabState ls) {
-		try {
-			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(ls.getName() + ".laby"));
-			out.writeObject(ls);
-			out.close();
-		} catch(IOException ex) {
-			System.out.println(ex);
-		}
+	public static void save(LabState ls) throws IOException {
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(ls.getName() + ".laby"));
+		out.writeObject(ls);
+		out.close();
 	}
 
-	public static LabState load(String fname){
-		LabState labState = null;
-		try {
-			ObjectInputStream in = new ObjectInputStream(new FileInputStream(fname));
-			labState = (LabState)in.readObject();
-			in.close();
-		} catch(IOException ex) {
-			System.out.println(ex);
-		} catch(ClassNotFoundException ex) {
-			System.out.println(ex);
-		}
+	public static LabState load(String fname) throws IOException, ClassNotFoundException {
+		ObjectInputStream in = new ObjectInputStream(new FileInputStream(fname));
+		LabState labState = (LabState)in.readObject();
+		in.close();
 		return labState;
 	}
 
