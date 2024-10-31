@@ -3,20 +3,19 @@ package view;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.Timer;
 
 import controller.LabGameControl;
 import model.LabState;
 
 
-public class GamePanel extends JPanel {
-	LabState labState;
-	LabView labView;
+public class GamePanel extends ModePanel {
 	LabGameControl labControl;
-	Timer timer = new Timer();
-	int dTime = 30;
 
-	public LabState getLabState() {return labState;}
+	@Override
+	public void setLabState(LabState ls){
+		super.setLabState(ls);
+		labControl.setLabState(ls);
+	}
 
 	private JPanel createHelpPanel() {
 		JPanel pan = new JPanel();
@@ -29,9 +28,8 @@ public class GamePanel extends JPanel {
 		return pan;
 	}
 
-	public GamePanel(LabState ls) {
-		labState = ls;
-		timer = new Timer();
+	public GamePanel(LabState ls, int dt) {
+		super(ls, dt);
 		setLayout(new BorderLayout());
 		add(createHelpPanel(), BorderLayout.WEST);
 		labView = new LabView(labState, 50, 30);
@@ -53,14 +51,9 @@ public class GamePanel extends JPanel {
 		});
 	}
 
-	public void exitGame(){
-		timer.cancel();
-		timer.purge();
-	}
-
-	public void startGame(){
-		timer = new Timer();
-		timer.scheduleAtFixedRate(new CustomTimerTask(labView::repaint), 0l, (long)dTime);
+	@Override
+	public void startMode(){
+		super.startMode();
 		timer.scheduleAtFixedRate(new CustomTimerTask(labControl::step), 0l, (long)dTime);
 	}
 }

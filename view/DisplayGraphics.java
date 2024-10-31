@@ -13,35 +13,38 @@ public class DisplayGraphics{
 	JPanel mainPage;
 	EditPanel editPanel;
 	GamePanel gamePanel;
+	ModePanel current;
 
-	public void toEditMode() {
+	public void switchTo(ModePanel m) {
+		if (m == current) return;
 		CardLayout lout = (CardLayout)mainPage.getLayout();
-		gamePanel.exitGame();
-		editPanel.startEditing();
-		lout.first(mainPage);
-	}
-
-	public void toGameMode() {
-		CardLayout lout = (CardLayout)mainPage.getLayout();
-		gamePanel.startGame();
-		editPanel.exitEdit();
-		lout.last(mainPage);
+		if (m == editPanel) {
+			gamePanel.exitMode();
+			editPanel.startMode();
+			lout.first(mainPage);
+		} else {
+			editPanel.exitMode();
+			gamePanel.startMode();
+			lout.last(mainPage);
+		}
+		current = m;
 	}
 
 	private JMenuBar menuSetup(){
 		JMenuItem edThis = new JMenuItem("Edit this map");
-		edThis.addActionListener(e -> toEditMode());
+		edThis.addActionListener(e -> switchTo(editPanel));
 		JMenuItem edNew = new JMenuItem("Create new map");
 		JMenuItem edLoad = new JMenuItem("Load map");
 		edLoad.addActionListener(e -> SimplePopup.load(this, editPanel).startPopup());
 		JMenuItem pThis = new JMenuItem("Play on this map");
-		pThis.addActionListener(e -> toGameMode());
+		pThis.addActionListener(e -> switchTo(gamePanel));
 		JMenuItem pNew = new JMenuItem("Random new map");
 		JMenuItem pCNew = new JMenuItem("Configure random new map");
 		JMenuItem pLoad = new JMenuItem("Load map");
+		pLoad.addActionListener(e -> SimplePopup.load(this, gamePanel).startPopup());
 		JMenuItem save = new JMenuItem("Save map");
     JMenuItem saveAs = new JMenuItem("Save as...");
-		saveAs.addActionListener(e -> SimplePopup.save(editPanel.getLabState()).startPopup()); // TODO not always the active panel
+		saveAs.addActionListener(e -> SimplePopup.save(current.getLabState()).startPopup());
 
 		JMenu eMenu = new JMenu("Edit");
 		eMenu.add(edThis);
@@ -70,11 +73,11 @@ public class DisplayGraphics{
 
 		mainPage = new JPanel();
 		mainPage.setLayout(new CardLayout());
-		editPanel = new EditPanel(labState);
+		editPanel = new EditPanel(labState, dTime);
 		mainPage.add(editPanel);
-		editPanel.startEditing();
-		gamePanel = new GamePanel(labState);
+		gamePanel = new GamePanel(labState, dTime);
 		mainPage.add(gamePanel);
+		switchTo(editPanel);
 
 		JFrame frame = new JFrame();
 		frame.add(mainPage);

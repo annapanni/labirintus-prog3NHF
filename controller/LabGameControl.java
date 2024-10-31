@@ -14,13 +14,20 @@ public class LabGameControl {
 	private double mouseX;
 	private double mouseY;
 
-	public void setLabState(LabState ls) {labState = ls;}
+	public void setLabState(LabState ls) {
+		labState = ls;
+		initMovers(ls.getObjects());
+	}
 
 	public LabGameControl(LabState laby, int dt) {
 		labState = laby;
 		dTime = dt;
 		toMove = new LinkedList<>();
-		for (Storable obj : labState.getObjects()) {
+		initMovers(laby.getObjects());
+	}
+
+	private void initMovers(List<Storable> objs) {
+		for (Storable obj : objs) {
 			Mover mv = Mover.create(obj);
 			if (mv != null) {
 				toMove.add(mv);

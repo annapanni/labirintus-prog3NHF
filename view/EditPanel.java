@@ -3,23 +3,17 @@ package view;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.Timer;
 
 import controller.LabEditControl;
 import model.LabState;
 
-public class EditPanel extends JPanel {
-	LabState labState;
-	LabView labView;
+public class EditPanel extends ModePanel {
 	LabEditControl labControl;
-	Timer timer = new Timer();
-	int dTime = 30;
 
-	public LabState getLabState() {return labState;}
+	@Override
 	public void setLabState(LabState ls){
-		labState = ls;
+		super.setLabState(ls);
 		labControl.setLabState(ls);
-		labView.setLabState(ls);
 	}
 
 	private JPanel createOptionPanel() {
@@ -50,9 +44,8 @@ public class EditPanel extends JPanel {
 		return pan;
 	}
 
-	public EditPanel(LabState ls) {
-		labState = ls;
-		timer = new Timer();
+	public EditPanel(LabState ls, int dt) {
+		super(ls, dt);
 		setLayout(new BorderLayout());
 		add(createOptionPanel(), BorderLayout.WEST);
 		add(createSettingsPanel(), BorderLayout.EAST);
@@ -66,15 +59,5 @@ public class EditPanel extends JPanel {
 				labControl.handleClick(labView.pxToLabPos(e.getX()), labView.pxToLabPos(e.getY()));
 			}
 		});
-	}
-
-	public void exitEdit(){
-		timer.cancel();
-		timer.purge();
-	}
-
-	public void startEditing(){
-		timer = new Timer();
-		timer.scheduleAtFixedRate(new CustomTimerTask(labView::repaint), 0l, (long)dTime);
 	}
 }

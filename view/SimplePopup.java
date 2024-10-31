@@ -36,7 +36,7 @@ public class SimplePopup {
 		};
 		return s;
 	}
-	public static SimplePopup load(DisplayGraphics disp, EditPanel ep) {
+	public static SimplePopup load(DisplayGraphics disp, ModePanel pan) {
 		SimplePopup s = new SimplePopup();
 		JComboBox jcb = new JComboBox(FileManager.getLabys());
 		JLabel label = new JLabel("Choose file:");
@@ -46,8 +46,8 @@ public class SimplePopup {
 		s.doneButton = "Load";
 		s.action = () -> {
 			try {
-				ep.setLabState(FileManager.load((String)jcb.getSelectedItem()));
-				disp.toEditMode();
+				pan.setLabState(FileManager.load((String)jcb.getSelectedItem()));
+				disp.switchTo(pan);
 			} catch (IOException e) {s.errorMsg = "File error";}
 			catch (ClassNotFoundException e) {s.errorMsg = "Could not find map";}
 			catch (NullPointerException e) {s.errorMsg = "No such file";}
