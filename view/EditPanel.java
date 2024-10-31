@@ -31,15 +31,27 @@ public class EditPanel extends ModePanel {
 	}
 
 	private JPanel createSettingsPanel() {
-		JButton keyButt = new JButton("sett");
-		keyButt.setAlignmentX(Component.CENTER_ALIGNMENT);
-		JButton changeButt = new JButton("sett2");
-		changeButt.setAlignmentX(Component.CENTER_ALIGNMENT);
+		StructSettings sett = new StructSettings(this);
+		JButton createButt = new JButton("Create");
+		createButt.addActionListener(e -> sett.generateAndSet());
+		createButt.setAlignmentX(Component.CENTER_ALIGNMENT);
+		JPanel structPanel = new JPanel();
+		structPanel.setLayout(new BoxLayout(structPanel, BoxLayout.Y_AXIS));
+		structPanel.add(sett);
+		structPanel.add(createButt);
+		structPanel.add(Box.createVerticalStrut(10));
+		structPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+
 
 		JPanel pan = new JPanel();
-		pan.setLayout(new BoxLayout (pan, BoxLayout.Y_AXIS));
-		pan.add(keyButt);
-		pan.add(changeButt);
+		GridBagLayout gb = new GridBagLayout();
+		GridBagConstraints con = new GridBagConstraints();
+		con.insets = new Insets(10, 10, 10, 10);
+		pan.setLayout(gb);
+
+		con.gridx = 0; con.gridy = 0;
+		gb.setConstraints(structPanel, con);
+		pan.add(structPanel);
 
 		return pan;
 	}

@@ -40,7 +40,7 @@ public class DisplayGraphics{
 			switchTo(editPanel);
 		});
 		JMenuItem edNew = new JMenuItem("Create new map");
-		edNew.addActionListener(e -> (new StructSettings(editPanel)).generateAndSet());
+		edNew.addActionListener(e -> (new StructSettings(this, editPanel)).generateAndSet()); //should also switch to TODO
 		JMenuItem edLoad = new JMenuItem("Load map");
 		edLoad.addActionListener(e -> SimplePopup.load(this, editPanel).startPopup());
 		JMenuItem pCont = new JMenuItem("Continue playing");
@@ -51,8 +51,12 @@ public class DisplayGraphics{
 			switchTo(gamePanel);
 		});
 		JMenuItem pNew = new JMenuItem("Random new map");
-		pNew.addActionListener(e -> (new StructSettings(gamePanel)).generateAndSet());
+		pNew.addActionListener(e -> (new StructSettings(this, gamePanel)).generateAndSet());
 		JMenuItem pCNew = new JMenuItem("Configure random new map");
+		pCNew.addActionListener(e -> {
+			StructSettings sett = new StructSettings(this, gamePanel);
+			SimplePopup.from(sett, sett::generateAndSet, "Create").startPopup();
+		});
 		JMenuItem pLoad = new JMenuItem("Load map");
 		pLoad.addActionListener(e -> SimplePopup.load(this, gamePanel).startPopup());
 		JMenuItem save = new JMenuItem("Save map");
@@ -93,7 +97,7 @@ public class DisplayGraphics{
 
 	public void createApplication() {
 		int dTime = 1000 / 30;
-		LabState labState = (new StructSettings(null)).generate();
+		LabState labState = (new StructSettings()).generate();
 
 		mainPage = new JPanel();
 		mainPage.setLayout(new CardLayout());

@@ -1,6 +1,7 @@
 package view;
 
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 import java.util.Random;
 
 import model.*;
@@ -17,8 +18,13 @@ public class StructSettings extends JPanel {
 	private String rType;
 
 	private ModePanel pan;
+	private DisplayGraphics disp;
 
-	public StructSettings(ModePanel mp) {
+	public StructSettings(){this(null, null);}
+
+	public StructSettings(ModePanel mp){this(null, mp);}
+
+	public StructSettings(DisplayGraphics d, ModePanel mp) {
 		lWidth = rand.nextInt(25) + 5;
 		lHeight = (int)((rand.nextDouble() + 0.5) * lWidth);
 		lType = lTypes[rand.nextInt(lTypes.length)];
@@ -26,6 +32,48 @@ public class StructSettings extends JPanel {
 		rSize = (randSize >= Math.min(lWidth, lHeight)) ? Math.min(lWidth, lHeight) / 2 : randSize;
 		rType = rTypes[rand.nextInt(rTypes.length)];
 		pan = mp;
+		disp = d;
+
+		JSpinner lwInp = new JSpinner(new SpinnerNumberModel(lWidth, 2, 50, 1));
+		lwInp.addChangeListener(e -> lWidth = (Integer)lwInp.getValue());
+		JLabel lwLabel = new JLabel("Width:");
+		lwLabel.setLabelFor(lwInp);
+		JSpinner lhInp = new JSpinner(new SpinnerNumberModel(lHeight, 2, 50, 1));
+		lhInp.addChangeListener(e -> lHeight = (Integer)lhInp.getValue());
+		JLabel lhLabel = new JLabel("Height:");
+		lhLabel.setLabelFor(lhInp);
+		JComboBox ltInp = new JComboBox(lTypes);
+		ltInp.addActionListener(e -> lType = (String)ltInp.getSelectedItem());
+		JLabel ltLabel = new JLabel("Labyrinth type:");
+		ltLabel.setLabelFor(ltInp);
+		JSpinner rsInp = new JSpinner(new SpinnerNumberModel(rSize, 1, 50, 1));
+		rsInp.addChangeListener(e -> rSize = (Integer)rsInp.getValue());
+		JLabel rsLabel = new JLabel("Max room size:");
+		rsLabel.setLabelFor(rsInp);
+		JComboBox rtInp = new JComboBox(rTypes);
+		rtInp.addActionListener(e -> rType = (String)rtInp.getSelectedItem());
+		JLabel rtLabel = new JLabel("Room type:");
+		rtLabel.setLabelFor(rtInp);
+
+		GridBagLayout gridbag = new GridBagLayout();
+		GridBagConstraints con = new GridBagConstraints();
+		con.insets = new Insets(10, 10, 10, 10);
+		setLayout(gridbag);
+		Component[][] comps = new Component[][]{
+			new Component[]{lwLabel, lwInp},
+			new Component[]{lhLabel, lhInp},
+			new Component[]{ltLabel, ltInp},
+			new Component[]{rtLabel, rtInp},
+			new Component[]{rsLabel, rsInp},
+		};
+		for (int y=0; y < comps.length; y++){
+			for (int x=0; x < comps[y].length; x++){
+				con.gridx = x; con.gridy = y;
+				gridbag.setConstraints(comps[y][x], con);
+				add(comps[y][x]);
+			}
+		}
+
 	}
 
 	public LabState generate(){
@@ -48,7 +96,12 @@ public class StructSettings extends JPanel {
 	}
 
 	public void generateAndSet(){
-		pan.setLabState(generate());
+		if (pan != null) {
+			pan.setLabState(generate());
+		}
+		if (disp != null) {
+			disp.switchTo(pan);
+		}
 	}
 
 }

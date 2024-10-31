@@ -37,6 +37,7 @@ public class SimplePopup {
 		};
 		return s;
 	}
+
 	public static SimplePopup load(DisplayGraphics disp, ModePanel pan) {
 		SimplePopup s = new SimplePopup();
 		JComboBox jcb = new JComboBox(FileManager.getLabys());
@@ -64,6 +65,14 @@ public class SimplePopup {
 		s.doneButton = "Ok";
 		s.action = () -> {};
 		s.cancellable = false;
+		return s;
+	}
+
+	public static SimplePopup from(Component inp, Runnable a, String done) {
+		SimplePopup s = new SimplePopup();
+		s.input = inp;
+		s.action = a;
+		s.doneButton = done;
 		return s;
 	}
 
