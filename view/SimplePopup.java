@@ -14,6 +14,7 @@ public class SimplePopup {
 	Runnable action;
 	String doneButton;
 	String errorMsg;
+	boolean cancellable = true;
 
 	public static SimplePopup save(LabState lab) {
 		SimplePopup s = new SimplePopup();
@@ -62,6 +63,7 @@ public class SimplePopup {
 		s.inpLabel = label;
 		s.doneButton = "Ok";
 		s.action = () -> {};
+		s.cancellable = false;
 		return s;
 	}
 
@@ -80,6 +82,8 @@ public class SimplePopup {
 				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 			}
 		});
+		JButton canc = new JButton("Cancel");
+		canc.addActionListener((e) -> frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING)));
 		JPanel pan = new JPanel();
 		GridBagLayout gridbag = new GridBagLayout();
 		GridBagConstraints con = new GridBagConstraints();
@@ -88,15 +92,16 @@ public class SimplePopup {
 		con.gridx = 0;
 		con.gridy = 0;
 		if (input == null) {
-			con.gridwidth = 2;
+			con.gridwidth = 3;
 		}
 		if (inpLabel != null) {
 			gridbag.setConstraints(inpLabel, con);
 			pan.add(inpLabel);
 			con.gridx = 1;
 			con.gridy = 0;
-		} else {
 			con.gridwidth = 2;
+		} else {
+			con.gridwidth = 3;
 		}
 		if (input != null) {
 			gridbag.setConstraints(input, con);
@@ -104,9 +109,20 @@ public class SimplePopup {
 		}
 		con.gridx = 0;
 		con.gridy = 1;
+		con.gridwidth = 1;
+		if (!cancellable) {
+			con.gridwidth = 2;
+		}
 		gridbag.setConstraints(errorLabel, con);
 		pan.add(errorLabel);
-		con.gridx = 1;
+		if (cancellable) {
+			con.gridx = 1;
+			con.gridy = 1;
+			con.anchor = GridBagConstraints.EAST;
+			gridbag.setConstraints(canc, con);
+			pan.add(canc);
+		}
+		con.gridx = 2;
 		con.gridy = 1;
 		con.anchor = GridBagConstraints.EAST ;
 		gridbag.setConstraints(done, con);
