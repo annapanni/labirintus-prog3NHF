@@ -106,6 +106,9 @@ public class LabView extends JPanel {
 			case ModelSprite.BRAZIER:
 				g.setColor(Color.RED);
 				g.fillOval(x-4, y-4, 8, 8); break;
+			case ModelSprite.EXIT:
+				g.setColor(Color.BLACK);
+				g.fillRect(x-4, y-4, 8, 8); break;
 			default:
 				g.setColor(Color.BLUE);
 				g.fillOval(x-3, y-3, 6, 6); break;

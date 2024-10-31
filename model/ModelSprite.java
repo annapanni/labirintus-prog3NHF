@@ -1,5 +1,5 @@
 package model;
 
 public enum ModelSprite {
-	DEFAULT, CHARACTER, KEY, FIREFLY, BRAZIER
+	DEFAULT, CHARACTER, KEY, FIREFLY, BRAZIER, EXIT
 }

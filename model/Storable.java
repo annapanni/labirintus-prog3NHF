@@ -57,10 +57,24 @@ public class Storable implements java.io.Serializable  {
 		}
 	}
 
+	public void setCell(Vector idx) {
+		if (lab.inBound(idx)){
+			inCell = idx;
+			xOffset = 0;
+			yOffset = 0;
+		}
+	}
+
 	public static Storable brazier(Labyrinth l, Vector idx){
 		Storable b = new Storable(l, idx);
 		b.setLight(new Light(b, 0.7, 0.2, 0.5, ModelColor.ORANGE));
 		b.setSprite(ModelSprite.BRAZIER);
+		return b;
+	}
+
+	public static Storable exit(Labyrinth l, Vector idx){
+		Storable b = new Storable(l, idx);
+		b.setSprite(ModelSprite.EXIT);
 		return b;
 	}
 

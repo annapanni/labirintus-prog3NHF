@@ -14,6 +14,8 @@ public class EditPanel extends ModePanel {
 	public void setLabState(LabState ls){
 		super.setLabState(ls);
 		labControl.setLabState(ls);
+		ls.getPlayer().setCell(ls.getStartPos());
+		// TODO uncollect keys
 	}
 
 	private JPanel createOptionPanel() {

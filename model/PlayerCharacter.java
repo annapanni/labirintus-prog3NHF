@@ -8,6 +8,7 @@ public class PlayerCharacter extends Storable {
 	public PlayerCharacter(Labyrinth l, Vector idx, double stepD){
 		super(l, idx);
 		stepDist = stepD;
+		setLight(new Light(this, 3.5, 0.3, 0.0));
 		setSprite(ModelSprite.CHARACTER);
 	}
 
