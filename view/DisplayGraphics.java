@@ -112,6 +112,8 @@ public class DisplayGraphics{
 		frame.setJMenuBar(menuSetup());
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		gamePanel.init();
+		editPanel.init();
 
 		frame.setVisible(true);
 	}

@@ -130,15 +130,15 @@ public class EditPanel extends ModePanel {
 		setLayout(new BorderLayout());
 		add(createOptionPanel(), BorderLayout.WEST);
 		add(createSettingsPanel(), BorderLayout.EAST);
-		labView = new LabView(labState, 50, 30, 0.2);
+		labView = new LabView(labState, 30, 0.2);
 		add(labView, BorderLayout.CENTER);
 		labControl = new LabEditControl(labState);
 
 		labView.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mousePressed(MouseEvent e) {
-				double xpos = labView.pxToLabPos(e.getX());
-				double ypos = labView.pxToLabPos(e.getY());
+				double xpos = labView.xpxToLabPos(e.getX());
+				double ypos = labView.ypxToLabPos(e.getY());
 				switch (currMode) {
 					case Mode.KEY:
 						labControl.addDeleteKey(xpos, ypos); break;

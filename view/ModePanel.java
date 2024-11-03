@@ -25,6 +25,10 @@ public abstract class ModePanel extends JPanel {
 		labView.setLabState(ls);
 	}
 
+	public void init() {
+		labView.setLabState(labState); //to call centering once jpanel size is determined
+	}
+
 	public void startMode() {
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new CustomTimerTask(labView::repaint), 0l, (long)dTime);

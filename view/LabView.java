@@ -12,23 +12,34 @@ import model.*;
 
 public class LabView extends JPanel {
 	private LabState labState;
-	private int offset;
+	private int xoffset;
+	private int yoffset;
 	private double scale;
 	private double visiblityOverride;
 
-	public void setLabState(LabState ls) {labState = ls;}
+	public void setLabState(LabState ls) {labState = ls; center();}
 	public void setVisiblityOverride(double vo) {visiblityOverride = vo;}
 
-	public LabView(LabState laby, int offs, int sc, double vo) {
+	public LabView(LabState laby, int sc, double vo) {
 		labState = laby;
-		offset = offs;
 		scale = sc;
 		visiblityOverride = vo;
 		setPreferredSize(new Dimension(800, 600));
+		center();
 	}
 
-	public LabView(LabState laby, int offs, int sc) {
-		this(laby, offs, sc, -1);
+	public LabView(LabState laby, int sc) {
+		this(laby, sc, -1);
+	}
+
+	private void center(){
+		xoffset = 0; yoffset = 0;
+		int px = xlabPosToPx(labState.getPlayer().getXPos());
+		int py = ylabPosToPx(labState.getPlayer().getYPos());
+		int screenWidth = (int)getSize().getWidth();
+		int screenHeight = (int)getSize().getHeight();
+		xoffset = screenWidth/2 - px;
+		yoffset = screenHeight/2 - py;
 	}
 
 	private double calculateCorridorWidth(){
@@ -64,15 +75,15 @@ public class LabView extends JPanel {
 
 	private void drawCell(Graphics2D g, Vector idx) {
 		List<double[]> xyLabPos = labState.getLab().getNodePoly(idx);
-		int[] xpos = xyLabPos.stream().mapToInt(p -> labPosToPx(p[0])).toArray();
-		int[] ypos = xyLabPos.stream().mapToInt(p -> labPosToPx(p[1])).toArray();
+		int[] xpos = xyLabPos.stream().mapToInt(p -> xlabPosToPx(p[0])).toArray();
+		int[] ypos = xyLabPos.stream().mapToInt(p -> ylabPosToPx(p[1])).toArray();
 		g.fillPolygon(xpos, ypos, xpos.length);
 	}
 
 	private void drawRoom(Graphics2D g, Room r){
 		List<Vector> border = r.getBorderPoly();
-		int[] xpos = border.stream().mapToInt(v -> labPosToPx(labState.getLab().xPosition(v))).toArray();
-		int[] ypos = border.stream().mapToInt(v -> labPosToPx(labState.getLab().yPosition(v))).toArray();
+		int[] xpos = border.stream().mapToInt(v -> xlabPosToPx(labState.getLab().xPosition(v))).toArray();
+		int[] ypos = border.stream().mapToInt(v -> ylabPosToPx(labState.getLab().yPosition(v))).toArray();
 		g.fillPolygon(xpos, ypos, xpos.length);
 		g.drawPolygon(xpos, ypos, xpos.length);
 	}
@@ -85,18 +96,18 @@ public class LabView extends JPanel {
 					continue;
 				}
 				drawCell(g, idx);
-				int centerX = labPosToPx(labState.getLab().xPosition(idx));
-				int centerY = labPosToPx(labState.getLab().yPosition(idx));
-				int endX = labPosToPx(labState.getLab().xPosition(idx.plus(labState.getLab().getDir(idx))));
-				int endY = labPosToPx(labState.getLab().yPosition(idx.plus(labState.getLab().getDir(idx))));
+				int centerX = xlabPosToPx(labState.getLab().xPosition(idx));
+				int centerY = ylabPosToPx(labState.getLab().yPosition(idx));
+				int endX = xlabPosToPx(labState.getLab().xPosition(idx.plus(labState.getLab().getDir(idx))));
+				int endY = ylabPosToPx(labState.getLab().yPosition(idx.plus(labState.getLab().getDir(idx))));
 				g.drawLine(centerX, centerY, endX, endY);
 			}
 		}
 	}
 
 	private void drawObject(Graphics2D g, Storable obj){
-		int x = labPosToPx(obj.getXPos());
-		int y = labPosToPx(obj.getYPos());
+		int x = xlabPosToPx(obj.getXPos());
+		int y = ylabPosToPx(obj.getYPos());
 		switch (obj.getSprite()) {
 			case ModelSprite.CHARACTER:
 				g.setColor(Color.RED);
@@ -118,12 +129,12 @@ public class LabView extends JPanel {
 
 	private Area getLightArea(Light l, double rad) {
 		List<double[]> lightPoly = l.getLightPoly();
-		int[] xpos = lightPoly.stream().mapToInt(c -> labPosToPx(c[0])).toArray();
-		int[] ypos = lightPoly.stream().mapToInt(c -> labPosToPx(c[1])).toArray();
+		int[] xpos = lightPoly.stream().mapToInt(c -> xlabPosToPx(c[0])).toArray();
+		int[] ypos = lightPoly.stream().mapToInt(c -> ylabPosToPx(c[1])).toArray();
 		Area light = new Area(new Polygon(xpos, ypos, xpos.length));
 		if (rad != Double.POSITIVE_INFINITY) {
 			Storable og = l.getOrigin();
-			Area range = new Area(new Ellipse2D.Double(labPosToPx(og.getXPos()) - rad, labPosToPx(og.getYPos()) - rad, rad*2, rad*2));
+			Area range = new Area(new Ellipse2D.Double(xlabPosToPx(og.getXPos()) - rad, ylabPosToPx(og.getYPos()) - rad, rad*2, rad*2));
 			light.intersect(range);
 		}
 		return light;
@@ -132,8 +143,8 @@ public class LabView extends JPanel {
 	private void drawLightColors(Graphics2D g, List<Light> lights) {
 		for (Light light : lights){
 			Area lArea = getLightArea(light, light.getRadius()*scale);
-			int cx = labPosToPx(light.getOrigin().getXPos());
-			int cy = labPosToPx(light.getOrigin().getYPos());
+			int cx = xlabPosToPx(light.getOrigin().getXPos());
+			int cy = ylabPosToPx(light.getOrigin().getYPos());
 			double r = light.getRadius() * scale;
 			Color col = decodeColor(light.getColor());
 			Paint p = new RadialGradientPaint(cx, cy, (float)r, new float[]{(float)light.getDimFrom(), 1f},
@@ -150,8 +161,8 @@ public class LabView extends JPanel {
 		g.fillRect(0, 0, image.getWidth(), image.getHeight());
 		for (Light light : lights) {
 			Area lArea = getLightArea(light, light.getRadius()*scale);
-			int cx = labPosToPx(light.getOrigin().getXPos());
-			int cy = labPosToPx(light.getOrigin().getYPos());
+			int cx = xlabPosToPx(light.getOrigin().getXPos());
+			int cy = ylabPosToPx(light.getOrigin().getYPos());
 			double r = light.getRadius() * scale;
 			Paint p = new RadialGradientPaint(cx, cy, (float)r, new float[]{(float)light.getDimFrom(), 1f},
 				new Color[]{new Color(255, 255, 255, 255), new Color(255, 255, 255, 0)});
@@ -169,12 +180,20 @@ public class LabView extends JPanel {
 		return image;
 	}
 
-	public int labPosToPx(double p){
-		return offset + (int)((p + 2/scale) * scale);
+	public int xlabPosToPx(double p){
+		return xoffset + (int)((p + 2/scale) * scale);
 	}
 
-	public double pxToLabPos(int px){
-		return (px - offset) / scale;
+	public int ylabPosToPx(double p){
+		return yoffset + (int)((p + 2/scale) * scale);
+	}
+
+	public double xpxToLabPos(int px){
+		return (px - xoffset) / scale;
+	}
+
+	public double ypxToLabPos(int px){
+		return (px - yoffset) / scale;
 	}
 
 	@Override
