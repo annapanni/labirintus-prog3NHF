@@ -45,7 +45,7 @@ public class LabView extends JPanel {
 		setPreferredSize(new Dimension(800, 600));
 		center();
 		addKeyListener(new KeyHandler());
-		addMouseWheelListener(e -> scale = scale * (1 - 0.02*e.getWheelRotation()));
+		addMouseWheelListener(e -> scale = scale * (1 - 0.05*e.getWheelRotation()));
 	}
 
 	public LabView(LabState laby, int sc) {

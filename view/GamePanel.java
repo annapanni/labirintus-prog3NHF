@@ -19,11 +19,32 @@ public class GamePanel extends ModePanel {
 
 	private JPanel createHelpPanel() {
 		JPanel pan = new JPanel();
-		JButton keyButt = new JButton("help ");
-		JButton changeButt = new JButton("help2");
+		Color defBg = pan.getBackground();
+		JLabel info = new JLabel(
+			"<html><h3>Objectives</h3>" +
+			"<ul style=margin-left:20px><li>collect all the keys</li><li>reach the exit</li>" +
+			"<li>to help you find your next<br/>goal you may release a firefly</li></ul>" +
+			"<h3>Game controls</h3><ul style=margin-left:20px>" +
+			"<li>arrow keys: pan the map</li><li>mouse wheel: zoom</li>" +
+			"<li>c key: center the map</li><li>f key: realease a firefly</li>" +
+			"<li>space: (un)lock player position</li><li>click: interact with objects</li>" +
+			"</ul></html>"
+		);
+		info.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		JToggleButton togInfo = new JToggleButton("?", true);
+		togInfo.addChangeListener(e -> {
+			info.setVisible(togInfo.isSelected());
+			pan.setBackground(togInfo.isSelected() ? defBg : Color.black);
+		});
+		togInfo.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS));
+		pan.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		pan.add(togInfo);
+		pan.add(info);
 
-		pan.add(keyButt);
-		pan.add(changeButt);
+
+
+
 
 		return pan;
 	}
