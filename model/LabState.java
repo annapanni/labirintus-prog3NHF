@@ -19,6 +19,7 @@ public class LabState implements java.io.Serializable {
 	public Labyrinth getLab(){return lab;};
 	public List<Storable> getObjects() {return objects;}
 	public List<Key> getKeys() {return keys;}
+	public long getUncollectedKeyNum() {return keys.stream().filter(k -> !k.getCollected()).count();}
 	public PlayerCharacter getPlayer() {return player;}
 	public Light getLineOfSight() {return lineOfSight;}
 	public void setLineOfSight(boolean on) {lineOfSight = on ? new Light(player) : null;}
@@ -31,15 +32,14 @@ public class LabState implements java.io.Serializable {
 	public Storable getExit(){return exit;}
 	public int getFireflyNum(){return fireflyNum;}
 	public void setFireflyNum(int n){fireflyNum = n;}
+	public int getUsedFireflyNum(){return usedFireflyNum;}
 	public void setUsedFireflyNum(int n){usedFireflyNum = n;}
 
-	public LabState(Labyrinth l, int kNum) {
+	public LabState(Labyrinth l, int kNum, int fNum) {
 		lab = l;
 		darknessOpacity = 1.0;
 		objects = new ArrayList<>();
 		startPos = l.getRandomPos();
-		exit = Storable.exit(l, l.getRandomPos());
-		objects.add(exit);
 		player = new PlayerCharacter(l, startPos, 0.002);
 		objects.add(player);
 		lineOfSight = new Light(player);
@@ -49,5 +49,8 @@ public class LabState implements java.io.Serializable {
 			keys.add(k);
 			objects.add(k);
 		}
+		exit = Storable.exit(l, l.getRandomPos());
+		objects.add(exit);
+		fireflyNum = fNum;
 	}
 }

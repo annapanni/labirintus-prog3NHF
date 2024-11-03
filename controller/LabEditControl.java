@@ -22,7 +22,7 @@ public class LabEditControl {
 		Storable exit = Storable.exit(lab, lab.getRandomPos());
 		changeNTimes(lab, lab.getWidth() * lab.getHeight() * 10);
 		coverWithRooms(lab, lab.getRoomfinder());
-		LabState labState = new LabState(lab, 3);
+		LabState labState = new LabState(lab, 3, 5);
 		return labState;
 	}
 

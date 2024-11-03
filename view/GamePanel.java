@@ -41,11 +41,6 @@ public class GamePanel extends ModePanel {
 		pan.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		pan.add(togInfo);
 		pan.add(info);
-
-
-
-
-
 		return pan;
 	}
 
@@ -58,18 +53,27 @@ public class GamePanel extends ModePanel {
 		add(labView, BorderLayout.CENTER);
 		labControl = new LabGameControl(labState, dTime);
 
+		labView.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_SPACE) labControl.switchLockedPos();
+				if (e.getKeyCode() == KeyEvent.VK_F) labControl.startFirefly();
+	    }
+		});
+
 		labView.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mousePressed(MouseEvent e) {
 				labView.requestFocus();
-				labControl.handleClick(labView.xpxToLabPos(e.getX()), labView.ypxToLabPos(e.getY()));
+				double xpos = labView.xpxToLabPos(e.getX());
+				double ypos = labView.ypxToLabPos(e.getY());
+				labControl.interactAt(xpos, ypos, () -> SimplePopup.message("Congratulations! You exited the maze.").startPopup(GamePanel.this));
 			}
 		});
 
 		labView.addMouseMotionListener(new MouseMotionAdapter(){
 			@Override
 			public void mouseMoved(MouseEvent e) {
-					labControl.handleMouseMove(labView.xpxToLabPos(e.getX()), labView.ypxToLabPos(e.getY()));
+					labControl.setMousePos(labView.xpxToLabPos(e.getX()), labView.ypxToLabPos(e.getY()));
 			}
 		});
 	}
