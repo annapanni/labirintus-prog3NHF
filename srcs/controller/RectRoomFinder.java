@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import model.*;
 
 
-public class RectRoomFinder implements RoomFinder {
+public class RectRoomFinder implements RoomFinder, java.io.Serializable{
 	private int maxsize;
 
 	public RectRoomFinder(int ms) {maxsize = ms;}
