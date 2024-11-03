@@ -15,6 +15,7 @@ public class GamePanel extends ModePanel {
 	public void setLabState(LabState ls){
 		super.setLabState(ls);
 		labControl.setLabState(ls);
+		labView.setVisiblityOverride(-1);
 	}
 
 	private JPanel createHelpPanel() {
@@ -85,6 +86,5 @@ public class GamePanel extends ModePanel {
 	public void startMode(){
 		super.startMode();
 		timer.scheduleAtFixedRate(new CustomTimerTask(labControl::step), 0l, (long)dTime);
-		labView.setVisiblityOverride(-1);
 	}
 }
