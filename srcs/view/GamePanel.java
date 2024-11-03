@@ -66,7 +66,10 @@ public class GamePanel extends ModePanel {
 				labView.requestFocus();
 				double xpos = labView.xpxToLabPos(e.getX());
 				double ypos = labView.ypxToLabPos(e.getY());
-				labControl.interactAt(xpos, ypos, () -> SimplePopup.message("<html>Congratulations!<br/> You exited the maze.").startPopup(GamePanel.this));
+				labControl.interactAt(xpos, ypos, () -> {
+					SimplePopup.message("<html>Congratulations!<br/> You exited the maze.").startPopup(GamePanel.this);
+					labView.setVisiblityOverride(0.0);
+				});
 			}
 		});
 
@@ -82,5 +85,6 @@ public class GamePanel extends ModePanel {
 	public void startMode(){
 		super.startMode();
 		timer.scheduleAtFixedRate(new CustomTimerTask(labControl::step), 0l, (long)dTime);
+		labView.setVisiblityOverride(-1);
 	}
 }

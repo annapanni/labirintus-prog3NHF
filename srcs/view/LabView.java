@@ -6,8 +6,11 @@ import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.RadialGradientPaint;
 import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import java.util.List;
+import java.io.IOException;
+import java.io.File;
 
 import model.*;
 
@@ -20,6 +23,27 @@ public class LabView extends JPanel {
 
 	public void setLabState(LabState ls) {labState = ls; center();}
 	public void setVisiblityOverride(double vo) {visiblityOverride = vo;}
+
+	private static boolean failedToLoad = false;
+	private static BufferedImage charImage;
+	private static BufferedImage keyImage;
+	private static BufferedImage brazierImage;
+	private static BufferedImage exitImage;
+	private static BufferedImage fireflyImage;
+
+	static {
+		try {
+			charImage = ImageIO.read(new File("./resources/wizard.png"));
+			keyImage = ImageIO.read(new File("./resources/key.png"));
+			brazierImage = ImageIO.read(new File("./resources/brazier.png"));
+			exitImage = ImageIO.read(new File("./resources/exit.png"));
+			fireflyImage = ImageIO.read(new File("./resources/firefly.png"));
+		} catch (IOException e) {
+			failedToLoad = true;
+			System.out.println(e);
+			SimplePopup.message("<html>Failed to load sprites. <br/> Defaulting to basic characterset").startPopup();
+		}
+	}
 
 	private class KeyHandler extends KeyAdapter {
 		public void keyPressed(KeyEvent e) {
@@ -125,25 +149,52 @@ public class LabView extends JPanel {
 		}
 	}
 
+	private void drawImageAt(Graphics2D g, Image img, int x, int y, double sizeModifier) {
+		int h = img.getHeight(null);
+		int w = img.getWidth(null);
+		double sc = scale *(1 - labState.getLab().getPadding()) / (h > w ? h : w);
+		int nh = (int)(h*sc*sizeModifier);
+		int nw = (int)(w*sc*sizeModifier);
+		g.drawImage(img, x - nw/2, y - nh/2, nw, nh, null);
+	}
+
 	private void drawObject(Graphics2D g, Storable obj){
 		int x = xlabPosToPx(obj.getXPos());
 		int y = ylabPosToPx(obj.getYPos());
-		switch (obj.getSprite()) {
-			case ModelSprite.CHARACTER:
-				g.setColor(Color.RED);
-				g.fillOval(x-3, y-3, 6, 6); break;
-			case ModelSprite.KEY:
-				g.setColor(Color.BLACK);
-				g.fillOval(x-3, y-3, 6, 6); break;
-			case ModelSprite.BRAZIER:
-				g.setColor(Color.RED);
-				g.fillOval(x-4, y-4, 8, 8); break;
-			case ModelSprite.EXIT:
-				g.setColor(Color.BLACK);
-				g.fillRect(x-4, y-4, 8, 8); break;
-			default:
-				g.setColor(Color.BLUE);
-				g.fillOval(x-3, y-3, 6, 6); break;
+		if (failedToLoad) {
+			switch (obj.getSprite()) {
+				case ModelSprite.CHARACTER:
+					g.setColor(Color.RED);
+					g.fillOval(x-3, y-3, 6, 6); break;
+				case ModelSprite.KEY:
+					g.setColor(Color.BLACK);
+					g.fillOval(x-3, y-3, 6, 6); break;
+				case ModelSprite.BRAZIER:
+					g.setColor(Color.RED);
+					g.fillOval(x-4, y-4, 8, 8); break;
+				case ModelSprite.EXIT:
+					g.setColor(Color.BLACK);
+					g.fillRect(x-4, y-4, 8, 8); break;
+				default:
+					g.setColor(Color.BLUE);
+					g.fillOval(x-3, y-3, 6, 6); break;
+			}
+		} else {
+			switch (obj.getSprite()) {
+				case ModelSprite.CHARACTER:
+					drawImageAt(g, charImage, x, y, 1); break;
+				case ModelSprite.KEY:
+					drawImageAt(g, keyImage, x, y, 0.7); break;
+				case ModelSprite.BRAZIER:
+					drawImageAt(g, brazierImage, x, y, 1); break;
+				case ModelSprite.EXIT:
+					drawImageAt(g, exitImage, x, y, 0.6); break;
+				case ModelSprite.FIREFLY:
+					drawImageAt(g, fireflyImage, x, y, 0.5); break;
+				default:
+					g.setColor(Color.BLUE);
+					g.fillOval(x-3, y-3, 6, 6); break;
+			}
 		}
 	}
 
