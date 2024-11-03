@@ -35,10 +35,12 @@ public class DisplayGraphics{
 		JMenuItem edCont = new JMenuItem("Continue edititing");
 		edCont.addActionListener(e -> switchTo(editPanel));
 		JMenuItem edThis = new JMenuItem("Edit this map");
-		edThis.addActionListener(e -> {
-			editPanel.setLabState(current.getLabState());
-			switchTo(editPanel);
-		});
+		edThis.addActionListener(e ->
+			SimplePopup.ask("<html>Are you sure? <br> All unsaved in-game progress will be lost", () -> {
+				editPanel.setLabState(current.getLabState());
+				switchTo(editPanel);
+			}).startPopup()
+		);
 		JMenuItem edNew = new JMenuItem("Create new map");
 		edNew.addActionListener(e -> (new StructSettings(this, editPanel)).generateAndSet()); //should also switch to TODO
 		JMenuItem edLoad = new JMenuItem("Load map");

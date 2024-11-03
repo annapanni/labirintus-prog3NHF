@@ -68,6 +68,14 @@ public class SimplePopup {
 		return s;
 	}
 
+	public static SimplePopup ask(String msg, Runnable a) {
+		SimplePopup s = new SimplePopup();
+		s.inpLabel = new JLabel(msg);
+		s.doneButton = "Continue";
+		s.action = a;
+		return s;
+	}
+
 	public static SimplePopup from(Component inp, Runnable a, String done) {
 		SimplePopup s = new SimplePopup();
 		s.input = inp;

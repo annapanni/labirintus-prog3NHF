@@ -20,7 +20,11 @@ public class EditPanel extends ModePanel {
 		super.setLabState(ls);
 		labControl.setLabState(ls);
 		ls.getPlayer().setCell(ls.getStartPos());
-		// TODO uncollect keys
+		ls.setUsedFireflyNum(0);
+		ls.getKeys().stream().forEach(k -> {
+			k.setCollected(false);
+			if(! ls.getObjects().contains(k))  ls.getObjects().add(k);
+		});
 	}
 
 	private JPanel createOptionPanel() {
