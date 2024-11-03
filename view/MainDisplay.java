@@ -10,7 +10,7 @@ import java.io.IOException;
 import model.*;
 import controller.*;
 
-public class DisplayGraphics{
+public class MainDisplay extends JFrame{
 	JPanel mainPage;
 	EditPanel editPanel;
 	GamePanel gamePanel;
@@ -39,12 +39,12 @@ public class DisplayGraphics{
 			SimplePopup.ask("<html>Are you sure? <br> All unsaved in-game progress will be lost", () -> {
 				editPanel.setLabState(current.getLabState());
 				switchTo(editPanel);
-			}).startPopup()
+			}).startPopup(this)
 		);
 		JMenuItem edNew = new JMenuItem("Create new map");
 		edNew.addActionListener(e -> (new StructSettings(this, editPanel)).generateAndSet()); //should also switch to TODO
 		JMenuItem edLoad = new JMenuItem("Load map");
-		edLoad.addActionListener(e -> SimplePopup.load(this, editPanel).startPopup());
+		edLoad.addActionListener(e -> SimplePopup.load(this, editPanel).startPopup(this));
 		JMenuItem pCont = new JMenuItem("Continue playing");
 		pCont.addActionListener(e -> switchTo(gamePanel));
 		JMenuItem pThis = new JMenuItem("Play on this map");
@@ -57,23 +57,21 @@ public class DisplayGraphics{
 		JMenuItem pCNew = new JMenuItem("Configure random new map");
 		pCNew.addActionListener(e -> {
 			StructSettings sett = new StructSettings(this, gamePanel);
-			SimplePopup.from(sett, sett::generateAndSet, "Create").startPopup();
+			SimplePopup.from(sett, sett::generateAndSet, "Create").startPopup(this);
 		});
 		JMenuItem pLoad = new JMenuItem("Load map");
-		pLoad.addActionListener(e -> SimplePopup.load(this, gamePanel).startPopup());
+		pLoad.addActionListener(e -> SimplePopup.load(this, gamePanel).startPopup(this));
 		JMenuItem save = new JMenuItem("Save map");
 		save.addActionListener(e -> {
 			if (current.getLabState().getName() == null) {
-				SimplePopup.save(current.getLabState()).startPopup();
+				SimplePopup.save(current.getLabState()).startPopup(this);
 			} else {
 				try {FileManager.save(current.getLabState());}
-				catch (IOException ex) {SimplePopup.message("Failed to save map").startPopup();}
+				catch (IOException ex) {SimplePopup.message("Failed to save map").startPopup(this);}
 			}
 		});
-
     JMenuItem saveAs = new JMenuItem("Save as...");
-		saveAs.addActionListener(e -> SimplePopup.save(current.getLabState()).startPopup());
-
+		saveAs.addActionListener(e -> SimplePopup.save(current.getLabState()).startPopup(this));
 		JMenu eMenu = new JMenu("Edit");
 		eMenu.add(edCont);
 		eMenu.add(edThis);
@@ -88,7 +86,6 @@ public class DisplayGraphics{
 		JMenu sMenu = new JMenu("Save");
 		sMenu.add(save);
 		sMenu.add(saveAs);
-
 		JMenuBar mb = new JMenuBar();
 		mb.add(eMenu);
 		mb.add(pMenu);
@@ -100,7 +97,6 @@ public class DisplayGraphics{
 	public void createApplication() {
 		int dTime = 1000 / 30;
 		LabState labState = (new StructSettings()).generate();
-
 		mainPage = new JPanel();
 		mainPage.setLayout(new CardLayout());
 		editPanel = new EditPanel(labState, dTime);
@@ -108,20 +104,17 @@ public class DisplayGraphics{
 		gamePanel = new GamePanel(labState, dTime);
 		mainPage.add(gamePanel);
 		switchTo(editPanel);
-
-		JFrame frame = new JFrame();
-		frame.add(mainPage);
-		frame.setJMenuBar(menuSetup());
-		frame.pack();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		add(mainPage);
+		setJMenuBar(menuSetup());
+		pack();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gamePanel.init();
 		editPanel.init();
-
-		frame.setVisible(true);
+		setVisible(true);
 	}
 
 	public static void main(String[] args) {
-		DisplayGraphics disp = new DisplayGraphics();
+		MainDisplay disp = new MainDisplay();
 		disp.createApplication();
 	}
 }

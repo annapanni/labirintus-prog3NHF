@@ -18,13 +18,13 @@ public class StructSettings extends JPanel {
 	private String rType;
 
 	private ModePanel pan;
-	private DisplayGraphics disp;
+	private MainDisplay disp;
 
 	public StructSettings(){this(null, null);}
 
 	public StructSettings(ModePanel mp){this(null, mp);}
 
-	public StructSettings(DisplayGraphics d, ModePanel mp) {
+	public StructSettings(MainDisplay d, ModePanel mp) {
 		lWidth = rand.nextInt(25) + 5;
 		lHeight = (int)((rand.nextDouble() + 0.5) * lWidth);
 		lType = lTypes[rand.nextInt(lTypes.length)];

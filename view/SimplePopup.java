@@ -38,7 +38,7 @@ public class SimplePopup {
 		return s;
 	}
 
-	public static SimplePopup load(DisplayGraphics disp, ModePanel pan) {
+	public static SimplePopup load(MainDisplay disp, ModePanel pan) {
 		SimplePopup s = new SimplePopup();
 		JComboBox jcb = new JComboBox(FileManager.getLabys());
 		JLabel label = new JLabel("Choose file:");
@@ -85,7 +85,13 @@ public class SimplePopup {
 	}
 
 	public void startPopup() {
+		startPopup(null);
+	}
+
+	public void startPopup(Component parent) {
 		JFrame frame = new JFrame();
+		frame.setLocationRelativeTo(parent);
+		frame.setLocationRelativeTo(parent);
 		JLabel errorLabel = new JLabel("");
 		errorLabel.setForeground(Color.RED);
 		JButton done = new JButton(doneButton);
@@ -146,6 +152,8 @@ public class SimplePopup {
 		pan.add(done);
 		frame.add(pan);
 		frame.pack();
+		Point uLeft = frame.getLocation();
+		frame.setLocation((int)uLeft.getX()-frame.getSize().width/2, (int)uLeft.getY()-frame.getSize().height/2);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setVisible(true);
 	}
