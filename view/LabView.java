@@ -37,7 +37,6 @@ public class LabView extends JPanel {
 			}
     }
 	}
-	public KeyListener getKeyHandler() {return new KeyHandler();}
 
 	public LabView(LabState laby, int sc, double vo) {
 		labState = laby;
@@ -46,6 +45,7 @@ public class LabView extends JPanel {
 		setPreferredSize(new Dimension(800, 600));
 		center();
 		addKeyListener(new KeyHandler());
+		addMouseWheelListener(e -> scale = scale * (1 - 0.02*e.getWheelRotation()));
 	}
 
 	public LabView(LabState laby, int sc) {
