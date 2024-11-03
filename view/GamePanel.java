@@ -33,12 +33,14 @@ public class GamePanel extends ModePanel {
 		setLayout(new BorderLayout());
 		add(createHelpPanel(), BorderLayout.WEST);
 		labView = new LabView(labState, 30);
+		labView.requestFocus();
 		add(labView, BorderLayout.CENTER);
 		labControl = new LabGameControl(labState, dTime);
 
 		labView.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mousePressed(MouseEvent e) {
+				labView.requestFocus();
 				labControl.handleClick(labView.xpxToLabPos(e.getX()), labView.ypxToLabPos(e.getY()));
 			}
 		});

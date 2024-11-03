@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.event.*;
 import javax.swing.JPanel;
 import java.util.Timer;
 
@@ -18,6 +19,7 @@ public abstract class ModePanel extends JPanel {
 		labState = l;
 		timer = new Timer();
 		dTime = dt;
+		setFocusable(true);
 	}
 
 	public void setLabState(LabState ls){
@@ -32,6 +34,8 @@ public abstract class ModePanel extends JPanel {
 	public void startMode() {
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new CustomTimerTask(labView::repaint), 0l, (long)dTime);
+		requestFocusInWindow();
+		labView.requestFocus();
 	}
 
 	public void exitMode(){

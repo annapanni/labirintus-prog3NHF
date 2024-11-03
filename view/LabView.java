@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.RadialGradientPaint;
@@ -20,12 +21,31 @@ public class LabView extends JPanel {
 	public void setLabState(LabState ls) {labState = ls; center();}
 	public void setVisiblityOverride(double vo) {visiblityOverride = vo;}
 
+	private class KeyHandler extends KeyAdapter {
+		public void keyPressed(KeyEvent e) {
+			switch (e.getKeyCode()) {
+				case KeyEvent.VK_UP:
+					yoffset += 10; break;
+				case KeyEvent.VK_DOWN:
+					yoffset -= 10; break;
+				case KeyEvent.VK_LEFT:
+					xoffset += 10; break;
+				case KeyEvent.VK_RIGHT:
+					xoffset -= 10; break;
+				case KeyEvent.VK_C:
+					center(); break;
+			}
+    }
+	}
+	public KeyListener getKeyHandler() {return new KeyHandler();}
+
 	public LabView(LabState laby, int sc, double vo) {
 		labState = laby;
 		scale = sc;
 		visiblityOverride = vo;
 		setPreferredSize(new Dimension(800, 600));
 		center();
+		addKeyListener(new KeyHandler());
 	}
 
 	public LabView(LabState laby, int sc) {

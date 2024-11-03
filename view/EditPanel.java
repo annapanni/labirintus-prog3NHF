@@ -103,7 +103,6 @@ public class EditPanel extends ModePanel {
 		return pan;
 	}
 
-
 	private JPanel createSettingsPanel() {
 		StructSettings sett = new StructSettings(this);
 		JButton createButt = new JButton("Create");
@@ -131,12 +130,14 @@ public class EditPanel extends ModePanel {
 		add(createOptionPanel(), BorderLayout.WEST);
 		add(createSettingsPanel(), BorderLayout.EAST);
 		labView = new LabView(labState, 30, 0.2);
+		labView.requestFocus();
 		add(labView, BorderLayout.CENTER);
 		labControl = new LabEditControl(labState);
 
 		labView.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mousePressed(MouseEvent e) {
+				labView.requestFocus();
 				double xpos = labView.xpxToLabPos(e.getX());
 				double ypos = labView.ypxToLabPos(e.getY());
 				switch (currMode) {
