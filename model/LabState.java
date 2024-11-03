@@ -13,6 +13,8 @@ public class LabState implements java.io.Serializable {
 	private Light lineOfSight;
 	private double darknessOpacity;
 	private String name;
+	private int fireflyNum;
+	private int usedFireflyNum;
 
 	public Labyrinth getLab(){return lab;};
 	public List<Storable> getObjects() {return objects;}
@@ -27,6 +29,9 @@ public class LabState implements java.io.Serializable {
 	public Vector getStartPos(){return startPos;}
 	public void setStartPos(Vector s){startPos = s;}
 	public Storable getExit(){return exit;}
+	public int getFireflyNum(){return fireflyNum;}
+	public void setFireflyNum(int n){fireflyNum = n;}
+	public void setUsedFireflyNum(int n){usedFireflyNum = n;}
 
 	public LabState(Labyrinth l, int kNum) {
 		lab = l;

@@ -51,6 +51,59 @@ public class EditPanel extends ModePanel {
 		return pan;
 	}
 
+	private JPanel createGameplayPanel(){
+		JToggleButton show = new JToggleButton("OFF");
+		show.addChangeListener(e -> {
+			labView.setVisiblityOverride(show.isSelected() ? -1 : 0.2 );
+			show.setText(show.isSelected() ? "ON" : "OFF");
+		});
+		show.setPreferredSize(show.getPreferredSize());
+		JSpinner dOp = new JSpinner(new SpinnerNumberModel(labState.getdarknessOpacity(), 0.0, 1.0, 0.05));
+		dOp.addChangeListener(e -> labState.setDarknessOpacity((Double)dOp.getValue()));
+		JFormattedTextField jftf = ((JSpinner.DefaultEditor) dOp.getEditor()).getTextField();
+		jftf.setColumns(3);
+		JToggleButton los = new JToggleButton("OFF", labState.getLineOfSight() != null);
+		los.setPreferredSize(los.getPreferredSize()); //initialized as "OFF" to make sure both texts fit
+		los.setText(labState.getLineOfSight() != null ? "ON" : "OFF");
+		los.addChangeListener(e -> {
+			labState.setLineOfSight(los.isSelected());
+			los.setText(los.isSelected() ? "ON" : "OFF");
+		});
+		JSpinner fNum = new JSpinner(new SpinnerNumberModel(labState.getFireflyNum(), 0, 50, 1));
+		fNum.addChangeListener(e -> labState.setFireflyNum((Integer)fNum.getValue()));
+		JLabel showLabel = new JLabel("<html><body style='text-align: right'>Show visiblity settings<br>in edit mode:");
+		showLabel.setLabelFor(show);
+		JLabel dopLabel = new JLabel("Darkness opacity:");
+		dopLabel.setLabelFor(dOp);
+		JLabel losLabel = new JLabel("Enable line of sight:");
+		losLabel.setLabelFor(los);
+		JLabel fNumLabel = new JLabel("Number of usable fireflies:");
+		fNumLabel.setLabelFor(fNum);
+		JPanel pan = new JPanel();
+		pan.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		GridBagLayout gl = new GridBagLayout();
+		GridBagConstraints con = new GridBagConstraints();
+		con.insets = new Insets(10, 10, 10, 10);
+		pan.setLayout(gl);
+		Component[][] comps = new Component[][] {
+			new Component[]{showLabel, show},
+			new Component[]{dopLabel, dOp},
+			new Component[]{losLabel, los},
+			new Component[]{fNumLabel, fNum}
+		};
+		for (int y=0; y<comps.length; y++) {
+			for (int x=0; x<comps[y].length; x++) {
+				con.gridy = y; con.gridx  = x;
+				con.anchor = x % 2 == 0 ? GridBagConstraints.EAST : GridBagConstraints.WEST;
+				gl.setConstraints(comps[y][x], con);
+				pan.add(comps[y][x]);
+			}
+		}
+		pan.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		return pan;
+	}
+
+
 	private JPanel createSettingsPanel() {
 		StructSettings sett = new StructSettings(this);
 		JButton createButt = new JButton("Create");
@@ -68,7 +121,7 @@ public class EditPanel extends ModePanel {
 		gl.setVgap(10);
 		pan.setLayout(gl);
 		pan.add(structPanel);
-
+		pan.add(createGameplayPanel());
 		return pan;
 	}
 

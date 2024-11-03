@@ -14,15 +14,16 @@ public class LabView extends JPanel {
 	private LabState labState;
 	private int offset;
 	private double scale;
-	private double opacityOverride;
+	private double visiblityOverride;
 
 	public void setLabState(LabState ls) {labState = ls;}
+	public void setVisiblityOverride(double vo) {visiblityOverride = vo;}
 
-	public LabView(LabState laby, int offs, int sc, double oo) {
+	public LabView(LabState laby, int offs, int sc, double vo) {
 		labState = laby;
 		offset = offs;
 		scale = sc;
-		opacityOverride = oo;
+		visiblityOverride = vo;
 		setPreferredSize(new Dimension(800, 600));
 	}
 
@@ -195,12 +196,12 @@ public class LabView extends JPanel {
 			drawObject(g, obj);
 		}
 		g.setColor(new Color(0, 0, 0, 255));
-		double op = opacityOverride > 0 ? opacityOverride : labState.getdarknessOpacity();
+		double op = visiblityOverride >= 0 ? visiblityOverride : labState.getdarknessOpacity();
 		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)op));
 		BufferedImage darkness = darknessImage(lights, screenWidth, screenHeight);
 		g.drawImage(darkness, 0, 0, null);
 		Light sRange =  labState.getLineOfSight();
-		if (sRange != null) {
+		if (sRange != null && visiblityOverride < 0) {
 			Area sightDarkness = new Area(new Rectangle(screenWidth, screenHeight));
 			sightDarkness.subtract(getLightArea(sRange, Double.POSITIVE_INFINITY));
 			g.fill(sightDarkness);
