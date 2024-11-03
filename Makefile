@@ -11,5 +11,5 @@ srcs = $(view:%=view/%.java) $(model:%=model/%.java) $(controller:%=controller/%
 main = view.MainDisplay
 
 run:
-	javac $(srcs)
-	java $(main)
+	javac $(srcs:%=srcs/%)
+	java -classpath srcs $(main)
