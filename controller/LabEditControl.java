@@ -3,6 +3,7 @@ package controller;
 import java.util.Random;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import model.*;
 
@@ -21,7 +22,7 @@ public class LabEditControl {
 		Storable exit = Storable.exit(lab, lab.getRandomPos());
 		changeNTimes(lab, lab.getWidth() * lab.getHeight() * 10);
 		coverWithRooms(lab, roomfinder);
-		LabState labState = new LabState(lab);
+		LabState labState = new LabState(lab, 3);
 		return labState;
 	}
 
@@ -72,4 +73,56 @@ public class LabEditControl {
 		br.setPosition(x, y);
 		labState.getObjects().add(br);
 	}
+
+	public void addDeleteKey(double x, double y) {
+		Vector vclick = labState.getLab().posToVec(x, y);
+		if (! labState.getLab().inBound(vclick)) {return;}
+		Optional<Key> optK = labState.getKeys().stream().filter(k -> k.getInCell().equals(vclick)).findFirst();
+		if (optK.isPresent()) {
+			Key k = optK.get();
+			labState.getKeys().remove(k);
+			labState.getObjects().remove(k);
+		} else {
+			Key k = new Key(labState.getLab(), vclick);
+			k.setPosition(x, y);
+			labState.getKeys().add(k);
+			labState.getObjects().add(k);
+		}
+	}
+
+	public void addDeleteBrazier(double x, double y) {
+		Vector vclick = labState.getLab().posToVec(x, y);
+		if (! labState.getLab().inBound(vclick)) {return;}
+		Optional<Storable> optB = labState.getObjects().stream()
+			.filter(b -> b.getInCell().equals(vclick) && b.getSprite() == ModelSprite.BRAZIER).findFirst();
+		if (optB.isPresent()) {
+			Storable b = optB.get();
+			labState.getObjects().remove(b);
+		} else {
+			Storable b = Storable.brazier(labState.getLab(), vclick);
+			b.setPosition(x, y);
+			labState.getObjects().add(b);
+		}
+	}
+
+	public void chageStartPos(double x, double y) {
+		Vector vclick = labState.getLab().posToVec(x, y);
+		if (! labState.getLab().inBound(vclick)) {return;}
+		labState.setStartPos(vclick);
+		labState.getPlayer().setCell(vclick);
+	}
+
+	public void chageExit(double x, double y) {
+		Vector vclick = labState.getLab().posToVec(x, y);
+		if (! labState.getLab().inBound(vclick)) {return;}
+		labState.getExit().setCell(vclick);
+	}
+
+	public void changeLabAt(double x, double y) {
+		Vector vclick = labState.getLab().posToVec(x, y);
+		if (! labState.getLab().inBound(vclick)) {return;}
+		changeNTimesFrom(labState.getLab(), 3, vclick, true);
+	}
+
+
 }
