@@ -1,2 +1,3 @@
 # ignore ALL .class files
 **.class
+*.laby
