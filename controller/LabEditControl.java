@@ -39,6 +39,7 @@ public class LabEditControl {
       lab.setRoot(nroot);
 		}
 		if (keepRoot) {
+			lab.rerootTo(ogRoot);
 			lab.setRoot(ogRoot);
 		}
 	}
