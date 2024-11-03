@@ -43,6 +43,7 @@ public class StructSettings extends JPanel {
 		JLabel lhLabel = new JLabel("Height:");
 		lhLabel.setLabelFor(lhInp);
 		JComboBox ltInp = new JComboBox(lTypes);
+		ltInp.setSelectedItem(lType);
 		ltInp.addActionListener(e -> lType = (String)ltInp.getSelectedItem());
 		JLabel ltLabel = new JLabel("Labyrinth type:");
 		ltLabel.setLabelFor(ltInp);
@@ -51,6 +52,7 @@ public class StructSettings extends JPanel {
 		JLabel rsLabel = new JLabel("Max room size:");
 		rsLabel.setLabelFor(rsInp);
 		JComboBox rtInp = new JComboBox(rTypes);
+		rtInp.setSelectedItem(rType);
 		rtInp.addActionListener(e -> rType = (String)rtInp.getSelectedItem());
 		JLabel rtLabel = new JLabel("Room type:");
 		rtLabel.setLabelFor(rtInp);
