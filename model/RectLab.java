@@ -3,12 +3,13 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.RoomFinder;
 
 public class RectLab extends Labyrinth {
 	private List<List<Vector>> directions;
 
-	public RectLab(int w, int h, double p) {
-		super(w, h, p);
+	public RectLab(int w, int h, double p, RoomFinder rf) {
+		super(w, h, p, rf);
 		setRoot(new Vector(0, 0));
 		//initialize directions
 		directions = new ArrayList<>();

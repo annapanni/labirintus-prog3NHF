@@ -3,13 +3,15 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.RoomFinder;
+
 public class HexaLab extends Labyrinth {
 	private int labHeight2;
 	private int labWidth;
 	private List<List<Vector>> directions;
 
-	public HexaLab(int w, int h, double p) {
-		super(w, h, p);
+	public HexaLab(int w, int h, double p, RoomFinder rf) {
+		super(w, h, p, rf);
 		setRoot(new Vector(w - 1, 0));
 		labHeight2 = (h - 1) / 2;
 		labWidth = w - labHeight2;

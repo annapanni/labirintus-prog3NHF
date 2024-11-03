@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
+import controller.RoomFinder;
+
 public abstract class Labyrinth implements java.io.Serializable {
 	private Vector root;
 	private int width;
 	private int height;
 	private double padding;
 	private List<Room> rooms;
+	private RoomFinder roomfinder;
 
 	protected static Random rand = new Random();
 
@@ -23,12 +26,14 @@ public abstract class Labyrinth implements java.io.Serializable {
 	public int getWidth(){return width;}
 	public int getHeight(){return height;}
 	public double getPadding() {return padding;}
+	public RoomFinder getRoomfinder() {return roomfinder;}
 
-	protected Labyrinth(int w, int h, double p) {
+	protected Labyrinth(int w, int h, double p, RoomFinder rf) {
 		width = w;
 		height = h;
 		padding = p;
 		rooms = new ArrayList<>();
+		roomfinder = rf;
 	}
 
 	public abstract double getDist2Between(Vector idx1, Vector idx2);

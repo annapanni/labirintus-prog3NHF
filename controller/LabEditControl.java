@@ -18,10 +18,10 @@ public class LabEditControl {
 		labState = laby;
 	}
 
-	public static LabState generateLabyrinth(Labyrinth lab, RoomFinder roomfinder) {
+	public static LabState generateLabyrinth(Labyrinth lab) {
 		Storable exit = Storable.exit(lab, lab.getRandomPos());
 		changeNTimes(lab, lab.getWidth() * lab.getHeight() * 10);
-		coverWithRooms(lab, roomfinder);
+		coverWithRooms(lab, lab.getRoomfinder());
 		LabState labState = new LabState(lab, 3);
 		return labState;
 	}
@@ -122,6 +122,7 @@ public class LabEditControl {
 		Vector vclick = labState.getLab().posToVec(x, y);
 		if (! labState.getLab().inBound(vclick)) {return;}
 		changeNTimesFrom(labState.getLab(), 3, vclick, true);
+		coverWithRooms(labState.getLab(), labState.getLab().getRoomfinder());
 	}
 
 

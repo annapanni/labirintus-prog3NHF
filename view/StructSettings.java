@@ -88,11 +88,11 @@ public class StructSettings extends JPanel {
 				rf = new RectRoomFinder(rSize);  // TODO none roomfinder
 		}
 		if (lType.equals("Hexagonal")) {
-			lab = new HexaLab(lWidth, lHeight, 0.3);
+			lab = new HexaLab(lWidth, lHeight, 0.3, rf);
 		} else {
-			lab = new RectLab(lWidth, lHeight, 0.3);
+			lab = new RectLab(lWidth, lHeight, 0.3, rf);
 		}
-		return LabEditControl.generateLabyrinth(lab, rf);
+		return LabEditControl.generateLabyrinth(lab);
 	}
 
 	public void generateAndSet(){
