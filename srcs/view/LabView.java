@@ -285,7 +285,7 @@ public class LabView extends JPanel {
 		Graphics2D g = (Graphics2D)g1;
 		int screenWidth = (int)g.getDeviceConfiguration().getBounds().getWidth();
 		int screenHeight = (int)g.getDeviceConfiguration().getBounds().getHeight();
-		setBackground(Color.DARK_GRAY);
+		setBackground(Color.BLACK);
 		g.setStroke(new BasicStroke((float)(scale * calculateCorridorWidth()+ 1)));
 		if (failedToLoad) g.setColor(Color.WHITE);
 		else g.setPaint(floorPaint);

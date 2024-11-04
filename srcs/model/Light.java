@@ -10,7 +10,7 @@ public class Light implements java.io.Serializable{
 	private double flicker = 0.2;
 	private double dimFrom = 0.3;
 	private int rayNum = 100;
-	private double step = 0.1;
+	private double step = 0.05;
 	private ModelColor color = ModelColor.NONE;
 
 	public double getRadius(){return radius;}
