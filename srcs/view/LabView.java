@@ -20,16 +20,19 @@ public class LabView extends JPanel {
 	private int yoffset;
 	private double scale;
 	private double visiblityOverride;
+	private Paint floorPaint;
 
 	public void setLabState(LabState ls) {labState = ls; center();}
 	public void setVisiblityOverride(double vo) {visiblityOverride = vo;}
 
 	private static boolean failedToLoad = false;
+	public static boolean failedToLoadTexture() {return failedToLoad;}
 	private static BufferedImage charImage;
 	private static BufferedImage keyImage;
 	private static BufferedImage brazierImage;
 	private static BufferedImage exitImage;
 	private static BufferedImage fireflyImage;
+	private static BufferedImage tilesImage;
 
 	static {
 		try {
@@ -38,10 +41,9 @@ public class LabView extends JPanel {
 			brazierImage = ImageIO.read(new File("./resources/brazier.png"));
 			exitImage = ImageIO.read(new File("./resources/exit.png"));
 			fireflyImage = ImageIO.read(new File("./resources/firefly.png"));
+			tilesImage = ImageIO.read(new File("./resources/tiles.jpg"));
 		} catch (IOException e) {
 			failedToLoad = true;
-			System.out.println(e);
-			SimplePopup.message("<html>Failed to load sprites. <br/> Defaulting to basic characterset").startPopup();
 		}
 	}
 
@@ -59,6 +61,9 @@ public class LabView extends JPanel {
 				case KeyEvent.VK_C:
 					center(); break;
 			}
+			if (! failedToLoad) {
+				floorPaint = new TexturePaint(tilesImage, new Rectangle(xoffset, yoffset, (int)scale, (int)scale));
+			}
     }
 	}
 
@@ -69,7 +74,14 @@ public class LabView extends JPanel {
 		setPreferredSize(new Dimension(800, 600));
 		center();
 		addKeyListener(new KeyHandler());
-		addMouseWheelListener(e -> scale = scale * (1 - 0.05*e.getWheelRotation()));
+		addMouseWheelListener(e -> {
+			scale = scale * (1 - 0.05*e.getWheelRotation());
+			if (! failedToLoad) floorPaint = new TexturePaint(tilesImage, new Rectangle(xoffset, yoffset, (int)scale, (int)scale));
+		});
+		if (! failedToLoad) {
+			tilesImage.getGraphics().translate(xoffset, yoffset);
+			floorPaint = new TexturePaint(tilesImage, new Rectangle(xoffset, yoffset, (int)scale, (int)scale));
+		}
 	}
 
 	public LabView(LabState laby, int sc) {
@@ -275,7 +287,8 @@ public class LabView extends JPanel {
 		int screenHeight = (int)g.getDeviceConfiguration().getBounds().getHeight();
 		setBackground(Color.DARK_GRAY);
 		g.setStroke(new BasicStroke((float)(scale * calculateCorridorWidth()+ 1)));
-		g.setColor(Color.WHITE);
+		if (failedToLoad) g.setColor(Color.WHITE);
+		else g.setPaint(floorPaint);
 		for (Room r : labState.getLab().getRooms()) {
 			drawRoom(g, r);
 		}

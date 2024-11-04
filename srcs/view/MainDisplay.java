@@ -111,6 +111,9 @@ public class MainDisplay extends JFrame{
 		gamePanel.init();
 		editPanel.init();
 		setVisible(true);
+		if (LabView.failedToLoadTexture()) {
+			SimplePopup.message("<html>Failed to load resources.<br/> Defaulting to basic characterset").startPopup(this);
+		}
 	}
 
 	public static void main(String[] args) {
