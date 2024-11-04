@@ -3,6 +3,8 @@ package view;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Area;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.geom.Ellipse2D;
 import java.awt.RadialGradientPaint;
 import java.awt.image.BufferedImage;
@@ -21,8 +23,8 @@ public class LabView extends JPanel {
 	private double scale;
 	private double visiblityOverride;
 	private Paint floorPaint;
+	private BufferedImage mapImage;
 
-	public void setLabState(LabState ls) {labState = ls; center();}
 	public void setVisiblityOverride(double vo) {visiblityOverride = vo;}
 
 	private static boolean failedToLoad = false;
@@ -68,9 +70,9 @@ public class LabView extends JPanel {
 	}
 
 	public LabView(LabState laby, int sc, double vo) {
-		labState = laby;
 		scale = sc;
 		visiblityOverride = vo;
+		setLabState(laby);
 		setPreferredSize(new Dimension(800, 600));
 		center();
 		addKeyListener(new KeyHandler());
@@ -86,6 +88,12 @@ public class LabView extends JPanel {
 
 	public LabView(LabState laby, int sc) {
 		this(laby, sc, -1);
+	}
+
+	public void setLabState(LabState ls) {
+		labState = ls;
+		center();
+		mapImage = (new MapView(labState, 10)).getImage(1); //TODO random
 	}
 
 	private void center(){
@@ -309,6 +317,8 @@ public class LabView extends JPanel {
 			sightDarkness.subtract(getLightArea(sRange, Double.POSITIVE_INFINITY));
 			g.fill(sightDarkness);
 		}
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+		g.drawImage(mapImage, 5, 5, null);
 	}
 
 }
