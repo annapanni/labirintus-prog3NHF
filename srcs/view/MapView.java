@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 import model.*;
 
@@ -18,6 +19,8 @@ public class MapView {
 
 	public int getWidth() {return w;}
 	public int getHeight() {return h;}
+
+	private static Random rand = new Random();
 
 	public MapView(LabState laby, int sc) {
 		labState = laby;
@@ -52,10 +55,14 @@ public class MapView {
 		setSize();
 	}
 
+	private int fuzz(){
+		return rand.nextInt(3) - 1;
+	}
+
 	private void drawRoom(Graphics2D g, Room r){
 		List<Vector> border = r.getBorderPoly();
-		int[] xpos = border.stream().mapToInt(v -> xlabPosToPx(labState.getLab().xPosition(v))).toArray();
-		int[] ypos = border.stream().mapToInt(v -> ylabPosToPx(labState.getLab().yPosition(v))).toArray();
+		int[] xpos = border.stream().mapToInt(v -> xlabPosToPx(labState.getLab().xPosition(v)) + fuzz()).toArray();
+		int[] ypos = border.stream().mapToInt(v -> ylabPosToPx(labState.getLab().yPosition(v)) + fuzz()).toArray();
 		g.fillPolygon(xpos, ypos, xpos.length);
 		g.drawPolygon(xpos, ypos, xpos.length);
 	}
@@ -67,11 +74,18 @@ public class MapView {
 				if (! labState.getLab().inBound(idx)) {
 					continue;
 				}
-				int centerX = xlabPosToPx(labState.getLab().xPosition(idx));
-				int centerY = ylabPosToPx(labState.getLab().yPosition(idx));
-				int endX = xlabPosToPx(labState.getLab().xPosition(idx.plus(labState.getLab().getDir(idx))));
-				int endY = ylabPosToPx(labState.getLab().yPosition(idx.plus(labState.getLab().getDir(idx))));
-				g.drawLine(centerX, centerY, endX, endY);
+				int sections = 3;
+				int[] xpos = new int[sections+1];
+				int[] ypos = new int[sections+1];
+				xpos[0] = xlabPosToPx(labState.getLab().xPosition(idx));
+				ypos[0] = ylabPosToPx(labState.getLab().yPosition(idx));
+				xpos[sections] = xlabPosToPx(labState.getLab().xPosition(idx.plus(labState.getLab().getDir(idx))));
+				ypos[sections] = ylabPosToPx(labState.getLab().yPosition(idx.plus(labState.getLab().getDir(idx))));
+				for (int i=1; i<sections; i++) {
+					xpos[i] = xpos[0] + i * (xpos[sections] - xpos[0]) / sections + fuzz();
+					ypos[i] = ypos[0] + i * (ypos[sections] - ypos[0]) / sections + fuzz();
+				}
+				g.drawPolyline(xpos, ypos, sections + 1);
 			}
 		}
 	}
@@ -85,10 +99,10 @@ public class MapView {
 	}
 
 	public void paint(Graphics2D g) {
-		int screenWidth = (int)g.getDeviceConfiguration().getBounds().getWidth();
-		int screenHeight = (int)g.getDeviceConfiguration().getBounds().getHeight();
+		int width = (int)g.getDeviceConfiguration().getBounds().getWidth();
+		int height = (int)g.getDeviceConfiguration().getBounds().getHeight();
 		g.setColor(new Color(240, 230, 140));
-		g.fillRect(0, 0, screenWidth, screenHeight);
+		g.fillRect(0, 0, width, height);
 		g.setStroke(new BasicStroke(2.0f));
 		g.setColor(Color.BLACK);
 		for (Room r : labState.getLab().getRooms()) {
@@ -97,14 +111,17 @@ public class MapView {
 		drawCorridors(g);
 	}
 
-	public BufferedImage getImage(int rotation) {
-    BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-    Graphics2D g = img.createGraphics();
+	public BufferedImage getImage(boolean rotate) {
+		int rotation = rotate ? rand.nextInt(5) : 0;
+		BufferedImage unRotated = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		paint((Graphics2D)unRotated.getGraphics());
 		int neww = rotation % 2 == 0 ?  w : h;
 		int newh = rotation % 2 == 0 ? h : w;
-		paint(g);
+		BufferedImage img = new BufferedImage(neww, newh, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = img.createGraphics();
 		g.translate((neww-w)/2, (newh-h)/2);
     g.rotate(Math.PI/2 * rotation, w/2, h/2);
+		g.drawRenderedImage(unRotated, null);
     g.dispose();
 		return img;
 	}

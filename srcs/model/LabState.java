@@ -10,11 +10,13 @@ public class LabState implements java.io.Serializable {
 	private PlayerCharacter player;
 	private Storable exit;
 	private Vector startPos;
+	private Storable map;
 	private Light lineOfSight;
 	private double darknessOpacity;
 	private String name;
 	private int fireflyNum;
 	private int usedFireflyNum;
+	private boolean mapCollected=false;
 
 	public Labyrinth getLab(){return lab;};
 	public List<Storable> getObjects() {return objects;}
@@ -30,10 +32,13 @@ public class LabState implements java.io.Serializable {
 	public Vector getStartPos(){return startPos;}
 	public void setStartPos(Vector s){startPos = s;}
 	public Storable getExit(){return exit;}
+	public Storable getMap(){return map;}
 	public int getFireflyNum(){return fireflyNum;}
 	public void setFireflyNum(int n){fireflyNum = n;}
 	public int getUsedFireflyNum(){return usedFireflyNum;}
 	public void setUsedFireflyNum(int n){usedFireflyNum = n;}
+	public boolean getMapCollected(){return mapCollected;}
+	public void setMapCollected(boolean b){mapCollected = b;}
 
 	public LabState(Labyrinth l, int kNum, int fNum) {
 		lab = l;
@@ -51,6 +56,8 @@ public class LabState implements java.io.Serializable {
 		}
 		exit = Storable.exit(l, l.getRandomPos());
 		objects.add(exit);
+		map = Storable.map(l, l.getRandomPos());
+		objects.add(map);
 		fireflyNum = fNum;
 	}
 }

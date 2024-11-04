@@ -24,6 +24,7 @@ public class LabView extends JPanel {
 	private double visiblityOverride;
 	private Paint floorPaint;
 	private BufferedImage mapImage;
+	private boolean drawMap;
 
 	public void setVisiblityOverride(double vo) {visiblityOverride = vo;}
 
@@ -35,6 +36,7 @@ public class LabView extends JPanel {
 	private static BufferedImage exitImage;
 	private static BufferedImage fireflyImage;
 	private static BufferedImage tilesImage;
+	private static BufferedImage mapIconImage;
 
 	static {
 		try {
@@ -44,6 +46,7 @@ public class LabView extends JPanel {
 			exitImage = ImageIO.read(new File("./resources/exit.png"));
 			fireflyImage = ImageIO.read(new File("./resources/firefly.png"));
 			tilesImage = ImageIO.read(new File("./resources/tiles.jpg"));
+			mapIconImage = ImageIO.read(new File("./resources/map.png"));
 		} catch (IOException e) {
 			failedToLoad = true;
 		}
@@ -62,6 +65,8 @@ public class LabView extends JPanel {
 					xoffset -= 10; break;
 				case KeyEvent.VK_C:
 					center(); break;
+				case KeyEvent.VK_M:
+					drawMap = !drawMap; break;
 			}
 			if (! failedToLoad) {
 				floorPaint = new TexturePaint(tilesImage, new Rectangle(xoffset, yoffset, (int)scale, (int)scale));
@@ -93,7 +98,7 @@ public class LabView extends JPanel {
 	public void setLabState(LabState ls) {
 		labState = ls;
 		center();
-		mapImage = (new MapView(labState, 10)).getImage(1); //TODO random
+		mapImage = (new MapView(labState, 10)).getImage(true);
 	}
 
 	private void center(){
@@ -211,6 +216,8 @@ public class LabView extends JPanel {
 					drawImageAt(g, exitImage, x, y, 0.6); break;
 				case ModelSprite.FIREFLY:
 					drawImageAt(g, fireflyImage, x, y, 0.5); break;
+				case ModelSprite.MAP:
+					drawImageAt(g, mapIconImage, x, y, 0.6); break;
 				default:
 					g.setColor(Color.BLUE);
 					g.fillOval(x-3, y-3, 6, 6); break;
@@ -317,8 +324,10 @@ public class LabView extends JPanel {
 			sightDarkness.subtract(getLightArea(sRange, Double.POSITIVE_INFINITY));
 			g.fill(sightDarkness);
 		}
-		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-		g.drawImage(mapImage, 5, 5, null);
+		if (labState.getMapCollected() && drawMap) {
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+			g.drawImage(mapImage, 5, 5, null);
+		}
 	}
 
 }

@@ -58,6 +58,10 @@ public class LabGameControl {
 			onVictory.run();
 			playerMover.switchLockedPos();
 		}
+		if (labState.getMap().getInCell().equals(vclick)) {
+			labState.setMapCollected(true);
+			labState.getObjects().remove(labState.getMap());
+		}
 	}
 
 	private void startFireflyTo(Vector to){

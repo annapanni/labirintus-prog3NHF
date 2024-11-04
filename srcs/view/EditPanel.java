@@ -25,6 +25,8 @@ public class EditPanel extends ModePanel {
 			k.setCollected(false);
 			if(! ls.getObjects().contains(k))  ls.getObjects().add(k);
 		});
+		ls.setMapCollected(false);
+		if(!ls.getObjects().contains(ls.getMap())) ls.getObjects().add(ls.getMap());
 	}
 
 	private JPanel createOptionPanel() {

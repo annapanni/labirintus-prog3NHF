@@ -78,4 +78,10 @@ public class Storable implements java.io.Serializable  {
 		return b;
 	}
 
+	public static Storable map(Labyrinth l, Vector idx){
+		Storable m = new Storable(l, idx);
+		m.setSprite(ModelSprite.MAP);
+		return m;
+	}
+
 }
