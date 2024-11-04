@@ -26,11 +26,11 @@ public class LabGameControl {
 	public LabGameControl(LabState laby, int dt) {
 		labState = laby;
 		dTime = dt;
-		toMove = new LinkedList<>();
 		initMovers(laby.getObjects());
 	}
 
 	private void initMovers(List<Storable> objs) {
+		toMove = new LinkedList<>();
 		for (Storable obj : objs) {
 			Mover mv = Mover.create(obj);
 			if (mv != null) {
