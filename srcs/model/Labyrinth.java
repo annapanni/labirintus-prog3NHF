@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
-import controller.RoomFinder;
 
 public abstract class Labyrinth implements java.io.Serializable {
 	private Vector root;

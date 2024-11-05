@@ -3,7 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import controller.RoomFinder;
 
 public class RectLab extends Labyrinth {
 	private List<List<Vector>> directions;

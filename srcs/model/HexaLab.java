@@ -3,8 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import controller.RoomFinder;
-
 public class HexaLab extends Labyrinth {
 	private int labHeight2;
 	private int labWidth;
