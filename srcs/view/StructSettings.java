@@ -83,11 +83,11 @@ public class StructSettings extends JPanel {
 		Labyrinth lab;
 		switch (rType) {
 			case "Concave":
-				rf = new ConcaveRoomFinder(rSize); break; //TODO size instead of radius
+				rf = new ConcaveRoomFinder(rSize); break;
 			case "Rectangular":
 				rf = new RectRoomFinder(rSize); break;
 			default:
-				rf = new RectRoomFinder(rSize);  // TODO none roomfinder
+				rf = new RectRoomFinder(rSize);
 		}
 		if (lType.equals("Hexagonal")) {
 			lab = new HexaLab(lWidth, lHeight, 0.1, rf);

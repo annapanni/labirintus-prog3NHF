@@ -11,7 +11,7 @@ import model.*;
 public class ConcaveRoomFinder implements RoomFinder, java.io.Serializable{
 	private int maxRad;
 
-	public ConcaveRoomFinder(int mr) {maxRad = mr;}
+	public ConcaveRoomFinder(int size) {maxRad = size / 2;}
 
 	public Room findRoomAt(Vector idx, Labyrinth lab) {
 		List<Vector> stree = GraphUtils.subtree(idx, lab::getChildren, lab::inAnyRoom);

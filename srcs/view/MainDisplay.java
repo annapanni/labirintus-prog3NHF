@@ -42,7 +42,7 @@ public class MainDisplay extends JFrame{
 			}).startPopup(this)
 		);
 		JMenuItem edNew = new JMenuItem("Create new map");
-		edNew.addActionListener(e -> (new StructSettings(this, editPanel)).generateAndSet()); //should also switch to TODO
+		edNew.addActionListener(e -> (new StructSettings(this, editPanel)).generateAndSet());
 		JMenuItem edLoad = new JMenuItem("Load map");
 		edLoad.addActionListener(e -> SimplePopup.load(this, editPanel).startPopup(this));
 		JMenuItem pCont = new JMenuItem("Continue playing");
