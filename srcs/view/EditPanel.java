@@ -13,7 +13,7 @@ public class EditPanel extends ModePanel {
 	LabEditControl labControl;
 	Mode currMode = Mode.KEY;
 
-	private enum Mode {KEY, BRAZIER, EXIT, STARTPOS, LAB}
+	private enum Mode {KEY, BRAZIER, EXIT, STARTPOS, LAB, MAP}
 
 	@Override
 	public void setLabState(LabState ls){
@@ -38,16 +38,19 @@ public class EditPanel extends ModePanel {
 		JButton exitButt = new JButton("Add/delete exit");
 		exitButt.setAlignmentX(Component.CENTER_ALIGNMENT);
 		exitButt.addActionListener(e -> currMode = Mode.EXIT);
+		JButton mapButt = new JButton("Add/delete map");
+		mapButt.setAlignmentX(Component.CENTER_ALIGNMENT);
+		mapButt.addActionListener(e -> currMode = Mode.MAP);
 		JButton startButt = new JButton("<html><center>Change starting<br/>position</center></html>");
 		startButt.setAlignmentX(Component.CENTER_ALIGNMENT);
 		startButt.addActionListener(e -> currMode = Mode.STARTPOS);
 		JButton changeButt = new JButton("Change Labyrinth");
 		changeButt.setAlignmentX(Component.CENTER_ALIGNMENT);
 		changeButt.addActionListener(e -> currMode = Mode.LAB);
-		List<JButton> btns = new ArrayList<>(List.of(keyButt, brazButt, exitButt, startButt, changeButt));
+		List<JButton> btns = new ArrayList<>(List.of(keyButt, brazButt, mapButt,exitButt, startButt, changeButt));
 		JPanel pan = new JPanel();
 		pan.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		GridLayout gl = new GridLayout(7,0);
+		GridLayout gl = new GridLayout(btns.size() + 2,0);
 		gl.setVgap(10);
 		pan.setLayout(gl);
 		for (JButton b : btns) {
@@ -156,6 +159,8 @@ public class EditPanel extends ModePanel {
 						labControl.chageStartPos(xpos, ypos); break;
 					case Mode.LAB:
 						labControl.changeLabAt(xpos, ypos); break;
+					case Mode.MAP:
+						labControl.addDeleteMap(xpos, ypos); break;
 				}
 			}
 		});

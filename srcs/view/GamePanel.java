@@ -28,7 +28,7 @@ public class GamePanel extends ModePanel {
 			"<li>to help you find your next<br/>goal you may release a firefly</li></ul>" +
 			"<h3>Game controls</h3><ul style=margin-left:20px>" +
 			"<li>arrow keys: pan the map</li><li>mouse wheel: zoom</li>" +
-			"<li>c key: center the map</li><li>f key: realease a firefly</li>" +
+			"<li>c key: center the map</li><li>f key: realease a firefly</li><li>m key: toggle collected map</li>" +
 			"<li>space: (un)lock player position</li><li>click: interact with objects</li>" +
 			"</ul></html>"
 		);
