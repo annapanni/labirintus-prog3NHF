@@ -6,6 +6,7 @@ import java.awt.event.*;
 
 import controller.LabGameControl;
 import model.LabState;
+import model.Exit;
 
 
 public class GamePanel extends ModePanel {
@@ -67,10 +68,13 @@ public class GamePanel extends ModePanel {
 				labView.requestFocus();
 				double xpos = labView.xpxToLabPos(e.getX());
 				double ypos = labView.ypxToLabPos(e.getY());
-				labControl.interactAt(xpos, ypos, () -> {
+				labControl.interactAt(xpos, ypos);
+				Exit exited = labControl.exitedOn();
+				if (exited != null) {
 					SimplePopup.message("<html>Congratulations!<br/> You exited the maze.").startPopup(GamePanel.this);
 					labView.setVisiblityOverride(0.0);
-				});
+					exited.setCollected(false);
+				}
 			}
 		});
 

@@ -2,15 +2,14 @@ package model;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 public class LabState implements java.io.Serializable {
 	private Labyrinth lab;
 	private List<Storable> objects;
-	private List<Key> keys;
+	private List<Item> items;
 	private PlayerCharacter player;
-	private Storable exit;
 	private Vector startPos;
-	private Storable map;
 	private Light lineOfSight;
 	private double darknessOpacity;
 	private String name;
@@ -20,8 +19,10 @@ public class LabState implements java.io.Serializable {
 
 	public Labyrinth getLab(){return lab;};
 	public List<Storable> getObjects() {return objects;}
-	public List<Key> getKeys() {return keys;}
-	public long getUncollectedKeyNum() {return keys.stream().filter(k -> !k.getCollected()).count();}
+	public List<Item> getItems() {return items;}
+	public long getUncollectedKeyNum() {return items.stream().filter(k -> !k.getCollected() && k instanceof Key).count();}
+	public Stream<Key> getKeys() {return items.stream().filter(k -> k instanceof Key).map(k -> (Key)k);}
+	public Stream<Exit> getExits() {return items.stream().filter(e -> e instanceof Exit).map(e -> (Exit)e);}
 	public PlayerCharacter getPlayer() {return player;}
 	public Light getLineOfSight() {return lineOfSight;}
 	public void setLineOfSight(boolean on) {lineOfSight = on ? new Light(player) : null;}
@@ -31,8 +32,6 @@ public class LabState implements java.io.Serializable {
 	public void setName(String n){name = n;}
 	public Vector getStartPos(){return startPos;}
 	public void setStartPos(Vector s){startPos = s;}
-	public Storable getExit(){return exit;}
-	public Storable getMap(){return map;}
 	public int getFireflyNum(){return fireflyNum;}
 	public void setFireflyNum(int n){fireflyNum = n;}
 	public int getUsedFireflyNum(){return usedFireflyNum;}
@@ -48,15 +47,17 @@ public class LabState implements java.io.Serializable {
 		player = new PlayerCharacter(l, startPos, 0.002);
 		objects.add(player);
 		lineOfSight = new Light(player);
-		keys = new ArrayList<>();
+		items = new ArrayList<>();
 		for (int i=0; i<kNum; i++){
 			Key k = new Key(l, l.getRandomPos());
-			keys.add(k);
+			items.add(k);
 			objects.add(k);
 		}
-		exit = Storable.exit(l, l.getRandomPos());
+		Exit exit = new Exit(l, l.getRandomPos());
 		objects.add(exit);
-		map = Storable.map(l, l.getRandomPos());
+		items.add(exit);
+		Map map = new Map(l, l.getRandomPos());
+		items.add(map);
 		objects.add(map);
 		fireflyNum = fNum;
 	}

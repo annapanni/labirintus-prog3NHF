@@ -132,6 +132,8 @@ public class LabView extends JPanel {
 				return new Color(210, 240, 30);
 			case ORANGE:
 				return new Color(255, 180, 20, 255);
+			case BLUE:
+				return Color.BLUE;
 			default:
 				return new Color(0,0,0,0);
 			}

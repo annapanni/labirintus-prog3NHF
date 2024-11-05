@@ -10,6 +10,7 @@ import model.*;
 public class LabGameControl {
 	private LabState labState;
 	private List<Mover> toMove;
+	private List<Interactable> interactors;
 	private CharMover playerMover;
 	private Vector routeFrom;
 	private int dTime;
@@ -21,12 +22,12 @@ public class LabGameControl {
 	public void setLabState(LabState ls) {
 		labState = ls;
 		initMovers(ls.getObjects());
+		initInteract(ls.getObjects());
 	}
 
 	public LabGameControl(LabState laby, int dt) {
-		labState = laby;
 		dTime = dt;
-		initMovers(laby.getObjects());
+		setLabState(laby);
 	}
 
 	private void initMovers(List<Storable> objs) {
@@ -43,24 +44,31 @@ public class LabGameControl {
 		}
 	}
 
-	public void interactAt(double x, double y, Runnable onVictory){
+	private void initInteract(List<Storable> objs){
+		interactors = new LinkedList<>();
+		for (Storable obj : objs) {
+			Interactable i = InteractFactory.create(obj);
+			if (i != null) {
+				interactors.add(i);
+			}
+		}
+	}
+
+	public Exit exitedOn() {
+		Optional<Exit> exited = labState.getExits().filter(e -> e.getCollected()).findFirst();
+		if (exited.isPresent()) {
+			return exited.get();
+		} else {
+			return null;
+		}
+	}
+
+	public void interactAt(double x, double y){
 		Vector vclick = labState.getLab().posToVec(x, y);
 		if (! labState.getLab().inBound(vclick)) {return;}
 		if (! labState.getPlayer().getInCell().equals(vclick)) {return;}
-		Optional<Key> optK = labState.getKeys().stream()
-			.filter(k -> !k.getCollected() && k.getInCell().equals(vclick)).findFirst();
-		if (optK.isPresent()) {
-			Key k = optK.get();
-			k.setCollected(true);
-			labState.getObjects().remove(k);
-		}
-		if (labState.getExit().getInCell().equals(vclick) && labState.getUncollectedKeyNum() == 0) {
-			onVictory.run();
-			playerMover.switchLockedPos();
-		}
-		if (labState.getMap().getInCell().equals(vclick)) {
-			labState.setMapCollected(true);
-			labState.getObjects().remove(labState.getMap());
+		for (Interactable i : interactors) {
+			i.interact(labState, vclick);
 		}
 	}
 
@@ -74,12 +82,12 @@ public class LabGameControl {
 	}
 
 	public void startFirefly(){
-		Optional<Key> optK = labState.getKeys().stream().filter(k -> !k.getCollected()).findFirst();
+		Optional<Key> optK = labState.getKeys().filter(k -> !k.getCollected()).findFirst();
 		if (optK.isPresent()) {
 			startFireflyTo(optK.get().getInCell());
 			return;
 		}
-		startFireflyTo(labState.getExit().getInCell());
+		startFireflyTo(labState.getExits().findFirst().get().getInCell());
 	}
 
  	public void setMousePos(double x, double y) {

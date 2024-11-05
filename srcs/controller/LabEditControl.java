@@ -19,7 +19,7 @@ public class LabEditControl {
 	}
 
 	public static LabState generateLabyrinth(Labyrinth lab) {
-		Storable exit = Storable.exit(lab, lab.getRandomPos());
+		Storable exit = new Exit(lab, lab.getRandomPos());
 		changeNTimes(lab, lab.getWidth() * lab.getHeight() * 10);
 		coverWithRooms(lab, lab.getRoomfinder());
 		LabState labState = new LabState(lab, 3, 5);
@@ -77,15 +77,15 @@ public class LabEditControl {
 	public void addDeleteKey(double x, double y) {
 		Vector vclick = labState.getLab().posToVec(x, y);
 		if (! labState.getLab().inBound(vclick)) {return;}
-		Optional<Key> optK = labState.getKeys().stream().filter(k -> k.getInCell().equals(vclick)).findFirst();
+		Optional<Key> optK = labState.getKeys().filter(k -> k.getInCell().equals(vclick)).findFirst();
 		if (optK.isPresent()) {
 			Key k = optK.get();
-			labState.getKeys().remove(k);
+			labState.getItems().remove(k);
 			labState.getObjects().remove(k);
 		} else {
 			Key k = new Key(labState.getLab(), vclick);
 			k.setPosition(x, y);
-			labState.getKeys().add(k);
+			labState.getItems().add(k);
 			labState.getObjects().add(k);
 		}
 	}
@@ -112,10 +112,20 @@ public class LabEditControl {
 		labState.getPlayer().setCell(vclick);
 	}
 
-	public void chageExit(double x, double y) {
+	public void addDeleteExit(double x, double y) {
 		Vector vclick = labState.getLab().posToVec(x, y);
 		if (! labState.getLab().inBound(vclick)) {return;}
-		labState.getExit().setCell(vclick);
+		Optional<Exit> optE = labState.getExits().filter(k -> k.getInCell().equals(vclick)).findFirst();
+		if (optE.isPresent() && labState.getExits().count() > 1) {
+			Exit e = optE.get();
+			labState.getItems().remove(e);
+			labState.getObjects().remove(e);
+		} else {
+			Exit e = new Exit(labState.getLab(), vclick);
+			e.setPosition(x, y);
+			labState.getItems().add(e);
+			labState.getObjects().add(e);
+		}
 	}
 
 	public void changeLabAt(double x, double y) {

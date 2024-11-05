@@ -72,16 +72,4 @@ public class Storable implements java.io.Serializable  {
 		return b;
 	}
 
-	public static Storable exit(Labyrinth l, Vector idx){
-		Storable b = new Storable(l, idx);
-		b.setSprite(ModelSprite.EXIT);
-		return b;
-	}
-
-	public static Storable map(Labyrinth l, Vector idx){
-		Storable m = new Storable(l, idx);
-		m.setSprite(ModelSprite.MAP);
-		return m;
-	}
-
 }

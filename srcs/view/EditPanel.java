@@ -21,12 +21,11 @@ public class EditPanel extends ModePanel {
 		labControl.setLabState(ls);
 		ls.getPlayer().setCell(ls.getStartPos());
 		ls.setUsedFireflyNum(0);
-		ls.getKeys().stream().forEach(k -> {
-			k.setCollected(false);
-			if(! ls.getObjects().contains(k))  ls.getObjects().add(k);
+		ls.getItems().stream().forEach(i -> {
+			i.setCollected(false);
+			if(! ls.getObjects().contains(i))  ls.getObjects().add(i);
 		});
 		ls.setMapCollected(false);
-		if(!ls.getObjects().contains(ls.getMap())) ls.getObjects().add(ls.getMap());
 	}
 
 	private JPanel createOptionPanel() {
@@ -36,7 +35,7 @@ public class EditPanel extends ModePanel {
 		JButton brazButt = new JButton("Add/delete brazier");
 		brazButt.setAlignmentX(Component.CENTER_ALIGNMENT);
 		brazButt.addActionListener(e -> currMode = Mode.BRAZIER);
-		JButton exitButt = new JButton("Change exit");
+		JButton exitButt = new JButton("Add/delete exit");
 		exitButt.setAlignmentX(Component.CENTER_ALIGNMENT);
 		exitButt.addActionListener(e -> currMode = Mode.EXIT);
 		JButton startButt = new JButton("<html><center>Change starting<br/>position</center></html>");
@@ -152,7 +151,7 @@ public class EditPanel extends ModePanel {
 					case Mode.BRAZIER:
 						labControl.addDeleteBrazier(xpos, ypos); break;
 					case Mode.EXIT:
-						labControl.chageExit(xpos, ypos); break;
+						labControl.addDeleteExit(xpos, ypos); break;
 					case Mode.STARTPOS:
 						labControl.chageStartPos(xpos, ypos); break;
 					case Mode.LAB:
