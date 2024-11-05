@@ -17,13 +17,13 @@ public class LabState implements java.io.Serializable {
 	private int usedFireflyNum;
 	private boolean mapCollected=false;
 
-	public Labyrinth getLab(){return lab;};
+	public Labyrinth getLab(){return lab;}
 	public List<Storable> getObjects() {return objects;}
 	public List<Item> getItems() {return items;}
 	public long getUncollectedKeyNum() {return items.stream().filter(k -> !k.getCollected() && k instanceof Key).count();}
-	public Stream<Key> getKeys() {return items.stream().filter(k -> k instanceof Key).map(k -> (Key)k);}
-	public Stream<Exit> getExits() {return items.stream().filter(e -> e instanceof Exit).map(e -> (Exit)e);}
-	public Stream<Map> getMaps() {return items.stream().filter(m -> m instanceof Map).map(m -> (Map)m);}
+	public Stream<Key> getKeys() {return items.stream().filter(Key.class::isInstance).map(k -> (Key)k);}
+	public Stream<Exit> getExits() {return items.stream().filter(Exit.class::isInstance).map(e -> (Exit)e);}
+	public Stream<Map> getMaps() {return items.stream().filter(Map.class::isInstance).map(m -> (Map)m);}
 	public PlayerCharacter getPlayer() {return player;}
 	public Light getLineOfSight() {return lineOfSight;}
 	public void setLineOfSight(boolean on) {lineOfSight = on ? new Light(player) : null;}

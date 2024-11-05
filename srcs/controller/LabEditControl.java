@@ -19,11 +19,9 @@ public class LabEditControl {
 	}
 
 	public static LabState generateLabyrinth(Labyrinth lab) {
-		Storable exit = new Exit(lab, lab.getRandomPos());
 		changeNTimes(lab, lab.getWidth() * lab.getHeight() * 10);
 		coverWithRooms(lab, lab.getRoomfinder());
-		LabState labState = new LabState(lab, 3, 5);
-		return labState;
+		return new LabState(lab, 3, 5);
 	}
 
 	private static void changeNTimesFrom(Labyrinth lab, int n, Vector changeAt, boolean keepRoot) {

@@ -3,8 +3,6 @@ package view;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Area;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.geom.Ellipse2D;
 import java.awt.RadialGradientPaint;
 import java.awt.image.BufferedImage;
@@ -53,6 +51,7 @@ public class LabView extends JPanel {
 	}
 
 	private class KeyHandler extends KeyAdapter {
+		@Override
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()) {
 				case KeyEvent.VK_UP:
@@ -67,6 +66,7 @@ public class LabView extends JPanel {
 					center(); break;
 				case KeyEvent.VK_M:
 					drawMap = !drawMap; break;
+				default:
 			}
 			if (! failedToLoad) {
 				floorPaint = new TexturePaint(tilesImage, new Rectangle(xoffset, yoffset, (int)scale, (int)scale));

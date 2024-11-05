@@ -40,7 +40,7 @@ public class SimplePopup {
 
 	public static SimplePopup load(MainDisplay disp, ModePanel pan) {
 		SimplePopup s = new SimplePopup();
-		JComboBox jcb = new JComboBox(FileManager.getLabys());
+		JComboBox<String> jcb = new JComboBox<>(FileManager.getLabys());
 		JLabel label = new JLabel("Choose file:");
 		label.setLabelFor(jcb);
 		s.input = jcb;
@@ -95,7 +95,7 @@ public class SimplePopup {
 		JLabel errorLabel = new JLabel("");
 		errorLabel.setForeground(Color.RED);
 		JButton done = new JButton(doneButton);
-		done.addActionListener((e) -> {
+		done.addActionListener(e -> {
 			action.run();
 			if (errorMsg != null) {
 				errorLabel.setText(errorMsg);
@@ -106,7 +106,7 @@ public class SimplePopup {
 			}
 		});
 		JButton canc = new JButton("Cancel");
-		canc.addActionListener((e) -> frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING)));
+		canc.addActionListener(e -> frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING)));
 		JPanel pan = new JPanel();
 		GridBagLayout gridbag = new GridBagLayout();
 		GridBagConstraints con = new GridBagConstraints();

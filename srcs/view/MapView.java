@@ -15,7 +15,8 @@ public class MapView {
 	private int xoffset;
 	private int yoffset;
 	private double scale;
-	private int w, h;
+	private int w;
+	private int h;
 
 	public int getWidth() {return w;}
 	public int getHeight() {return h;}
@@ -120,7 +121,7 @@ public class MapView {
 		BufferedImage img = new BufferedImage(neww, newh, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = img.createGraphics();
 		g.translate((neww-w)/2, (newh-h)/2);
-    g.rotate(Math.PI/2 * rotation, w/2, h/2);
+    g.rotate(Math.PI/2 * rotation, w/2.0, h/2.0);
 		g.drawRenderedImage(unRotated, null);
     g.dispose();
 		return img;

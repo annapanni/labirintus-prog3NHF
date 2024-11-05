@@ -12,7 +12,6 @@ public class LabGameControl {
 	private List<Mover> toMove;
 	private List<Interactable> interactors;
 	private CharMover playerMover;
-	private Vector routeFrom;
 	private int dTime;
 	private double mouseX;
 	private double mouseY;
@@ -55,7 +54,7 @@ public class LabGameControl {
 	}
 
 	public Exit exitedOn() {
-		Optional<Exit> exited = labState.getExits().filter(e -> e.getCollected()).findFirst();
+		Optional<Exit> exited = labState.getExits().filter(Item::getCollected).findFirst();
 		if (exited.isPresent()) {
 			return exited.get();
 		} else {

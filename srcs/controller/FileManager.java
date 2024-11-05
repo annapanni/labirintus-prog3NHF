@@ -6,6 +6,7 @@ import java.util.Arrays;
 import model.LabState;
 
 public class FileManager {
+	private FileManager(){}
 	public static void save(LabState ls) throws IOException {
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(ls.getName() + ".laby"));
 		out.writeObject(ls);

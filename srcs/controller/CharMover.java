@@ -1,6 +1,6 @@
 package controller;
 
-import model.PlayerCharacter;;
+import model.PlayerCharacter;
 
 public class CharMover extends Mover {
 	private PlayerCharacter pl;

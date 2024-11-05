@@ -2,9 +2,6 @@ package view;
 
 import java.awt.*;
 import javax.swing.*;
-
-import java.lang.Thread;
-import java.lang.InterruptedException;
 import java.io.IOException;
 
 import model.*;

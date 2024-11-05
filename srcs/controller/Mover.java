@@ -4,7 +4,7 @@ import java.util.Random;
 
 import model.*;
 
-public class Mover {
+public abstract class Mover {
 	protected static Random rand = new Random();
 
 	public static Mover create(Firefly f) {return new FireflyMover(f);}
@@ -18,5 +18,5 @@ public class Mover {
 		return null;
 	}
 
-	public void step(int dTime) {}
+	public abstract void step(int dTime);
 }

@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 
 
 public class GraphUtils {
+	private GraphUtils(){}
 	public static <T> List<T> subtree(T start, Function<T, List<T>> children,
 		Predicate<T> stopAt) {
 		if (stopAt.test(start)) {

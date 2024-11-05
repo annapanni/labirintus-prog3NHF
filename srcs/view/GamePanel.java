@@ -56,6 +56,7 @@ public class GamePanel extends ModePanel {
 		labControl = new LabGameControl(labState, dTime);
 
 		labView.addKeyListener(new KeyAdapter() {
+			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_SPACE) labControl.switchLockedPos();
 				if (e.getKeyCode() == KeyEvent.VK_F) labControl.startFirefly();
@@ -89,6 +90,6 @@ public class GamePanel extends ModePanel {
 	@Override
 	public void startMode(){
 		super.startMode();
-		timer.scheduleAtFixedRate(new CustomTimerTask(labControl::step), 0l, (long)dTime);
+		timer.scheduleAtFixedRate(new CustomTimerTask(labControl::step), 0l, dTime);
 	}
 }
