@@ -95,6 +95,22 @@ public class LabView extends JPanel {
 		this(laby, sc, -1);
 	}
 
+	public int xlabPosToPx(double p){
+		return xoffset + (int)((p + 2/scale) * scale);
+	}
+
+	public int ylabPosToPx(double p){
+		return yoffset + (int)((p + 2/scale) * scale);
+	}
+
+	public double xpxToLabPos(int px){
+		return (px - xoffset) / scale;
+	}
+
+	public double ypxToLabPos(int px){
+		return (px - yoffset) / scale;
+	}
+
 	public void setLabState(LabState ls) {
 		labState = ls;
 		center();
@@ -280,28 +296,30 @@ public class LabView extends JPanel {
 		return image;
 	}
 
-	public int xlabPosToPx(double p){
-		return xoffset + (int)((p + 2/scale) * scale);
-	}
-
-	public int ylabPosToPx(double p){
-		return yoffset + (int)((p + 2/scale) * scale);
-	}
-
-	public double xpxToLabPos(int px){
-		return (px - xoffset) / scale;
-	}
-
-	public double ypxToLabPos(int px){
-		return (px - yoffset) / scale;
+	private void drawStatus(Graphics2D g) {
+		g.setColor(Color.WHITE);
+		int screenWidth = (int)getSize().getWidth();
+		String ffStatus = (labState.getFireflyNum() - labState.getUsedFireflyNum()) + "/" + labState.getFireflyNum();
+		long kNum = labState.getKeys().count();
+		String keyStatus = (kNum - labState.getUncollectedKeyNum()) + "/" + kNum;
+		int padd1 = g.getFontMetrics().stringWidth(keyStatus) + g.getFontMetrics().stringWidth(keyStatus) + 45;
+		int padd2 = g.getFontMetrics().stringWidth(keyStatus) + 5;
+		g.drawString(keyStatus, screenWidth - padd1, 20);
+		g.drawString(ffStatus, screenWidth - padd2, 20);
+		if (! failedToLoad) {
+			double kw = 30.0 / keyImage.getWidth();
+			g.drawImage(keyImage, screenWidth - padd1 - 30, 0, (int)(keyImage.getWidth() * kw), (int)(keyImage.getHeight() * kw), null);
+			double fw = 30.0 / fireflyImage.getWidth();
+			g.drawImage(fireflyImage, screenWidth - padd2 - 30, 0, (int)(fireflyImage.getWidth() * fw), (int)(fireflyImage.getHeight() * fw), null);
+		}
 	}
 
 	@Override
 	public void paintComponent(Graphics g1) {
 		super.paintComponent(g1);
 		Graphics2D g = (Graphics2D)g1;
-		int screenWidth = (int)g.getDeviceConfiguration().getBounds().getWidth();
-		int screenHeight = (int)g.getDeviceConfiguration().getBounds().getHeight();
+		int screenWidth = (int)getSize().getWidth();
+		int screenHeight = (int)getSize().getHeight();
 		setBackground(Color.BLACK);
 		g.setStroke(new BasicStroke((float)(scale * calculateCorridorWidth()+ 1)));
 		if (failedToLoad) g.setColor(Color.WHITE);
@@ -326,10 +344,11 @@ public class LabView extends JPanel {
 			sightDarkness.subtract(getLightArea(sRange, Double.POSITIVE_INFINITY));
 			g.fill(sightDarkness);
 		}
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 		if (labState.getMapCollected() && drawMap) {
-			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 			g.drawImage(mapImage, 5, 5, null);
 		}
+		drawStatus(g);
 	}
 
 }

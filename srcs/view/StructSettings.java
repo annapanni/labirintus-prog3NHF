@@ -90,7 +90,7 @@ public class StructSettings extends JPanel {
 				rf = new RectRoomFinder(rSize);
 		}
 		if (lType.equals("Hexagonal")) {
-			lab = new HexaLab(lWidth, lHeight, 0.1, rf);
+			lab = new HexaLab(lWidth, lHeight, 0.15, rf);
 		} else {
 			lab = new RectLab(lWidth, lHeight, 0.3, rf);
 		}
