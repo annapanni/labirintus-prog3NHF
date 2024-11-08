@@ -8,8 +8,8 @@ controller = LabGameControl LabEditControl RectRoomFinder ConcaveRoomFinder Move
 
 srcs = $(view:%=view/%.java) $(model:%=model/%.java) $(controller:%=controller/%.java)
 
-main = view.MainDisplay
+main = labyrinth.view.MainDisplay
 
 run:
-	javac $(srcs:%=srcs/%)
-	java -classpath srcs $(main)
+	javac $(srcs:%=src/main/java/labyrinth/%)
+	java -classpath src/main/java/ $(main)
