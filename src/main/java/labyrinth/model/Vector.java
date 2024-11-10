@@ -28,6 +28,10 @@ public class Vector implements java.io.Serializable  {
 		return idx.x == x && idx.y == y;
 	}
 
+	public String toString(){
+		return "(" + x + ", " + y + ")";
+	}
+
 	public int hashCode() {
 		return (x + ", " + y).hashCode();
 	}
