@@ -51,8 +51,8 @@ public abstract class Labyrinth implements java.io.Serializable {
 
 	public Vector lastValidIdx(){
 		int i = width * height - 1;
-		while (! inBound(new Vector(i / width, i % width))) {i--;}
-		return new Vector(i / width, i % width);
+		while (! inBound(new Vector(i % width, i / width))) {i--;}
+		return new Vector(i % width, i / width);
 	}
 
 	public Room inWhichRoom(Vector idx) {

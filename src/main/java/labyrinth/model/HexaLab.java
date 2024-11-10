@@ -48,8 +48,8 @@ public class HexaLab extends Labyrinth {
 
 	public double getDist2Between(Vector idx1, Vector idx2) {
 		double dx = Math.abs(idx1.getX() - idx2.getX());
-		double dy = Math.abs(idx1.getY() -idx2.getY());
-		return (dx + dy/2)*(dx + dy/2) + 3 * (dy/2)*(dy/2);
+		double dy = Math.abs(idx1.getY() - idx2.getY());
+		return (dx - dy/2)*(dx - dy/2) + 3 * (dy/2)*(dy/2);
 	}
 
 	public List<Vector> getAllNeighbours(Vector idx){
