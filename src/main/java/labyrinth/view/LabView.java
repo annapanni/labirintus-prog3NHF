@@ -83,7 +83,12 @@ public class LabView extends JPanel {
 		center();
 		addKeyListener(new KeyHandler());
 		addMouseWheelListener(e -> {
+			double os = scale;
 			scale = scale * (1 - 0.05*e.getWheelRotation());
+			double plx = labState.getPlayer().getXPos();
+			double ply = labState.getPlayer().getYPos();
+			xoffset += (int)(plx * os - plx * scale);
+			yoffset += (int)(ply * os - ply * scale);
 			if (! failedToLoad) floorPaint = new TexturePaint(tilesImage, new Rectangle(xoffset, yoffset, (int)scale, (int)scale));
 		});
 		if (! failedToLoad) {
