@@ -2,11 +2,22 @@ package labyrinth.model;
 
 import java.util.List;
 
+/**
+ * Representation of a rectangular room in any labyrinth. The room can only contains the nodes whose 
+ * indeces are in a given [a;b]×[c;d] 2d interval.
+ */
 public class RectRoom extends Room {
 	private Vector sidx;
 	private int width;
 	private int height;
 
+	/**
+     * Constructs a RectRoom with the specified labyrinth and nodes.
+	 * @param l the labyrinth in which this room is contained
+	 * @param si the upper left corner of the room
+	 * @param w the width of the room
+	 * @param h the height of the room
+	 */
 	public RectRoom(Labyrinth l, Vector si, int w, int h) {
 		super(l);
 		sidx = si;

@@ -7,9 +7,13 @@ controller = LabGameControl LabEditControl RectRoomFinder ConcaveRoomFinder Move
 	CharMover LightMover FireflyMover FileManager Interactable ExitControl KeyControl MapControl InteractFactory
 
 srcs = $(view:%=view/%.java) $(model:%=model/%.java) $(controller:%=controller/%.java)
+classes = $(view:%=view/%.class) $(model:%=model/%.class) $(controller:%=controller/%.class)
 
 main = labyrinth.view.MainDisplay
 
 run:
 	javac $(srcs:%=src/main/java/labyrinth/%)
 	java -classpath src/main/java/ $(main)
+
+clean:
+	rm $(classes:%=src/main/java/labyrinth/%)

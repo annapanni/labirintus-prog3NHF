@@ -3,10 +3,20 @@ package labyrinth.model;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Represents a rectangular labyrinth. Provides methods for calculating distances,
+ * neighbors, directions, and positions within a rectangular grid structure.
+ */
 public class RectLab extends Labyrinth {
 	private List<List<Vector>> directions;
 
+	/**
+     * Constructs a rectangular labyrinth with specified dimensions, cell paddin, the type of the room finder.
+     * @param w the width of the labyrinth
+     * @param h the height of the labyrinth
+     * @param p padding between cells
+     * @param rf the room finder instance used for room generation
+     */
 	public RectLab(int w, int h, double p, RoomFinder rf) {
 		super(w, h, p, rf);
 		setRoot(new Vector(0, 0));
@@ -21,11 +31,13 @@ public class RectLab extends Labyrinth {
 		directions.get(0).set(0, new Vector(0,0));
 	}
 
+	/** Returns the four ortogonal directions in clockwise order*/
 	private List<Vector> getAllDirs() {
 		return new ArrayList<>(List.of(new Vector(-1, 0), new Vector(0, -1),
 			new Vector(1, 0),  new Vector(0, 1)));
 	}
 
+	/** Returns all 8 diagonal and ortogonal directions in clockwise order*/
 	private List<Vector> getDiagonalDirs(){
 		return new ArrayList<>(List.of(new Vector(-1, 0), new Vector(-1, -1), new Vector(0, -1),
 			new Vector(1, -1), new Vector(1, 0), new Vector(1, 1), new Vector(0, 1), new Vector(-1, 1)));

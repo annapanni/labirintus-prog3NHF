@@ -1,5 +1,6 @@
 package labyrinth.model;
 
+/** Represents a paper map in the labyrinth, can be stored and collected */
 public class Map extends Item {
 	public Map(Labyrinth l, Vector idx){
 		super(l, idx);

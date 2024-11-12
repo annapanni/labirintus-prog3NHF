@@ -3,11 +3,22 @@ package labyrinth.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a hexagonal labyrinth. Provides methods for calculating distances,
+ * neighbors, directions, and positions within a hexagonal grid structure.
+ */
 public class HexaLab extends Labyrinth {
 	private int labHeight2;
 	private int labWidth;
 	private List<List<Vector>> directions;
 
+	 /**
+     * Constructs a hexagonal labyrinth with specified dimensions, cell paddin, the type of the room finder.
+     * @param w the width of the labyrinth
+     * @param h the height of the labyrinth (the actual width may be one less to maintain the symmetry of the labyrinth)
+     * @param p padding between cells
+     * @param rf the room finder instance used for room generation
+     */
 	public HexaLab(int w, int h, double p, RoomFinder rf) {
 		super(w, h, p, rf);
 		setRoot(new Vector(w - 1, 0));
@@ -29,6 +40,12 @@ public class HexaLab extends Labyrinth {
 		}
 	}
 
+	/**
+     * Rounds given coordinates to the nearest hexagonal grid coordinate.
+     * @param x the x-coordinate
+     * @param y the y-coordinate
+     * @return a vector representing the rounded coordinates on the hexagonal grid
+     */
 	private Vector axialRounded(double x, double y){
 		long q = Math.round(x);
 		long r = Math.round(y);
@@ -41,6 +58,10 @@ public class HexaLab extends Labyrinth {
 		return new Vector((int)q, (int)r);
 	}
 
+	/**
+     * Returns a list of vectors representing the six directions in a hexagonal grid in clockwise order.
+     * @return a list of vectors for the six neighboring directions
+     */
 	private List<Vector> getAllDirs() {
 		return new ArrayList<>(List.of(new Vector(-1, 0), new Vector(0, -1),
 			new Vector(1, -1), new Vector(1, 0),  new Vector(0, 1), new Vector(-1, 1)));
@@ -56,6 +77,7 @@ public class HexaLab extends Labyrinth {
 		return getAllDirs().stream().map(idx::plus).toList();
 	}
 
+	
 	public List<Vector> getChildren(Vector idx) {
 		List<Vector> ch = new ArrayList<>();
 		for (Vector dir : getAllDirs()) {
