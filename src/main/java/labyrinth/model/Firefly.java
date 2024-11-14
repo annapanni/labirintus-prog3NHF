@@ -22,7 +22,7 @@ public class Firefly extends Storable {
 	 * @param s the distance it can go each step
 	 */
 	public Firefly(Labyrinth lab, Vector from, Vector to, double s) {
-		super(lab, lab.getRoute(from, to).get(0));
+		super(lab, from);
 		route = lab.getRoute(from, to);
 		route.remove(0);
 		stepDist = s;
