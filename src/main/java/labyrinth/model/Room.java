@@ -2,6 +2,7 @@ package labyrinth.model;
 
 import java.util.List;
 
+/** Abstract class for representing rooms in a labyrinth*/
 public abstract class Room implements java.io.Serializable {
 	private Labyrinth lab;
 

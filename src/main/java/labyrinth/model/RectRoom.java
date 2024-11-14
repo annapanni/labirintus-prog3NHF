@@ -20,6 +20,9 @@ public class RectRoom extends Room {
 	 */
 	public RectRoom(Labyrinth l, Vector si, int w, int h) {
 		super(l);
+		if (w < 1 || h < 1) {
+			throw new IllegalArgumentException("Room dimesions must be positive");
+		}
 		sidx = si;
 		width = w;
 		height = h;
