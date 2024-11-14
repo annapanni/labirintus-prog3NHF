@@ -80,5 +80,43 @@ class RectLabTest {
 		assertEquals(1 - laby.getPadding(), Math.sqrt(2) * distFromCenter, 0.00001);
 	}
 
+	@Test
+	void roomTests() {
+		Room r1 = new RectRoom(laby, new Vector(0, 0), 3, 2);
+		Room r2 = new RectRoom(laby, new Vector(3, 1), 4, 3);
+		List<Room> rs = List.of(r1, r2);
+		laby.setRooms(rs);
+		assertEquals(rs, laby.getRooms());
+		assertSame(r1, laby.inWhichRoom(new Vector(2, 1)));
+		assertSame(r2, laby.inWhichRoom(new Vector(4, 3)));
+		assertNull(laby.inWhichRoom(new Vector(2, 3)));	
+	}
+
+	@Test
+	void routeTest() {
+		Room r1 = new RectRoom(laby, new Vector(0, 0), 3, 2);
+		Room r2 = new RectRoom(laby, new Vector(3, 1), 4, 3);
+		laby.setRooms(List.of(r1, r2));
+		assertEquals(List.of(
+			new Vector(0, 0),
+			new Vector(0, 1),
+			new Vector(1, 1),
+			new Vector(2, 1),
+			new Vector(3, 1),
+			new Vector(4, 1),
+			new Vector(5, 1),
+			new Vector(6, 1),
+			new Vector(7, 1)
+		), laby.getRoute(new Vector(0, 0), new Vector(7, 1)));
+		assertEquals(List.of(
+			new Vector(7, 3),
+			new Vector(6, 3),
+			new Vector(6, 2),
+			new Vector(6, 1),
+			new Vector(7, 1)
+		), laby.getRoute(new Vector(7, 3), new Vector(7, 1)));
+	}
+
+
 
 }

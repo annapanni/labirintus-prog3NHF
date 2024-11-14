@@ -1,9 +1,8 @@
 package labyrinth.model;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -48,6 +47,10 @@ public class StorablesTest {
         assertEquals(pos, st.getInCell());
         assertEquals(5, st.getXPos());
         assertEquals(5, st.getYPos());
+        st.setCell(new Vector(-10, -10));
+        assertEquals(pos, st.getInCell());
+        assertEquals(5, st.getXPos());
+        assertEquals(5, st.getYPos());
     }
 
     @Test
@@ -67,7 +70,7 @@ public class StorablesTest {
         assertEquals(ModelSprite.EXIT, it.getSprite());
         it = new Key(lab, pos);
         assertEquals(ModelSprite.KEY, it.getSprite());
-        it = new Map(lab, pos);
+        it = new MapPlan(lab, pos);
         assertEquals(ModelSprite.MAP, it.getSprite());
     }
 
