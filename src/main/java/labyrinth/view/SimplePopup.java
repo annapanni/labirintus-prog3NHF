@@ -153,7 +153,7 @@ public class SimplePopup {
 		frame.pack();
 		Point uLeft = frame.getLocation();
 		frame.setLocation((int)uLeft.getX()-frame.getSize().width/2, (int)uLeft.getY()-frame.getSize().height/2);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		frame.setVisible(true);
 	}
 }

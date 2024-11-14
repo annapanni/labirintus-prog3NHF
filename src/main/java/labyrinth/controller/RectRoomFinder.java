@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import labyrinth.model.*;
 
 
-public class RectRoomFinder implements RoomFinder, java.io.Serializable{
+public class RectRoomFinder implements RoomFinder {
 	private int maxsize;
 
 	public RectRoomFinder(int ms) {maxsize = ms;}

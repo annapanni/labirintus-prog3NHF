@@ -20,8 +20,8 @@ public class LabView extends JPanel {
 	private int yoffset;
 	private double scale;
 	private double visiblityOverride;
-	private Paint floorPaint;
-	private BufferedImage mapImage;
+	private transient Paint floorPaint;
+	private transient BufferedImage mapImage;
 	private boolean drawMap;
 
 	public void setVisiblityOverride(double vo) {visiblityOverride = vo;}

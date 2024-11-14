@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 import labyrinth.model.*;
 
 
-public class ConcaveRoomFinder implements RoomFinder, java.io.Serializable{
+public class ConcaveRoomFinder implements RoomFinder {
 	private int maxRad;
 
 	public ConcaveRoomFinder(int size) {maxRad = size / 2;}

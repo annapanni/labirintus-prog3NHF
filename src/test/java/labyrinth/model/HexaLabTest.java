@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
-public class HexaLabTest {
+class HexaLabTest {
 	HexaLab laby;
 
 	@BeforeEach
@@ -14,7 +14,7 @@ public class HexaLabTest {
 	}
 
 	@Test
-	public void neighbourTest() {
+	void neighbourTest() {
 		Vector midPoint = new Vector(5, 5);
 		List<Vector> all5 = laby.getAllNeighbours(midPoint);
 		assertEquals(List.of(new Vector(4, 5), new Vector(5, 4),
@@ -31,7 +31,7 @@ public class HexaLabTest {
 	}
 
 	@Test
-	public void positionTests() {
+	void positionTests() {
 		Vector i1 = new Vector(2, 3);
 		Vector i2 = new Vector(8, 5);
 		assertEquals(28, laby.getDist2Between(i1, i2));
@@ -48,7 +48,7 @@ public class HexaLabTest {
 	}
 
 	@Test
-	public void directionTest() {
+	void directionTest() {
 		assertEquals(new Vector(0,0), laby.getDir(laby.getRoot()));
 		Vector ndir = new Vector(5, 5);
 		Vector idx = new Vector(4, 3);
@@ -70,7 +70,7 @@ public class HexaLabTest {
 	}
 
 	@Test
-	public void boundaryTest() {
+	void boundaryTest() {
 		testBoundaries();
 		//odd height laby
 		laby = new HexaLab(10, 7, 0.3, null);
@@ -78,7 +78,7 @@ public class HexaLabTest {
 	}
 
 	@Test
-	public void paddingTest(){
+	void paddingTest(){
 		assertEquals(0.3, laby.getPadding());
 		Vector idx = new Vector(4, 4);
 		List<double[]> poly = laby.getNodePoly(idx);

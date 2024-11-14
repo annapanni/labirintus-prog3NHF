@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
-public class RectLabTest {
+class RectLabTest {
 	RectLab laby;
 
 	@BeforeEach
@@ -14,7 +14,7 @@ public class RectLabTest {
 	}
 
 	@Test
-	public void neighbourTest() {
+	void neighbourTest() {
 		Vector midPoint = new Vector(5, 5);
 		List<Vector> all5 = laby.getAllNeighbours(midPoint);
 		assertEquals(List.of(new Vector(4, 5), new Vector(4, 4), new Vector(5, 4),
@@ -32,7 +32,7 @@ public class RectLabTest {
 	}
 
 	@Test
-	public void positionTests() {
+	void positionTests() {
 		Vector i1 = new Vector(2, 3);
 		Vector i2 = new Vector(8, 5);
 		assertEquals(40, laby.getDist2Between(i1, i2));
@@ -49,7 +49,7 @@ public class RectLabTest {
 	}
 
 	@Test
-	public void directionTest() {
+	void directionTest() {
 		assertEquals(new Vector(0,0), laby.getDir(laby.getRoot()));
 		Vector ndir = new Vector(5, 5);
 		Vector idx = new Vector(4, 3);
@@ -58,7 +58,7 @@ public class RectLabTest {
 	}
 
 	@Test
-	public void boundaryTest() {
+	void boundaryTest() {
 		assertTrue(laby.inBound(new Vector(4, 4)));
 		assertFalse(laby.inBound(new Vector(-1, 0)));
 		assertFalse(laby.onBound(new Vector(6, 6)));
@@ -70,7 +70,7 @@ public class RectLabTest {
 	}
 
 	@Test
-	public void paddingTest(){
+	void paddingTest(){
 		assertEquals(0.3, laby.getPadding());
 		Vector idx = new Vector(4, 4);
 		List<double[]> poly = laby.getNodePoly(idx);

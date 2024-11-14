@@ -26,7 +26,7 @@ public class StructSettings extends JPanel {
 
 	public StructSettings(MainDisplay d, ModePanel mp) {
 		lWidth = rand.nextInt(25) + 5;
-		lHeight = (int)((rand.nextDouble() + 0.5) * lWidth);
+		lHeight = rand.nextInt(lWidth) + lWidth / 2;
 		lType = lTypes[rand.nextInt(lTypes.length)];
 		int randSize = rand.nextInt(10) + 2;
 		rSize = (randSize >= Math.min(lWidth, lHeight)) ? Math.min(lWidth, lHeight) / 2 : randSize;
