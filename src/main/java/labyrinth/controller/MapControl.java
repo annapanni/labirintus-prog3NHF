@@ -1,13 +1,13 @@
 package labyrinth.controller;
 
-import labyrinth.model.Map;
+import labyrinth.model.MapPlan;
 import labyrinth.model.LabState;
 import labyrinth.model.Vector;
 
 public class MapControl implements Interactable{
-	private Map map;
+	private MapPlan map;
 
-	public MapControl(Map m) {map = m;}
+	public MapControl(MapPlan m) {map = m;}
 
 	public void interact(LabState labState, Vector at) {
 		if (! map.getInCell().equals(at)) return ;

@@ -34,7 +34,7 @@ public class LabState implements java.io.Serializable {
 	/** Returns a stream of all exits in the game.*/
 	public Stream<Exit> getExits() {return items.stream().filter(Exit.class::isInstance).map(e -> (Exit)e);}
 	/** Returns a stream of all (collected and uncollected) maps in the game.*/
-	public Stream<Map> getMaps() {return items.stream().filter(Map.class::isInstance).map(m -> (Map)m);}
+	public Stream<MapPlan> getMaps() {return items.stream().filter(MapPlan.class::isInstance).map(m -> (MapPlan)m);}
 	/** Retrieves the player character in the game state. */
 	public PlayerCharacter getPlayer() {return player;}
 	/** Retrieves the line of sight of the player */
@@ -89,7 +89,7 @@ public class LabState implements java.io.Serializable {
 		Exit exit = new Exit(l, l.getRandomPos());
 		objects.add(exit);
 		items.add(exit);
-		Map map = new Map(l, l.getRandomPos());
+		MapPlan map = new MapPlan(l, l.getRandomPos());
 		items.add(map);
 		objects.add(map);
 		fireflyNum = fNum;

@@ -106,13 +106,13 @@ public class LabEditControl {
 	public void addDeleteMap(double x, double y) {
 		Vector vclick = labState.getLab().posToVec(x, y);
 		if (! labState.getLab().inBound(vclick)) {return;}
-		Optional<Map> optM = labState.getMaps().filter(m -> m.getInCell().equals(vclick)).findFirst();
+		Optional<MapPlan> optM = labState.getMaps().filter(m -> m.getInCell().equals(vclick)).findFirst();
 		if (optM.isPresent()) {
-			Map m = optM.get();
+			MapPlan m = optM.get();
 			labState.getItems().remove(m);
 			labState.getObjects().remove(m);
 		} else {
-			Map m = new Map(labState.getLab(), vclick);
+			MapPlan m = new MapPlan(labState.getLab(), vclick);
 			m.setPosition(x, y);
 			labState.getItems().add(m);
 			labState.getObjects().add(m);
