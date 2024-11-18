@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import java.util.List;
 import java.io.IOException;
 import java.io.File;
+import java.util.stream.IntStream;
 
 import labyrinth.model.*;
 
@@ -262,17 +263,25 @@ public class LabView extends JPanel {
 		return light;
 	}
 
+	private boolean circleInBound(int w, int h, int cx, int cy, double r){
+		return cx + r > 0 && cy + r > 0 && cx - r < w && cy - r < h;
+	}
+
 	private void drawLightColors(Graphics2D g, List<Light> lights) {
+		int w = (int)getSize().getWidth();
+		int h = (int)getSize().getHeight();
 		for (Light light : lights){
-			Area lArea = getLightArea(light, light.getRadius()*scale);
 			int cx = xlabPosToPx(light.getOrigin().getXPos());
 			int cy = ylabPosToPx(light.getOrigin().getYPos());
 			double r = light.getRadius() * scale;
-			Color col = decodeColor(light.getColor());
-			Paint p = new RadialGradientPaint(cx, cy, (float)r, new float[]{(float)light.getDimFrom(), 1f},
-				new Color[]{withMaxOpacity(col, 150), withMaxOpacity(col, 0)});
-			g.setPaint(p);
-			g.fill(lArea);
+			if (circleInBound(w, h, cx, cy, r)) {
+				Area lArea = getLightArea(light, light.getRadius()*scale);
+				Color col = decodeColor(light.getColor());
+				Paint p = new RadialGradientPaint(cx, cy, (float)r, new float[]{(float)light.getDimFrom(), 1f},
+					new Color[]{withMaxOpacity(col, 150), withMaxOpacity(col, 0)});
+				g.setPaint(p);
+				g.fill(lArea);
+			}
 		}
 	}
 
@@ -282,23 +291,26 @@ public class LabView extends JPanel {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, image.getWidth(), image.getHeight());
 		for (Light light : lights) {
-			Area lArea = getLightArea(light, light.getRadius()*scale);
 			int cx = xlabPosToPx(light.getOrigin().getXPos());
 			int cy = ylabPosToPx(light.getOrigin().getYPos());
 			double r = light.getRadius() * scale;
-			Paint p = new RadialGradientPaint(cx, cy, (float)r, new float[]{(float)light.getDimFrom(), 1f},
-				new Color[]{new Color(255, 255, 255, 255), new Color(255, 255, 255, 0)});
-			g.setPaint(p);
-			g.fill(lArea);
+			if (circleInBound(w, h, cx, cy, r)) {
+				Area lArea = getLightArea(light, light.getRadius()*scale);
+				Paint p = new RadialGradientPaint(cx, cy, (float)r, new float[]{(float)light.getDimFrom(), 1f},
+					new Color[]{new Color(255, 255, 255, 255), new Color(255, 255, 255, 0)});
+				g.setPaint(p);
+				g.fill(lArea);
+			}
 		}
-		for (int x=0; x < image.getWidth(); x++){
-			for (int y=0; y < image.getHeight(); y++){
+
+		IntStream.range(0, image.getWidth()).parallel().forEach( x ->
+			IntStream.range(0, image.getHeight()).forEach( y -> {
 				int col = image.getRGB(x, y);
 				int newAlpha = (256 - col & 0xff) << 24;
 				int newCol = (col & 0xff000000) + newAlpha;
 				image.setRGB(x, y, newCol);
-			}
-		}
+			})
+		);
 		return image;
 	}
 

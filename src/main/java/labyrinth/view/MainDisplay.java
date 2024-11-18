@@ -114,6 +114,7 @@ public class MainDisplay extends JFrame{
 	}
 
 	public static void main(String[] args) {
+		System.setProperty("sun.java2d.opengl", "true");
 		MainDisplay disp = new MainDisplay();
 		disp.createApplication();
 	}
