@@ -343,8 +343,8 @@ public class LabView extends JPanel {
 		String ffStatus = (labState.getFireflyNum() - labState.getUsedFireflyNum()) + "/" + labState.getFireflyNum();
 		long kNum = labState.getKeys().count();
 		String keyStatus = (kNum - labState.getUncollectedKeyNum()) + "/" + kNum;
-		int padd1 = g.getFontMetrics().stringWidth(keyStatus) + g.getFontMetrics().stringWidth(keyStatus) + 45;
-		int padd2 = g.getFontMetrics().stringWidth(keyStatus) + 5;
+		int padd1 = g.getFontMetrics().stringWidth(keyStatus) + g.getFontMetrics().stringWidth(ffStatus) + 45;
+		int padd2 = g.getFontMetrics().stringWidth(ffStatus) + 5;
 		g.drawString(keyStatus, screenWidth - padd1, 20);
 		g.drawString(ffStatus, screenWidth - padd2, 20);
 		if (! failedToLoad) {
