@@ -7,6 +7,9 @@ import java.util.Optional;
 
 import labyrinth.model.*;
 
+/**
+ * Controller class responsible for editing and managing the state of a labyrinth.
+ */
 public class LabEditControl {
 	private LabState labState;
 
@@ -14,16 +17,33 @@ public class LabEditControl {
 
 	private static Random rand = new Random();
 
+	/**
+     * Constructs a new LabEditControl for the given labyrinth state.
+     * @param laby the labyrinth state to be controlled
+     */
 	public LabEditControl(LabState laby) {
 		labState = laby;
 	}
 
+	/**
+     * Generates a new labyrinth by performing random modifications and adding rooms.
+     * @param lab the labyrinth to modify
+     * @return a new LabState representing the modified labyrinth
+     */
 	public static LabState generateLabyrinth(Labyrinth lab) {
 		changeNTimes(lab, lab.getWidth() * lab.getHeight() * 10);
 		coverWithRooms(lab, lab.getRoomfinder());
 		return new LabState(lab, 3, 5);
 	}
 
+	/**
+     * Performs a series of random changes to the labyrinth, starting from a specified position.
+	 * All changes preserve the tree-like property of the labyrinth's corridors.
+     * @param lab the labyrinth to modify
+     * @param n the number of changes to perform
+     * @param changeAt the starting position for the changes
+     * @param keepRoot whether to restore the original root position after changes
+     */
 	private static void changeNTimesFrom(Labyrinth lab, int n, Vector changeAt, boolean keepRoot) {
 		Vector ogRoot = null;
 		if (keepRoot) {
@@ -43,13 +63,27 @@ public class LabEditControl {
 		}
 	}
 
+	/**
+     * Performs random changes to the labyrinth a specified number of times.
+	 * All changes preserve the tree-like property of the labyrinth's corridors.
+	 * May change the root of the labyrinth.
+     * @param lab the labyrinth to modify
+     * @param n the number of changes to perform
+     */
 	private static void changeNTimes(Labyrinth lab, int n){
 		for (int i=0; i<n; i++){
 			changeNTimesFrom(lab, 1, lab.getRandomPos(), false);
 		}
 	}
 
+	/**
+     * Fills the labyrinth with rooms based on a given room-finding algorithm.
+	 * May change the root of the labyrinth.
+     * @param lab the labyrinth to modify
+     * @param roomfinder the room-finding algorithm
+     */
 	private static void coverWithRooms(Labyrinth lab, RoomFinder roomfinder) {
+		// so the rooms are located in smaller subtress therefore the size of the loops will as small as possible
 		lab.rerootTo(lab.lastValidIdx());
 		lab.setRooms(new ArrayList<>());
 		for (int x = 0; x < lab.getWidth(); x++){
@@ -64,14 +98,12 @@ public class LabEditControl {
 		}
 	}
 
-	public void handleClick(double x, double y){
-		Vector vclick = labState.getLab().posToVec(x, y);
-		if (! labState.getLab().inBound(vclick)) {return;}
-		Storable br = Storable.brazier(labState.getLab(), vclick);
-		br.setPosition(x, y);
-		labState.getObjects().add(br);
-	}
-
+	/**
+     * Toggles the presence of a key at a specified position. If a key exists, it is removed;
+     * otherwise, a new key is added.
+     * @param x the x-coordinate of the key
+     * @param y the y-coordinate of the key
+     */
 	public void addDeleteKey(double x, double y) {
 		Vector vclick = labState.getLab().posToVec(x, y);
 		if (! labState.getLab().inBound(vclick)) {return;}
@@ -88,6 +120,12 @@ public class LabEditControl {
 		}
 	}
 
+	/**
+     * Toggles the presence of a brazier at a specified position. If a brazier exists, it is removed;
+     * otherwise, a new brazier is added.
+     * @param x the x-coordinate of the brazier
+     * @param y the y-coordinate of the brazier
+     */
 	public void addDeleteBrazier(double x, double y) {
 		Vector vclick = labState.getLab().posToVec(x, y);
 		if (! labState.getLab().inBound(vclick)) {return;}
@@ -103,6 +141,12 @@ public class LabEditControl {
 		}
 	}
 
+	 /**
+     * Toggles the presence of an map at a specified position. If an exit exists and there
+     * is more than one map, it is removed; otherwise, a new map is added.
+     * @param x the x-coordinate of the map
+     * @param y the y-coordinate of the map
+     */
 	public void addDeleteMap(double x, double y) {
 		Vector vclick = labState.getLab().posToVec(x, y);
 		if (! labState.getLab().inBound(vclick)) {return;}
@@ -119,6 +163,11 @@ public class LabEditControl {
 		}
 	}
 
+	/**
+	 * Set's the player's starting position to a specified point in the labyrinth
+	 * @param x x coordinate of the new starting position
+	 * @param y y coordinate of the new starting position
+	 */
 	public void chageStartPos(double x, double y) {
 		Vector vclick = labState.getLab().posToVec(x, y);
 		if (! labState.getLab().inBound(vclick)) {return;}
@@ -126,6 +175,12 @@ public class LabEditControl {
 		labState.getPlayer().setCell(vclick);
 	}
 
+	/**
+     * Toggles the presence of an exit at a specified position. If an exit exists and there
+     * is more than one exit, it is removed; otherwise, a new exit is added.
+     * @param x the x-coordinate of the exit
+     * @param y the y-coordinate of the exit
+     */
 	public void addDeleteExit(double x, double y) {
 		Vector vclick = labState.getLab().posToVec(x, y);
 		if (! labState.getLab().inBound(vclick)) {return;}
@@ -142,6 +197,11 @@ public class LabEditControl {
 		}
 	}
 
+	/**
+     * Modifies the labyrinth's structure starting from the specified position.
+     * @param x the x-coordinate of the position
+     * @param y the y-coordinate of the position
+     */
 	public void changeLabAt(double x, double y) {
 		Vector vclick = labState.getLab().posToVec(x, y);
 		if (! labState.getLab().inBound(vclick)) {return;}

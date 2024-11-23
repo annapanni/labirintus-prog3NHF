@@ -7,10 +7,16 @@ import java.util.function.Predicate;
 
 import labyrinth.model.*;
 
-
+/**
+ * A roomfinder algorithm that can find ConcaveRoom rooms from a given point.
+ */
 public class ConcaveRoomFinder implements RoomFinder {
 	private int maxRad;
 
+	/**
+	 * Creates a new ConcaveRoomFinder instance
+	 * @param size maximum diameter of a room found by this instance can be
+	 */
 	public ConcaveRoomFinder(int size) {maxRad = size / 2;}
 
 	public Room findRoomAt(Vector idx, Labyrinth lab) {
@@ -35,7 +41,7 @@ public class ConcaveRoomFinder implements RoomFinder {
 			reachable.removeAll(outliers);
 			outliers = reachable.stream().filter(n -> lab.getValidNeighbours(n).stream().filter(reachable::contains).count() < 2).toList();
 		}
-
+		//gate: if we were to remove this node, the room would fall into to parts => at this point the border of the room would intersect itself
 		List<Vector> gates = reachable.stream().filter(n -> {
 			List<Vector> notRoomNeighbours = lab.getAllNeighbours(n).stream().filter(Predicate.not(reachable::contains)).toList();
 			return GraphUtils.connectedTo(notRoomNeighbours, lab::getAllNeighbours, null, 0).size() != notRoomNeighbours.size();

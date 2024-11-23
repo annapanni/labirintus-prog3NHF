@@ -7,12 +7,14 @@ import java.io.IOException;
 import labyrinth.model.*;
 import labyrinth.controller.*;
 
+/**The main function of the application, represents the frame the whole application is running in */
 public class MainDisplay extends JFrame{
 	JPanel mainPage;
 	EditPanel editPanel;
 	GamePanel gamePanel;
 	ModePanel current;
 
+	/**Switched to the specified mode */
 	public void switchTo(ModePanel m) {
 		if (m == current) return;
 		CardLayout lout = (CardLayout)mainPage.getLayout();
@@ -91,6 +93,7 @@ public class MainDisplay extends JFrame{
 		return mb;
 	}
 
+	/**Creates and initializes the application's components */
 	public void createApplication() {
 		int dTime = 1000 / 30;
 		LabState labState = (new StructSettings()).generate();
@@ -113,6 +116,7 @@ public class MainDisplay extends JFrame{
 		}
 	}
 
+	/**main functinon, creates an instance of MainDisplay to run the application */
 	public static void main(String[] args) {
 		System.setProperty("sun.java2d.opengl", "true");
 		MainDisplay disp = new MainDisplay();

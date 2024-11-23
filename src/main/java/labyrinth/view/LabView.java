@@ -15,6 +15,11 @@ import java.util.stream.IntStream;
 
 import labyrinth.model.*;
 
+/**
+ * Represents the visual representation of a labyrinth game, providing functionality for 
+ * rendering the labyrinth, its objects, and various visual effects such as lighting and darkness.
+ * Handles simple events, such as scrolling and zooming.
+ */
 public class LabView extends JPanel {
 	private LabState labState;
 	private int xoffset;
@@ -25,9 +30,11 @@ public class LabView extends JPanel {
 	private transient BufferedImage mapImage;
 	private boolean drawMap;
 
+	/**Overrides the darkness opacity specified in the labstate class for this view */
 	public void setVisiblityOverride(double vo) {visiblityOverride = vo;}
 
 	private static boolean failedToLoad = false;
+	/**Checks if texture loading failed. */
 	public static boolean failedToLoadTexture() {return failedToLoad;}
 	private static BufferedImage charImage;
 	private static BufferedImage keyImage;
@@ -76,6 +83,12 @@ public class LabView extends JPanel {
     }
 	}
 
+	 /**
+     * Constructs a LabView with the specified labyrinth state, scale, and visibility override.
+     * @param laby the state of the labyrinth
+     * @param sc the scaling factor for rendering
+     * @param vo the visibility override, or -1 for default behavior
+     */
 	public LabView(LabState laby, int sc, double vo) {
 		scale = sc;
 		visiblityOverride = vo;
@@ -98,26 +111,36 @@ public class LabView extends JPanel {
 		}
 	}
 
+	/**
+     * Constructs a `LabView` with the specified labyrinth state and scale, using default visibility.
+     * @param laby the state of the labyrinth
+     * @param sc the scaling factor for rendering
+     */
 	public LabView(LabState laby, int sc) {
 		this(laby, sc, -1);
 	}
 
+	/** Converts a labyrinth x coordinate to a pixel x coordinate.*/
 	public int xlabPosToPx(double p){
 		return xoffset + (int)((p + 2/scale) * scale);
 	}
 
+	/** Converts a labyrinth y coordinate to a pixel y coordinate.*/
 	public int ylabPosToPx(double p){
 		return yoffset + (int)((p + 2/scale) * scale);
 	}
 
+	/** Converts a pixel x coordinate to a labyrinth x coordinate.*/
 	public double xpxToLabPos(int px){
 		return (px - xoffset) / scale;
 	}
 
+	/** Converts a pixel y coordinate to a labyrinth y coordinate.*/
 	public double ypxToLabPos(int px){
 		return (px - yoffset) / scale;
 	}
 
+	/**Sets the labyrinth to be rendered */
 	public void setLabState(LabState ls) {
 		labState = ls;
 		center();
@@ -332,6 +355,7 @@ public class LabView extends JPanel {
 		}
 	}
 
+	/**Renders the labyrinth */
 	@Override
 	public void paintComponent(Graphics g1) {
 		super.paintComponent(g1);

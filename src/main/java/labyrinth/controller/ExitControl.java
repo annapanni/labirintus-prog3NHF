@@ -4,7 +4,9 @@ import labyrinth.model.Exit;
 import labyrinth.model.LabState;
 import labyrinth.model.Vector;
 
-
+/**
+ * Class handling the player interactions with a given Exit instance.
+ */
 public class ExitControl implements Interactable{
 	private Exit e;
 

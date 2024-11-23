@@ -2,6 +2,9 @@ package labyrinth.controller;
 
 import labyrinth.model.PlayerCharacter;
 
+/**
+ * Mover class responsible for moving the player character in the labyrinth.
+ */
 public class CharMover extends Mover {
 	private PlayerCharacter pl;
 	private boolean lockedPos = false;

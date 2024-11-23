@@ -5,10 +5,16 @@ import java.util.ArrayList;
 
 import labyrinth.model.*;
 
-
+/**
+ * A roomfinder algorithm that can find RectRoom rooms from a given point.
+ */
 public class RectRoomFinder implements RoomFinder {
 	private int maxsize;
 
+	/**
+	 * Creates a new RectRoomFinder instance
+	 * @param ms maximum width or height a room found by this instance can be
+	 */
 	public RectRoomFinder(int ms) {maxsize = ms;}
 
 	public Room findRoomAt(Vector idx, Labyrinth lab) {

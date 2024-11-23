@@ -4,6 +4,9 @@ import labyrinth.model.Key;
 import labyrinth.model.LabState;
 import labyrinth.model.Vector;
 
+/**
+ * Class handling the player interactions with a given Key instance.
+ */
 public class KeyControl implements Interactable{
 	private Key k;
 

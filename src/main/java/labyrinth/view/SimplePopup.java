@@ -8,6 +8,7 @@ import java.io.IOException;
 import labyrinth.controller.FileManager;
 import labyrinth.model.LabState;
 
+/**Utility class for creating simple popup windows */
 public class SimplePopup {
 	Component input;
 	JLabel inpLabel;
@@ -16,6 +17,7 @@ public class SimplePopup {
 	String errorMsg;
 	boolean cancellable = true;
 
+	/**Creates a popup for saving the given labyrinth */
 	public static SimplePopup save(LabState lab) {
 		SimplePopup s = new SimplePopup();
 		JTextField tf = new JTextField(lab.getName());
@@ -38,6 +40,7 @@ public class SimplePopup {
 		return s;
 	}
 
+	/**Creates a popup for loading labyrinths to a given mode*/
 	public static SimplePopup load(MainDisplay disp, ModePanel pan) {
 		SimplePopup s = new SimplePopup();
 		JComboBox<String> jcb = new JComboBox<>(FileManager.getLabys());
@@ -57,6 +60,7 @@ public class SimplePopup {
 		return s;
 	}
 
+	/**Creates a popup displaying a message*/
 	public static SimplePopup message(String msg) {
 		SimplePopup s = new SimplePopup();
 		JLabel label = new JLabel(msg);
@@ -67,6 +71,7 @@ public class SimplePopup {
 		return s;
 	}
 
+	/**Creates asking for confirmation before performing an acion*/
 	public static SimplePopup ask(String msg, Runnable a) {
 		SimplePopup s = new SimplePopup();
 		s.inpLabel = new JLabel(msg);
@@ -75,6 +80,11 @@ public class SimplePopup {
 		return s;
 	}
 
+	/**Creates a custom popup
+	 * @param inp - main component of the popup
+	 * @param a - action to perform when the popup ind confirmed
+	 * @param done - caption of the comfirmation button
+	*/
 	public static SimplePopup from(Component inp, Runnable a, String done) {
 		SimplePopup s = new SimplePopup();
 		s.input = inp;
@@ -83,10 +93,10 @@ public class SimplePopup {
 		return s;
 	}
 
-	public void startPopup() {
-		startPopup(null);
-	}
-
+	/**
+	 * Starts the popup centered on it's parent window, or on the screen if parent is null
+	 * @param parent parent window ofthe popup, may be null
+	 */
 	public void startPopup(Component parent) {
 		JFrame frame = new JFrame();
 		frame.setLocationRelativeTo(parent);

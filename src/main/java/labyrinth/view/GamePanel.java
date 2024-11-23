@@ -8,7 +8,9 @@ import labyrinth.controller.LabGameControl;
 import labyrinth.model.LabState;
 import labyrinth.model.Exit;
 
-
+/**
+ * Panel for a the gameplay. Includes the view of the labyrinth and all associated event handling.
+ */
 public class GamePanel extends ModePanel {
 	LabGameControl labControl;
 
@@ -46,6 +48,11 @@ public class GamePanel extends ModePanel {
 		return pan;
 	}
 
+	/**
+	 * Creates a new game panel
+	 * @param ls labyrinth the game takes place in
+	 * @param dt time between screen refresh and object movements in miliseconds
+	 */
 	public GamePanel(LabState ls, int dt) {
 		super(ls, dt);
 		setLayout(new BorderLayout());

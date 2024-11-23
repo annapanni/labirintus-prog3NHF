@@ -9,6 +9,7 @@ import java.util.Random;
 
 import labyrinth.model.*;
 
+/**Provides a simplified, map-like view of a labyrinth.  */
 public class MapView {
 	private LabState labState;
 	private int padding = 10;
@@ -23,6 +24,7 @@ public class MapView {
 
 	private static Random rand = new Random();
 
+	/**Creates a new MapView fora labyrinth with the specified scale */
 	public MapView(LabState laby, int sc) {
 		labState = laby;
 		scale = sc;
@@ -91,15 +93,15 @@ public class MapView {
 		}
 	}
 
-	public int xlabPosToPx(double p){
+	private int xlabPosToPx(double p){
 		return xoffset + (int)((p + 2/scale) * scale);
 	}
 
-	public int ylabPosToPx(double p){
+	private int ylabPosToPx(double p){
 		return yoffset + (int)((p + 2/scale) * scale);
 	}
 
-	public void paint(Graphics2D g) {
+	private void paint(Graphics2D g) {
 		int width = (int)g.getDeviceConfiguration().getBounds().getWidth();
 		int height = (int)g.getDeviceConfiguration().getBounds().getHeight();
 		g.setColor(new Color(240, 230, 140));
@@ -112,6 +114,10 @@ public class MapView {
 		drawCorridors(g);
 	}
 
+	/**
+	 * Returns a rotated image of the map of the labyrinth
+	 * @param rotate the number of counter-clockwise 90 degree rotations
+	*/
 	public BufferedImage getImage(boolean rotate) {
 		int rotation = rotate ? rand.nextInt(5) : 0;
 		BufferedImage unRotated = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);

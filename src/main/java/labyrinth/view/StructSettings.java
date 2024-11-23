@@ -7,6 +7,13 @@ import java.util.Random;
 import labyrinth.model.*;
 import labyrinth.controller.*;
 
+/**
+ * A panel for configuring the structure of a labyrinth, including its dimensions, type, 
+ * and room settings. It allows users to customize labyrinth settings through a GUI 
+ * and generate labyrinth configurations dynamically.
+ * Integrates with {@link ModePanel} and {@link MainDisplay} to allow seamless 
+ * interaction and visualization of the generated labyrinth structures.
+ */
 public class StructSettings extends JPanel {
 	private static Random rand = new Random();
 	private static String[] lTypes = new String[]{"Hexagonal", "Rectangular"};
@@ -20,10 +27,22 @@ public class StructSettings extends JPanel {
 	private ModePanel pan;
 	private MainDisplay disp;
 
+	/**
+     * Default constructor that initializes the panel without a {@link ModePanel} or {@link MainDisplay}.
+     */
 	public StructSettings(){this(null, null);}
 
+	/**
+     * Constructor that initializes the panel with a {@link ModePanel}.
+     * @param mp the mode panel to associate with this settings panel.
+     */
 	public StructSettings(ModePanel mp){this(null, mp);}
 
+	/**
+     * Constructor that initializes the panel with a {@link MainDisplay} and {@link ModePanel}.
+     * @param d  the main display for rendering the labyrinth.
+     * @param mp the mode panel to associate with this settings panel.
+     */
 	public StructSettings(MainDisplay d, ModePanel mp) {
 		lWidth = rand.nextInt(25) + 5;
 		lHeight = rand.nextInt(lWidth) + lWidth / 2;
@@ -78,6 +97,9 @@ public class StructSettings extends JPanel {
 
 	}
 
+	/**
+     * Generates a {@link LabState} based on the current configuration of the panel.
+     */
 	public LabState generate(){
 		RoomFinder rf;
 		Labyrinth lab;
@@ -97,6 +119,11 @@ public class StructSettings extends JPanel {
 		return LabEditControl.generateLabyrinth(lab);
 	}
 
+	/**
+     * Generates a labyrinth state and updates the associated {@link ModePanel} and {@link MainDisplay}.
+	 * If a {@link ModePanel} is associated, it sets the generated labyrinth state to it. 
+     * If a {@link MainDisplay} is associated, it switches to the updated display.
+     */
 	public void generateAndSet(){
 		if (pan != null) {
 			pan.setLabState(generate());

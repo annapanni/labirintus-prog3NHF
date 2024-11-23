@@ -2,6 +2,9 @@ package labyrinth.controller;
 
 import labyrinth.model.Light;
 
+/**
+ * Mover class responsible for moving the lights in the labyrinth.
+ */
 public class LightMover extends Mover {
 	private Light li;
 	private double ogRadius = Double.POSITIVE_INFINITY;

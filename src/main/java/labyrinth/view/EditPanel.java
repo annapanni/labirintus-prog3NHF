@@ -9,6 +9,9 @@ import java.util.List;
 import labyrinth.controller.LabEditControl;
 import labyrinth.model.LabState;
 
+/**
+ * Panel for editing a labyrinth. Includes the view of the labyrinth and all associated event handling.
+ */
 public class EditPanel extends ModePanel {
 	LabEditControl labControl;
 	Mode currMode = Mode.KEY;
@@ -132,6 +135,11 @@ public class EditPanel extends ModePanel {
 		return pan;
 	}
 
+	/**
+	 * Creates a new editor panel
+	 * @param ls labyrinth to be edited
+	 * @param dt time between screen refresh in miliseconds
+	 */
 	public EditPanel(LabState ls, int dt) {
 		super(ls, dt);
 		setLayout(new BorderLayout());

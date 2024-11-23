@@ -6,6 +6,9 @@ import java.util.List;
 import labyrinth.model.Firefly;
 import labyrinth.model.Vector;
 
+/**
+ * Mover class responsible for moving fireflies in the labyrinth.
+ */
 public class FireflyMover extends Mover {
 	private Firefly fly;
 	private double xAnchor;

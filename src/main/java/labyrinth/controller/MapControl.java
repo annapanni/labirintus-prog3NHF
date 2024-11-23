@@ -4,6 +4,9 @@ import labyrinth.model.MapPlan;
 import labyrinth.model.LabState;
 import labyrinth.model.Vector;
 
+/**
+ * Class handling the player interactions with a given MapPlay instance.
+ */
 public class MapControl implements Interactable{
 	private MapPlan map;
 
