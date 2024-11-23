@@ -56,6 +56,7 @@ public abstract class ModePanel extends JPanel {
 		timer.scheduleAtFixedRate(new CustomTimerTask(labView::repaint), 0l, dTime);
 		requestFocusInWindow();
 		labView.requestFocus();
+		setLabState(labState); //for initialization
 	}
 
 	/**

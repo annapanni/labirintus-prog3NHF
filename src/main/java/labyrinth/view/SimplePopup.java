@@ -94,7 +94,7 @@ public class SimplePopup {
 	}
 
 	/**
-	 * Starts the popup centered on it's parent window, or on the screen if parent is null
+	 * Starts the popup centered on its parent window, or on the screen if parent is null
 	 * @param parent parent window ofthe popup, may be null
 	 */
 	public void startPopup(Component parent) {

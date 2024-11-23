@@ -5,7 +5,7 @@ import java.util.Random;
 import labyrinth.model.*;
 
 /**
- * Abstract class responsible for moving objects in the labyrinth. Also serves as a factory for it's child classes.
+ * Abstract class responsible for moving objects in the labyrinth. Also serves as a factory for its child classes.
  */
 public abstract class Mover {
 	protected static Random rand = new Random();

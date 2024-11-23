@@ -80,6 +80,7 @@ public class GamePanel extends ModePanel {
 				if (exited != null) {
 					SimplePopup.message("<html>Congratulations!<br/> You exited the maze.").startPopup(GamePanel.this);
 					labView.setVisiblityOverride(0.0);
+					labControl.switchLockedPos();
 					exited.setCollected(false);
 				}
 			}

@@ -32,7 +32,12 @@ public class MainDisplay extends JFrame{
 
 	private JMenuBar menuSetup(){
 		JMenuItem edCont = new JMenuItem("Continue edititing");
-		edCont.addActionListener(e -> switchTo(editPanel));
+		edCont.addActionListener(e -> {
+			if (editPanel.labState == gamePanel.labState)
+				SimplePopup.ask("<html>Are you sure? <br> All unsaved in-game progress will be lost", () -> switchTo(editPanel))
+				.startPopup(this);
+			else switchTo(editPanel);
+		});
 		JMenuItem edThis = new JMenuItem("Edit this map");
 		edThis.addActionListener(e ->
 			SimplePopup.ask("<html>Are you sure? <br> All unsaved in-game progress will be lost", () -> {

@@ -13,7 +13,10 @@ import labyrinth.model.*;
 public class LabEditControl {
 	private LabState labState;
 
-	public void setLabState(LabState ls) {labState = ls;}
+	public void setLabState(LabState ls) {
+		labState = ls;
+		ls.toInitialConditions();
+	}
 
 	private static Random rand = new Random();
 
@@ -23,6 +26,7 @@ public class LabEditControl {
      */
 	public LabEditControl(LabState laby) {
 		labState = laby;
+		labState.toInitialConditions();
 	}
 
 	/**

@@ -22,7 +22,6 @@ public class EditPanel extends ModePanel {
 	public void setLabState(LabState ls){
 		super.setLabState(ls);
 		labControl.setLabState(ls);
-		ls.toInitialConditions();
 	}
 
 	private JPanel createOptionPanel() {

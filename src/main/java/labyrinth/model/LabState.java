@@ -101,7 +101,7 @@ public class LabState implements java.io.Serializable {
 	public void toInitialConditions() {
 		player.setCell(getStartPos());
 		setUsedFireflyNum(0);
-		objects.removeAll(objects.stream().filter(o -> !(o instanceof Firefly)).toList());
+		objects.removeAll(objects.stream().filter(o -> o instanceof Firefly).toList());
 		items.stream().forEach(i -> {
 			i.setCollected(false);
 			if(! objects.contains(i)) objects.add(0,i);
