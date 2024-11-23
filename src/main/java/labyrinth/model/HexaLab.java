@@ -113,10 +113,10 @@ public class HexaLab extends Labyrinth {
 
 	public Vector getRandomPos() {
 		int maxIter = 100;
-		Vector pos = new Vector(getRand().nextInt(getWidth() - 1), getRand().nextInt(getHeight() - 1));
+		Vector pos = new Vector(getRand().nextInt(getWidth()), getRand().nextInt(getHeight()));
 		int i = 0;
 		while (! inBound(pos) && i < maxIter){
-				pos = new Vector(getRand().nextInt(getWidth() - 1), getRand().nextInt(getHeight() - 1));
+				pos = new Vector(getRand().nextInt(getWidth()), getRand().nextInt(getHeight()));
 				i++;
 		}
 		if (i == maxIter){

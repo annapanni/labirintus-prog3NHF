@@ -85,7 +85,7 @@ public class RectLab extends Labyrinth {
 	}
 
 	public Vector getRandomPos() {
-		return new Vector(getRand().nextInt(getWidth() - 1), getRand().nextInt(getHeight() - 1));
+		return new Vector(getRand().nextInt(getWidth()), getRand().nextInt(getHeight()));
 	}
 
 	public double xPosition(Vector idx) {
