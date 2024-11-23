@@ -22,13 +22,7 @@ public class EditPanel extends ModePanel {
 	public void setLabState(LabState ls){
 		super.setLabState(ls);
 		labControl.setLabState(ls);
-		ls.getPlayer().setCell(ls.getStartPos());
-		ls.setUsedFireflyNum(0);
-		ls.getItems().stream().forEach(i -> {
-			i.setCollected(false);
-			if(! ls.getObjects().contains(i))  ls.getObjects().add(i);
-		});
-		ls.setMapCollected(false);
+		ls.toInitialConditions();
 	}
 
 	private JPanel createOptionPanel() {
@@ -145,7 +139,7 @@ public class EditPanel extends ModePanel {
 		setLayout(new BorderLayout());
 		add(createOptionPanel(), BorderLayout.WEST);
 		add(createSettingsPanel(), BorderLayout.EAST);
-		labView = new LabView(labState, 30, 0.2);
+		labView.setVisiblityOverride(0.2);
 		labView.requestFocus();
 		add(labView, BorderLayout.CENTER);
 		labControl = new LabEditControl(labState);

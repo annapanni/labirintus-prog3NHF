@@ -116,7 +116,7 @@ public class LabEditControl {
 			Key k = new Key(labState.getLab(), vclick);
 			k.setPosition(x, y);
 			labState.getItems().add(k);
-			labState.getObjects().add(k);
+			labState.getObjects().add(0,k);
 		}
 	}
 
@@ -137,7 +137,7 @@ public class LabEditControl {
 		} else {
 			Storable b = Storable.brazier(labState.getLab(), vclick);
 			b.setPosition(x, y);
-			labState.getObjects().add(b);
+			labState.getObjects().add(0,b);
 		}
 	}
 
@@ -159,7 +159,7 @@ public class LabEditControl {
 			MapPlan m = new MapPlan(labState.getLab(), vclick);
 			m.setPosition(x, y);
 			labState.getItems().add(m);
-			labState.getObjects().add(m);
+			labState.getObjects().add(0,m);
 		}
 	}
 
@@ -193,7 +193,7 @@ public class LabEditControl {
 			Exit e = new Exit(labState.getLab(), vclick);
 			e.setPosition(x, y);
 			labState.getItems().add(e);
-			labState.getObjects().add(e);
+			labState.getObjects().add(0,e);
 		}
 	}
 
@@ -208,6 +208,5 @@ public class LabEditControl {
 		changeNTimesFrom(labState.getLab(), 3, vclick, true);
 		coverWithRooms(labState.getLab(), labState.getLab().getRoomfinder());
 	}
-
 
 }

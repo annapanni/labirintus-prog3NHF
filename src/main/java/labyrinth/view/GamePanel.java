@@ -57,7 +57,6 @@ public class GamePanel extends ModePanel {
 		super(ls, dt);
 		setLayout(new BorderLayout());
 		add(createHelpPanel(), BorderLayout.WEST);
-		labView = new LabView(labState, 30);
 		labView.requestFocus();
 		add(labView, BorderLayout.CENTER);
 		labControl = new LabGameControl(labState, dTime);

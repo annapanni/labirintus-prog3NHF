@@ -26,6 +26,7 @@ public abstract class ModePanel extends JPanel {
 	 * @param dt time between screen refresh and/or object movements in miliseconds
 	 */
 	protected ModePanel(LabState l, int dt) {
+		labView = new LabView(l, 30);
 		labState = l;
 		timer = new Timer();
 		dTime = dt;

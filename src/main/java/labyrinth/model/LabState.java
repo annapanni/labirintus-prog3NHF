@@ -77,9 +77,6 @@ public class LabState implements java.io.Serializable {
 		darknessOpacity = 1.0;
 		objects = new ArrayList<>();
 		startPos = l.getRandomPos();
-		player = new PlayerCharacter(l, startPos, 0.002);
-		objects.add(player);
-		lineOfSight = new Light(player);
 		items = new ArrayList<>();
 		for (int i=0; i<kNum; i++){
 			Key k = new Key(l, l.getRandomPos());
@@ -93,5 +90,22 @@ public class LabState implements java.io.Serializable {
 		items.add(map);
 		objects.add(map);
 		fireflyNum = fNum;
+		player = new PlayerCharacter(l, startPos, 0.002);
+		objects.add(player);
+		lineOfSight = new Light(player);
+	}
+
+	/**
+	 * Sets labyrinth to its initial conditions eg. removes fireflies and adds uncollected keys again.
+	 */
+	public void toInitialConditions() {
+		player.setCell(getStartPos());
+		setUsedFireflyNum(0);
+		objects.removeAll(objects.stream().filter(o -> !(o instanceof Firefly)).toList());
+		items.stream().forEach(i -> {
+			i.setCollected(false);
+			if(! objects.contains(i)) objects.add(0,i);
+		});
+		setMapCollected(false);
 	}
 }
