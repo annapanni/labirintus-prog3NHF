@@ -99,7 +99,7 @@ public class MainDisplay extends JFrame{
 	}
 
 	/**Creates and initializes the application's components */
-	public void createApplication() {
+	public MainDisplay() {
 		int dTime = 1000 / 30;
 		LabState labState = (new StructSettings()).generate();
 		mainPage = new JPanel();
@@ -125,6 +125,5 @@ public class MainDisplay extends JFrame{
 	public static void main(String[] args) {
 		System.setProperty("sun.java2d.opengl", "true");
 		MainDisplay disp = new MainDisplay();
-		disp.createApplication();
 	}
 }
